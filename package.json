@@ -1,0 +1,85 @@
+{
+  "name": "linked-timer",
+  "displayName": "Linked Timer",
+  "description": "Real-time collaborative timer to use with your team.",
+  "homepage": "https://linkedtimer.com",
+  "icon": "icon.png",
+  "version": "1.0.0",
+  "publisher": "felladrin",
+  "author": {
+    "name": "Victor Nogueira"
+  },
+  "private": true,
+  "license": "MIT",
+  "pricing": "Free",
+  "sponsor": {
+    "url": "https://github.com/sponsors/felladrin"
+  },
+  "repository": {
+    "url": "https://github.com/felladrin/LinkedTimer",
+    "type": "git"
+  },
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:linked-timer.new-timer",
+    "onWebviewPanel:linked-timer"
+  ],
+  "main": "./out/extension.js",
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build-extension": "tsc -p ./src/extension/tsconfig.json",
+    "build-webview": "parcel build ./src/webview/index.html --public-url ./",
+    "build": "run-p build-extension build-webview",
+    "serve": "parcel ./src/webview/index.html --public-url ./",
+    "watch-extension": "tsc -watch -p ./src/extension/tsconfig.json",
+    "watch-webview": "parcel watch ./src/webview/index.html --public-url ./",
+    "watch": "run-p watch-extension watch-webview"
+  },
+  "devDependencies": {
+    "@parcel/optimizer-data-url": "^2.8.0",
+    "@parcel/transformer-inline-string": "^2.8.0",
+    "@parcel/transformer-sass": "^2.8.0",
+    "@types/halfmoon": "^1.0.2",
+    "@types/node": "^18.11.9",
+    "@types/react": "^18.0.26",
+    "@types/react-copy-to-clipboard": "^5.0.4",
+    "@types/react-dom": "^18.0.9",
+    "@types/vscode": "^1.32.0",
+    "@typescript-eslint/eslint-plugin": "^5.42.0",
+    "@typescript-eslint/parser": "^5.42.0",
+    "@vscode/vsce": "^2.15.0",
+    "create-pubsub": "^1.4.0",
+    "easytimer.js": "^4.5.4",
+    "eslint": "^8.26.0",
+    "halfmoon": "^1.1.1",
+    "jsonrpc-lite": "^2.2.0",
+    "npm-run-all": "^4.1.5",
+    "ovsx": "^0.7.1",
+    "parcel": "^2.8.0",
+    "peerjs": "^1.4.7",
+    "process": "^0.11.10",
+    "react": "^18.2.0",
+    "react-copy-to-clipboard": "^5.1.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.4.5",
+    "typescript": "^4.8.4"
+  },
+  "targets": {
+    "main": false
+  },
+  "browserslist": "last 2 Chrome versions",
+  "contributes": {
+    "commands": [
+      {
+        "command": "linked-timer.new-timer",
+        "title": "New Timer",
+        "category": "Linked Timer"
+      }
+    ]
+  }
+}
