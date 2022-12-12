@@ -329,6 +329,7 @@ function TimerScreen() {
   const [timerMinutes, setMinutes] = usePubSub(timerMinutesPubSub);
   const [timerSeconds, setSeconds] = usePubSub(timerSecondsPubSub);
   const timerIdInputReference = useRef<HTMLInputElement>(null);
+  const [hasJustCopiedTimerId, setJustCopiedTimerId] = useState(false);
 
   useEffect(() => timerIdInputReference.current?.focus(), []);
 
@@ -362,6 +363,18 @@ function TimerScreen() {
       timer.off("targetAchieved", targetAchievedListener);
     };
   }, []);
+
+  const handleCopyButtonClicked = () => setJustCopiedTimerId(true);
+
+  useEffect(() => {
+    let timeoutId = 0;
+    if (hasJustCopiedTimerId) {
+      timeoutId = window.setTimeout(() => setJustCopiedTimerId(false), 3000);
+    }
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [hasJustCopiedTimerId]);
 
   return (
     <div className="card">
@@ -433,23 +446,15 @@ function TimerScreen() {
                   </div>
                 </div>
               ) : null}
-              <details className="collapse-panel w-450 mw-full mt-20" open>
+              <details className="collapse-panel w-400 mw-full mt-20" open>
                 <summary className="collapse-header">Invite others by providing this Timer ID</summary>
                 <div className="collapse-content">
                   <div className="input-group">
                     <input type="text" className="form-control" value={hostTimerId} readOnly />
                     <div className="input-group-append">
-                      <CopyToClipboard
-                        text={hostTimerId}
-                        onCopy={() => {
-                          halfmoon.initStickyAlert({
-                            title: "Copied to clipboard:",
-                            content: hostTimerId,
-                          });
-                        }}
-                      >
+                      <CopyToClipboard text={hostTimerId} onCopy={handleCopyButtonClicked}>
                         <button className="btn" type="button">
-                          &#128203; Copy
+                          {hasJustCopiedTimerId ? <>&#10003;</> : <>&#128203;</>}
                         </button>
                       </CopyToClipboard>
                     </div>
