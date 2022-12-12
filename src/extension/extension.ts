@@ -4,7 +4,7 @@ import * as fs from "fs";
 
 export function activate({ subscriptions, extensionPath }: vscode.ExtensionContext) {
   const startTimerCommand = vscode.commands.registerCommand("linked-timer.new-timer", () => {
-    const panel = vscode.window.createWebviewPanel("linked-timer", "Multiplayer Timer", vscode.ViewColumn.One, {
+    const panel = vscode.window.createWebviewPanel("linked-timer", "Linked Timer", vscode.ViewColumn.One, {
       enableScripts: true,
     });
 

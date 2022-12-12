@@ -7,7 +7,6 @@ import Peer, { DataConnection } from "peerjs";
 import { useEffect, useRef, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { createRoot } from "react-dom/client";
-import { MemoryRouter, Link, Outlet, Route, Routes, useNavigate } from "react-router-dom";
 
 declare const acquireVsCodeApi: () => {
   postMessage(message: any): void;
@@ -26,12 +25,19 @@ const timer = new Timer({
 
 const peer = new Peer();
 
+enum CurrentScreen {
+  InitialScreen,
+  JoinScreen,
+  TimerScreen,
+}
+
 const hostTimerIdPubSub = createPubSub("");
 const startTimerButtonClickedPubSub = createPubSub();
 const stopTimerButtonClickedPubSub = createPubSub();
 const timerHoursPubSub = createPubSub("00");
 const timerMinutesPubSub = createPubSub("01");
 const timerSecondsPubSub = createPubSub("00");
+const currentScreenPubSub = createPubSub(CurrentScreen.InitialScreen);
 
 type EditTimerNotification = {
   hours: string;
@@ -50,33 +56,33 @@ function StickyAlertsContainer() {
   return <div className="sticky-alerts"></div>;
 }
 
-const Layout = () => {
+function Root() {
+  const [currentScreen] = usePubSub(currentScreenPubSub);
+
+  const getComponentFromCurrentScreen = () => {
+    switch (currentScreen) {
+      case CurrentScreen.JoinScreen:
+        return <JoinScreen />;
+      case CurrentScreen.TimerScreen:
+        return <TimerScreen />;
+      case CurrentScreen.InitialScreen:
+      default:
+        return <InitialScreen />;
+    }
+  };
+
   return (
     <>
       <StickyAlertsContainer />
-      <Outlet />
+      {getComponentFromCurrentScreen()}
     </>
-  );
-};
-
-function Root() {
-  return (
-    <MemoryRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<InitialScreen />} />
-          <Route path="join" element={<JoinScreen />} />
-          <Route path="timer" element={<TimerScreen />} />
-          <Route path="*" element={<InitialScreen />} />
-        </Route>
-      </Routes>
-    </MemoryRouter>
   );
 }
 
 function InitialScreen() {
-  const [isButtonDisabled, setButtonDisabled] = useState(true);
+  const [, setButtonDisabled] = useState(true);
   const [, setHostTimerId] = usePubSub(hostTimerIdPubSub);
+  const [, setCurrentScreen] = usePubSub(currentScreenPubSub);
 
   const handleHostButtonClicked = () => {
     setHostTimerId(peer.id);
@@ -162,6 +168,8 @@ function InitialScreen() {
         });
       });
     });
+
+    setCurrentScreen(CurrentScreen.TimerScreen);
   };
 
   useEffect(() => {
@@ -178,15 +186,19 @@ function InitialScreen() {
         <div className="container-fluid">
           <div className="row row-eq-spacing">
             <div className="col">
-              <Link to="/timer" className="btn btn-primary btn-block mr-10" onClick={handleHostButtonClicked}>
+              <button type="button" className="btn btn-primary btn-block mr-10" onClick={handleHostButtonClicked}>
                 Host a Timer
-              </Link>
+              </button>
             </div>
             <div className="v-spacer d-sm-none"></div>
             <div className="col">
-              <Link to="/join" className="btn btn-success btn-block">
+              <button
+                type="button"
+                className="btn btn-success btn-block"
+                onClick={() => setCurrentScreen(CurrentScreen.JoinScreen)}
+              >
                 Join a Timer
-              </Link>
+              </button>
             </div>
           </div>
         </div>
@@ -199,7 +211,7 @@ function JoinScreen() {
   const [timerId, setTimerId] = useState("");
   const [, setHostTimerId] = usePubSub(hostTimerIdPubSub);
   const timerIdInputReference = useRef<HTMLInputElement>(null);
-  const navigate = useNavigate();
+  const [, setCurrentScreen] = usePubSub(currentScreenPubSub);
 
   useEffect(() => timerIdInputReference.current?.focus(), []);
 
@@ -281,7 +293,7 @@ function JoinScreen() {
           }
         }
       });
-      navigate("/timer");
+      setCurrentScreen(CurrentScreen.TimerScreen);
     });
   };
 
@@ -310,9 +322,9 @@ function JoinScreen() {
       </div>
       <div className="content">
         <div className="text-left mt-20">
-          <Link to="/" className="btn btn-sm">
+          <button type="button" className="btn btn-sm" onClick={() => setCurrentScreen(CurrentScreen.InitialScreen)}>
             &larr; Back
-          </Link>
+          </button>
         </div>
       </div>
     </div>
