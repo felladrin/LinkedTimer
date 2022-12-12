@@ -7,7 +7,7 @@ import Peer, { DataConnection } from "peerjs";
 import { useEffect, useRef, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter, Link, Outlet, Route, Routes, useNavigate } from "react-router-dom";
+import { MemoryRouter, Link, Outlet, Route, Routes, useNavigate } from "react-router-dom";
 
 declare const acquireVsCodeApi: () => {
   postMessage(message: any): void;
@@ -59,7 +59,7 @@ const Layout = () => {
 
 function Root() {
   return (
-    <BrowserRouter>
+    <MemoryRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<InitialScreen />} />
@@ -68,7 +68,7 @@ function Root() {
           <Route path="*" element={<InitialScreen />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </MemoryRouter>
   );
 }
 
