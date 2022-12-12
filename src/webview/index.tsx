@@ -17,6 +17,8 @@ declare const acquireVsCodeApi: () => {
 
 const vsCodeApi = "acquireVsCodeApi" in window ? acquireVsCodeApi() : null;
 
+const extensionName = "Linked Timer";
+
 const timer = new Timer({
   countdown: true,
   startValues: { hours: 0, minutes: 1, seconds: 0 },
@@ -333,15 +335,17 @@ function TimerScreen() {
   useEffect(() => {
     const timerEventListener = () => {
       const timerValuesAsString = timer.getTimeValues().toString();
-      document.title = timer.isRunning() ? timerValuesAsString : "Linked Timer";
+      document.title = timerValuesAsString;
       vsCodeApi?.postMessage({ panelTitle: document.title });
       setTimerValues(timerValuesAsString);
       setTimerRunning(timer.isRunning());
     };
 
     const targetAchievedListener = () => {
-      vsCodeApi?.postMessage({ panelTitle: "Linked Timer: Time's up!" });
-      vsCodeApi?.postMessage({ informationMessage: "Linked Timer: Time's up!" });
+      const timeIsUpMessage = `Time's up!`;
+      document.title = `${timeIsUpMessage} | ${extensionName}`;
+      vsCodeApi?.postMessage({ panelTitle: `${extensionName}: ${timeIsUpMessage}` });
+      vsCodeApi?.postMessage({ informationMessage: `${extensionName}: ${timeIsUpMessage}` });
     };
 
     (["started", "stopped", "secondsUpdated"] as TimerEventType[]).forEach((timerEventType) => {
