@@ -1,8 +1,8 @@
 # Change Log
 
-## 1.0.3
+## 1.1.0
 
-- Prevent timer tab restarting when losing focus in VS Code.
+- Change behavior in VS Code, retaining the timer tab context when it loses focus.
 
 ## 1.0.2
 
