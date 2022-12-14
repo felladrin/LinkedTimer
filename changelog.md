@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.0.3
+
+- Prevent timer tab restarting when losing focus in VS Code.
+
 ## 1.0.2
 
 - Fix VS Code Browser opening new browser-tabs when changing screens.
