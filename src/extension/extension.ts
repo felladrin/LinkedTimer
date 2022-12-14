@@ -6,6 +6,7 @@ export function activate({ subscriptions, extensionPath }: vscode.ExtensionConte
   const startTimerCommand = vscode.commands.registerCommand("linked-timer.new-timer", () => {
     const panel = vscode.window.createWebviewPanel("linked-timer", "Linked Timer", vscode.ViewColumn.One, {
       enableScripts: true,
+      retainContextWhenHidden: true,
     });
 
     const { webview } = panel;
