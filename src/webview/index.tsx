@@ -41,6 +41,7 @@ enum CurrentScreen {
 }
 
 const hostTimerIdPubSub = createPubSub("");
+const timerIdToJoinPubSub = createPubSub("");
 const startTimerButtonClickedPubSub = createPubSub();
 const stopTimerButtonClickedPubSub = createPubSub();
 const timerHoursPubSub = createPubSub("00");
@@ -259,7 +260,7 @@ function InitialScreen() {
 }
 
 function JoinScreen() {
-  const [timerId, setTimerId] = useState("");
+  const [timerIdToJoin, setTimerIdToJoin] = usePubSub(timerIdToJoinPubSub);
   const [, setHostTimerId] = usePubSub(hostTimerIdPubSub);
   const timerIdInputReference = useRef<HTMLInputElement>(null);
   const [, setCurrentScreen] = usePubSub(currentScreenPubSub);
@@ -272,9 +273,9 @@ function JoinScreen() {
     const [setTimerHours, listenToTimerHoursUpdated, getTimerHours] = timerHoursPubSub;
     const [setTimerMinutes, listenToTimerMinutesUpdated, getTimerMinutes] = timerMinutesPubSub;
     const [setTimerSeconds, listenToTimerSecondsUpdated, getTimerSeconds] = timerSecondsPubSub;
-    const connectionWithHost = peer.connect(timerId);
+    const connectionWithHost = peer.connect(timerIdToJoin);
     connectionWithHost.on("open", () => {
-      setHostTimerId(timerId);
+      setHostTimerId(timerIdToJoin);
 
       const sendEditTimerNotification = () => {
         connectionWithHost.send(
@@ -348,6 +349,12 @@ function JoinScreen() {
     });
   };
 
+  useEffect(() => {
+    if (timerIdToJoin.length > 0) {
+      peer.open ? handleClickOnConnectButton() : peer.once("open", handleClickOnConnectButton);
+    }
+  }, []);
+
   return (
     <div className="card">
       <div className="content">
@@ -356,7 +363,8 @@ function JoinScreen() {
             type="text"
             className="form-control"
             placeholder="Timer ID to connect"
-            onChange={({ target }) => setTimerId(target.value)}
+            value={timerIdToJoin}
+            onChange={({ target }) => setTimerIdToJoin(target.value)}
             ref={timerIdInputReference}
           />
           <div className="input-group-append">
@@ -364,7 +372,7 @@ function JoinScreen() {
               className="btn btn-primary"
               type="button"
               onClick={handleClickOnConnectButton}
-              disabled={timerId.trim().length == 0}
+              disabled={timerIdToJoin.trim().length == 0}
             >
               Connect
             </button>
@@ -385,14 +393,12 @@ function JoinScreen() {
 function TimerScreen() {
   const [timerValues, setTimerValues] = useState(timer.getTimeValues().toString());
   const [isTimerRunning, setTimerRunning] = useState(timer.isRunning());
-  const [hostTimerId] = usePubSub(hostTimerIdPubSub);
   const [, emitStartTimerButtonClicked] = usePubSub(startTimerButtonClickedPubSub);
   const [, emitStopTimerButtonClicked] = usePubSub(stopTimerButtonClickedPubSub);
   const [timerHours, setHours] = usePubSub(timerHoursPubSub);
   const [timerMinutes, setMinutes] = usePubSub(timerMinutesPubSub);
   const [timerSeconds, setSeconds] = usePubSub(timerSecondsPubSub);
   const timerIdInputReference = useRef<HTMLInputElement>(null);
-  const [hasJustCopiedTimerId, setJustCopiedTimerId] = useState(false);
 
   useEffect(() => timerIdInputReference.current?.focus(), []);
 
@@ -412,18 +418,6 @@ function TimerScreen() {
       });
     };
   }, []);
-
-  const handleCopyButtonClicked = () => setJustCopiedTimerId(true);
-
-  useEffect(() => {
-    let timeoutId = 0;
-    if (hasJustCopiedTimerId) {
-      timeoutId = window.setTimeout(() => setJustCopiedTimerId(false), 3000);
-    }
-    return () => {
-      if (timeoutId) clearTimeout(timeoutId);
-    };
-  }, [hasJustCopiedTimerId]);
 
   return (
     <div className="card">
@@ -495,26 +489,49 @@ function TimerScreen() {
                   </div>
                 </div>
               ) : null}
-              <details className="collapse-panel w-400 mw-full mt-20" open>
-                <summary className="collapse-header">Invite others by providing this Timer ID</summary>
-                <div className="collapse-content">
-                  <div className="input-group">
-                    <input type="text" className="form-control" value={hostTimerId} readOnly />
-                    <div className="input-group-append">
-                      <CopyToClipboard text={hostTimerId} onCopy={handleCopyButtonClicked}>
-                        <button className="btn" type="button">
-                          {hasJustCopiedTimerId ? <>&#10003;</> : <>&#128203;</>}
-                        </button>
-                      </CopyToClipboard>
-                    </div>
-                  </div>
-                </div>
-              </details>
+              <InviteOthersLink />
             </div>
           </div>
         </div>
       </div>
     </div>
+  );
+}
+
+function InviteOthersLink() {
+  const [hostTimerId] = usePubSub(hostTimerIdPubSub);
+  const [hasJustCopiedTimerId, setJustCopiedTimerId] = useState(false);
+
+  useEffect(() => {
+    let timeoutId = 0;
+    if (hasJustCopiedTimerId) {
+      timeoutId = window.setTimeout(() => setJustCopiedTimerId(false), 3000);
+    }
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [hasJustCopiedTimerId]);
+
+  const addressToJoin = vsCodeApi ? hostTimerId : `${location.origin}/join/${hostTimerId}`;
+
+  const handleCopyButtonClicked = () => setJustCopiedTimerId(true);
+
+  return (
+    <details className="collapse-panel w-400 mw-full mt-20" open>
+      <summary className="collapse-header">Invite others to join!</summary>
+      <div className="collapse-content">
+        <div className="input-group">
+          <input type="text" className="form-control" value={addressToJoin} readOnly />
+          <div className="input-group-append">
+            <CopyToClipboard text={addressToJoin} onCopy={handleCopyButtonClicked}>
+              <button className="btn" type="button">
+                {hasJustCopiedTimerId ? <>&#10003;</> : <>&#128203;</>}
+              </button>
+            </CopyToClipboard>
+          </div>
+        </div>
+      </div>
+    </details>
   );
 }
 
@@ -534,6 +551,12 @@ function NotificationManager() {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+  if (location.pathname.startsWith("/join/")) {
+    const [setCurrentScreen] = currentScreenPubSub;
+    const [setTimerIdToJoin] = timerIdToJoinPubSub;
+    setTimerIdToJoin(location.pathname.substring("/join/".length));
+    setCurrentScreen(CurrentScreen.JoinScreen);
+  }
   const root = document.createElement("div");
   root.classList.add("page-wrapper");
   root.classList.add("root");
