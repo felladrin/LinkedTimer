@@ -1,5 +1,10 @@
 # Change Log
 
+## 1.2.0
+
+- Inviting others to connect is now easier in the browser, as there's a direct URL to join. And the link is hidden by default, to avoid stealing focus the timer.
+- Timer configuration (hours, minutes, seconds) now persists through sessions if Local Storage is available.
+
 ## 1.1.0
 
 - Change behavior in VS Code, retaining the timer tab context when it loses focus.
