@@ -7,6 +7,7 @@ import Peer, { DataConnection } from "peerjs";
 import { useEffect, useRef, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { createRoot } from "react-dom/client";
+import { Features, ToggleFeatures, Enable } from "react-enable";
 
 declare const acquireVsCodeApi: () => {
   postMessage(message: any): void;
@@ -14,9 +15,16 @@ declare const acquireVsCodeApi: () => {
   setState(state: any): void;
 };
 
+const isDevEnvironment = process.env.NODE_ENV === "development";
+
 const vsCodeApi = "acquireVsCodeApi" in window ? acquireVsCodeApi() : null;
 
 const extensionName = "Linked Timer";
+
+const features = [
+  { name: DocumentTitleManager.name, defaultValue: true },
+  { name: ToggleFeatures.name, defaultValue: isDevEnvironment },
+] as import("react-enable/dist/FeatureState").FeatureDescription[];
 
 const timer = new Timer({
   countdown: true,
@@ -57,26 +65,61 @@ function StickyAlertsContainer() {
 }
 
 function Root() {
+  return (
+    <Features features={features}>
+      <StickyAlertsContainer />
+      <Enable feature={DocumentTitleManager.name}>
+        <DocumentTitleManager />
+      </Enable>
+      <CurrentScreenPresenter />
+      <Enable feature={ToggleFeatures.name}>
+        <ToggleFeatures />
+      </Enable>
+    </Features>
+  );
+}
+
+function CurrentScreenPresenter() {
   const [currentScreen] = usePubSub(currentScreenPubSub);
 
-  const getComponentFromCurrentScreen = () => {
-    switch (currentScreen) {
-      case CurrentScreen.JoinScreen:
-        return <JoinScreen />;
-      case CurrentScreen.TimerScreen:
-        return <TimerScreen />;
-      case CurrentScreen.InitialScreen:
-      default:
-        return <InitialScreen />;
-    }
-  };
+  switch (currentScreen) {
+    case CurrentScreen.JoinScreen:
+      return <JoinScreen />;
+    case CurrentScreen.TimerScreen:
+      return <TimerScreen />;
+    case CurrentScreen.InitialScreen:
+    default:
+      return <InitialScreen />;
+  }
+}
 
-  return (
-    <>
-      <StickyAlertsContainer />
-      {getComponentFromCurrentScreen()}
-    </>
-  );
+function DocumentTitleManager() {
+  useEffect(() => {
+    const initialTitle = document.title;
+
+    const setTitleWithCurrentTime = () => {
+      document.title = `${timer.getTimeValues().toString()} | ${extensionName}`;
+    };
+
+    const handleTargetAchieved = () => {
+      document.title = `Time's up! | ${extensionName}`;
+    };
+
+    timer.on("started", setTitleWithCurrentTime);
+    timer.on("stopped", setTitleWithCurrentTime);
+    timer.on("secondsUpdated", setTitleWithCurrentTime);
+    timer.on("targetAchieved", handleTargetAchieved);
+
+    return () => {
+      timer.off("started", setTitleWithCurrentTime);
+      timer.off("stopped", setTitleWithCurrentTime);
+      timer.off("secondsUpdated", setTitleWithCurrentTime);
+      timer.off("targetAchieved", handleTargetAchieved);
+
+      document.title = initialTitle;
+    };
+  }, []);
+  return <></>;
 }
 
 function InitialScreen() {
@@ -348,15 +391,13 @@ function TimerScreen() {
   useEffect(() => {
     const timerEventListener = () => {
       const timerValuesAsString = timer.getTimeValues().toString();
-      document.title = timerValuesAsString;
-      vsCodeApi?.postMessage({ panelTitle: document.title });
+      vsCodeApi?.postMessage({ panelTitle: timerValuesAsString });
       setTimerValues(timerValuesAsString);
       setTimerRunning(timer.isRunning());
     };
 
     const targetAchievedListener = () => {
       const timeIsUpMessage = `Time's up!`;
-      document.title = `${timeIsUpMessage} | ${extensionName}`;
       vsCodeApi?.postMessage({ panelTitle: `${extensionName}: ${timeIsUpMessage}` });
       vsCodeApi?.postMessage({ informationMessage: `${extensionName}: ${timeIsUpMessage}` });
     };
