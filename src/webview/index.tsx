@@ -24,6 +24,7 @@ const extensionName = "Linked Timer";
 const features = [
   { name: TabTitleManager.name, defaultValue: true },
   { name: NotificationManager.name, defaultValue: true },
+  { name: LocalStorageManager.name, defaultValue: "localStorage" in window, noOverride: true },
   { name: ToggleFeatures.name, defaultValue: isDevEnvironment },
 ] as import("react-enable/dist/FeatureState").FeatureDescription[];
 
@@ -75,6 +76,9 @@ function Root() {
       </Enable>
       <Enable feature={NotificationManager.name}>
         <NotificationManager />
+      </Enable>
+      <Enable feature={LocalStorageManager.name}>
+        <LocalStorageManager />
       </Enable>
       <CurrentScreenPresenter />
       <Enable feature={ToggleFeatures.name}>
@@ -425,7 +429,18 @@ function TimerScreen() {
         <div className="container-fluid">
           <div className="row">
             <div className="col">
-              {!isTimerRunning ? (
+              {isTimerRunning ? (
+                <div className="input-group">
+                  <div className="input-group-prepend">
+                    <span className="input-group-text font-family-E1234">{timerValues}</span>
+                  </div>
+                  <div className="input-group-append">
+                    <button className="btn" type="button" onClick={() => emitStopTimerButtonClicked()}>
+                      Stop / Edit
+                    </button>
+                  </div>
+                </div>
+              ) : (
                 <div className="input-group">
                   <input
                     type="tel"
@@ -476,19 +491,7 @@ function TimerScreen() {
                     </button>
                   </div>
                 </div>
-              ) : null}
-              {isTimerRunning ? (
-                <div className="input-group">
-                  <div className="input-group-prepend">
-                    <span className="input-group-text font-family-E1234">{timerValues}</span>
-                  </div>
-                  <div className="input-group-append">
-                    <button className="btn" type="button" onClick={() => emitStopTimerButtonClicked()}>
-                      Stop / Edit
-                    </button>
-                  </div>
-                </div>
-              ) : null}
+              )}
               <InviteOthersLink />
             </div>
           </div>
@@ -517,7 +520,7 @@ function InviteOthersLink() {
   const handleCopyButtonClicked = () => setJustCopiedTimerId(true);
 
   return (
-    <details className="collapse-panel w-400 mw-full mt-20" open>
+    <details className="collapse-panel w-400 mw-full mt-20">
       <summary className="collapse-header">Invite others to join!</summary>
       <div className="collapse-content">
         <div className="input-group">
@@ -545,6 +548,37 @@ function NotificationManager() {
 
     return () => {
       timer.off("targetAchieved", targetAchievedListener);
+    };
+  }, []);
+  return <></>;
+}
+
+function LocalStorageManager() {
+  useEffect(() => {
+    const [setTimerHours, onTimerHoursChanged, getTimerHours] = timerHoursPubSub;
+    const [setTimerMinutes, onTimerMinutesChanged, getTimerMinutes] = timerMinutesPubSub;
+    const [setTimerSeconds, onTimerSecondsChanged, getTimerSeconds] = timerSecondsPubSub;
+
+    setTimerHours(window.localStorage.getItem("linked_timer_hours") ?? getTimerHours());
+    setTimerMinutes(window.localStorage.getItem("linked_timer_minutes") ?? getTimerMinutes());
+    setTimerSeconds(window.localStorage.getItem("linked_timer_seconds") ?? getTimerSeconds());
+
+    const unsubscribeFromTimerHoursChanged = onTimerHoursChanged((hours) => {
+      window.localStorage.setItem("linked_timer_hours", hours);
+    });
+
+    const unsubscribeFromTimerMinuteChanged = onTimerMinutesChanged((minutes) => {
+      window.localStorage.setItem("linked_timer_minutes", minutes);
+    });
+
+    const unsubscribeFromTimerSecondsChanged = onTimerSecondsChanged((seconds) => {
+      window.localStorage.setItem("linked_timer_seconds", seconds);
+    });
+
+    return () => {
+      unsubscribeFromTimerHoursChanged();
+      unsubscribeFromTimerMinuteChanged();
+      unsubscribeFromTimerSecondsChanged();
     };
   }, []);
   return <></>;
