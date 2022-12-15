@@ -22,7 +22,8 @@ const vsCodeApi = "acquireVsCodeApi" in window ? acquireVsCodeApi() : null;
 const extensionName = "Linked Timer";
 
 const features = [
-  { name: DocumentTitleManager.name, defaultValue: true },
+  { name: TabTitleManager.name, defaultValue: true },
+  { name: NotificationManager.name, defaultValue: true },
   { name: ToggleFeatures.name, defaultValue: isDevEnvironment },
 ] as import("react-enable/dist/FeatureState").FeatureDescription[];
 
@@ -68,8 +69,11 @@ function Root() {
   return (
     <Features features={features}>
       <StickyAlertsContainer />
-      <Enable feature={DocumentTitleManager.name}>
-        <DocumentTitleManager />
+      <Enable feature={TabTitleManager.name}>
+        <TabTitleManager />
+      </Enable>
+      <Enable feature={NotificationManager.name}>
+        <NotificationManager />
       </Enable>
       <CurrentScreenPresenter />
       <Enable feature={ToggleFeatures.name}>
@@ -93,16 +97,20 @@ function CurrentScreenPresenter() {
   }
 }
 
-function DocumentTitleManager() {
+function TabTitleManager() {
   useEffect(() => {
     const initialTitle = document.title;
 
     const setTitleWithCurrentTime = () => {
-      document.title = `${timer.getTimeValues().toString()} | ${extensionName}`;
+      const timerValuesAsString = timer.getTimeValues().toString();
+      vsCodeApi?.postMessage({ panelTitle: timerValuesAsString });
+      document.title = `${timerValuesAsString} | ${extensionName}`;
     };
 
     const handleTargetAchieved = () => {
-      document.title = `Time's up! | ${extensionName}`;
+      const title = `Time's up! | ${extensionName}`;
+      vsCodeApi?.postMessage({ panelTitle: title });
+      document.title = title;
     };
 
     timer.on("started", setTitleWithCurrentTime);
@@ -390,30 +398,18 @@ function TimerScreen() {
 
   useEffect(() => {
     const timerEventListener = () => {
-      const timerValuesAsString = timer.getTimeValues().toString();
-      vsCodeApi?.postMessage({ panelTitle: timerValuesAsString });
-      setTimerValues(timerValuesAsString);
+      setTimerValues(timer.getTimeValues().toString());
       setTimerRunning(timer.isRunning());
-    };
-
-    const targetAchievedListener = () => {
-      const timeIsUpMessage = `Time's up!`;
-      vsCodeApi?.postMessage({ panelTitle: `${extensionName}: ${timeIsUpMessage}` });
-      vsCodeApi?.postMessage({ informationMessage: `${extensionName}: ${timeIsUpMessage}` });
     };
 
     (["started", "stopped", "secondsUpdated"] as TimerEventType[]).forEach((timerEventType) => {
       timer.on(timerEventType, timerEventListener);
     });
 
-    timer.on("targetAchieved", targetAchievedListener);
-
     return () => {
       (["started", "stopped", "secondsUpdated"] as TimerEventType[]).forEach((timerEventType) => {
         timer.off(timerEventType, timerEventListener);
       });
-
-      timer.off("targetAchieved", targetAchievedListener);
     };
   }, []);
 
@@ -522,8 +518,25 @@ function TimerScreen() {
   );
 }
 
-const root = document.createElement("div");
-root.classList.add("page-wrapper");
-root.classList.add("root");
-document.body.appendChild(root);
-createRoot(root).render(<Root />);
+function NotificationManager() {
+  useEffect(() => {
+    const targetAchievedListener = () => {
+      vsCodeApi?.postMessage({ informationMessage: `${extensionName}: Time's up!` });
+    };
+
+    timer.on("targetAchieved", targetAchievedListener);
+
+    return () => {
+      timer.off("targetAchieved", targetAchievedListener);
+    };
+  }, []);
+  return <></>;
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  const root = document.createElement("div");
+  root.classList.add("page-wrapper");
+  root.classList.add("root");
+  document.body.appendChild(root);
+  createRoot(root).render(<Root />);
+});
