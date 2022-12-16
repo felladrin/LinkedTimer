@@ -1,4 +1,4 @@
-@import url("../../node_modules/halfmoon/css/halfmoon-variables.css");
+@import "../../../node_modules/halfmoon/css/halfmoon-variables.css";
 
 @font-face {
   font-family: "E1234";
@@ -7,8 +7,6 @@
   font-style: normal;
 }
 
-.root {
-  .font-family-E1234 {
-    font-family: "E1234";
-  }
+.font-family-E1234 {
+  font-family: "E1234", monospace;
 }
