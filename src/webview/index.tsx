@@ -4,7 +4,7 @@ import Timer, { TimeCounter, TimerEventType, TimerParams } from "easytimer.js";
 import halfmoon from "halfmoon";
 import { IParsedObject, notification, parse } from "jsonrpc-lite";
 import Peer, { DataConnection } from "peerjs";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, MutableRefObject } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { createRoot } from "react-dom/client";
 import { Features, ToggleFeatures, Enable } from "react-enable";
@@ -17,7 +17,18 @@ declare const acquireVsCodeApi: () => {
 
 const isDevEnvironment = process.env.NODE_ENV === "development";
 
-const vsCodeApi = "acquireVsCodeApi" in window ? acquireVsCodeApi() : null;
+const polyfillAcquireVsCodeApi: typeof acquireVsCodeApi = () => {
+  const voidFunction = () => {};
+  return {
+    postMessage: voidFunction,
+    getState: voidFunction,
+    setState: voidFunction,
+  };
+};
+
+const isRunningInVsCodeWebview = "acquireVsCodeApi" in window;
+
+const vsCodeApi = isRunningInVsCodeWebview ? acquireVsCodeApi() : polyfillAcquireVsCodeApi();
 
 const extensionName = "Linked Timer";
 
@@ -25,7 +36,6 @@ const features = [
   { name: TabTitleManager.name, defaultValue: true },
   { name: NotificationManager.name, defaultValue: true },
   { name: LocalStorageManager.name, defaultValue: "localStorage" in window, noOverride: true },
-  { name: ToggleFeatures.name, defaultValue: isDevEnvironment },
 ] as import("react-enable/dist/FeatureState").FeatureDescription[];
 
 const timer = new Timer({
@@ -81,9 +91,7 @@ function Root() {
         <LocalStorageManager />
       </Enable>
       <CurrentScreenPresenter />
-      <Enable feature={ToggleFeatures.name}>
-        <ToggleFeatures />
-      </Enable>
+      {isDevEnvironment ? <ToggleFeatures /> : <></>}
     </Features>
   );
 }
@@ -108,13 +116,13 @@ function TabTitleManager() {
 
     const setTitleWithCurrentTime = () => {
       const timerValuesAsString = timer.getTimeValues().toString();
-      vsCodeApi?.postMessage({ panelTitle: timerValuesAsString });
+      vsCodeApi.postMessage({ panelTitle: timerValuesAsString });
       document.title = `${timerValuesAsString} | ${extensionName}`;
     };
 
     const handleTargetAchieved = () => {
       const title = `Time's up! | ${extensionName}`;
-      vsCodeApi?.postMessage({ panelTitle: title });
+      vsCodeApi.postMessage({ panelTitle: title });
       document.title = title;
     };
 
@@ -266,10 +274,10 @@ function InitialScreen() {
 function JoinScreen() {
   const [timerIdToJoin, setTimerIdToJoin] = usePubSub(timerIdToJoinPubSub);
   const [, setHostTimerId] = usePubSub(hostTimerIdPubSub);
-  const timerIdInputReference = useRef<HTMLInputElement>(null);
+  const timerIdInputReference = useRef<HTMLInputElement>() as MutableRefObject<HTMLInputElement>;
   const [, setCurrentScreen] = usePubSub(currentScreenPubSub);
 
-  useEffect(() => timerIdInputReference.current?.focus(), []);
+  useEffect(() => timerIdInputReference.current.focus(), []);
 
   const handleClickOnConnectButton = () => {
     const [, listenToStartTimerButtonClicked] = startTimerButtonClickedPubSub;
@@ -402,9 +410,9 @@ function TimerScreen() {
   const [timerHours, setHours] = usePubSub(timerHoursPubSub);
   const [timerMinutes, setMinutes] = usePubSub(timerMinutesPubSub);
   const [timerSeconds, setSeconds] = usePubSub(timerSecondsPubSub);
-  const timerIdInputReference = useRef<HTMLInputElement>(null);
+  const timerIdInputReference = useRef<HTMLInputElement>() as MutableRefObject<HTMLInputElement>;
 
-  useEffect(() => timerIdInputReference.current?.focus(), []);
+  useEffect(() => timerIdInputReference.current.focus(), []);
 
   useEffect(() => {
     const timerEventListener = () => {
@@ -515,7 +523,7 @@ function InviteOthersLink() {
     };
   }, [hasJustCopiedTimerId]);
 
-  const addressToJoin = vsCodeApi ? hostTimerId : `${location.origin}/join/${hostTimerId}`;
+  const addressToJoin = isRunningInVsCodeWebview ? hostTimerId : `${location.origin}/join/${hostTimerId}`;
 
   const handleCopyButtonClicked = () => setJustCopiedTimerId(true);
 
@@ -541,7 +549,7 @@ function InviteOthersLink() {
 function NotificationManager() {
   useEffect(() => {
     const targetAchievedListener = () => {
-      vsCodeApi?.postMessage({ informationMessage: `${extensionName}: Time's up!` });
+      vsCodeApi.postMessage({ informationMessage: `${extensionName}: Time's up!` });
     };
 
     timer.on("targetAchieved", targetAchievedListener);
