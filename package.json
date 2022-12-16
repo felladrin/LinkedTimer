@@ -67,7 +67,9 @@
   "targets": {
     "main": false
   },
-  "browserslist": "last 2 Chrome versions",
+  "browserslist": [
+    "last 2 Chrome versions"
+  ],
   "contributes": {
     "commands": [
       {
