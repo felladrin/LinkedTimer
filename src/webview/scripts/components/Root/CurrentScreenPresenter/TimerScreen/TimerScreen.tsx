@@ -5,7 +5,7 @@ import {
   timer,
   timerHoursPubSub,
   timerMinutesPubSub,
-  timerSecondsPubSub
+  timerSecondsPubSub,
 } from "../../../../constants";
 import { usePubSub } from "create-pubsub/react";
 import { TimerEventType } from "easytimer.js";
@@ -41,13 +41,13 @@ export function TimerScreen() {
   }, []);
 
   return (
-    <div className="card">
-      <div className="content">
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col">
+    <div className="content">
+      <div className="container-fluid">
+        <div className="row">
+          <div className="col">
+            <div className="input-group justify-content-center">
               {isTimerRunning ? (
-                <div className="input-group">
+                <>
                   <div className="input-group-prepend">
                     <span className="input-group-text font-family-E1234">{timerValues}</span>
                   </div>
@@ -56,9 +56,9 @@ export function TimerScreen() {
                       Stop / Edit
                     </button>
                   </div>
-                </div>
+                </>
               ) : (
-                <div className="input-group">
+                <>
                   <input
                     type="tel"
                     pattern="[0-9]{2}"
@@ -107,10 +107,14 @@ export function TimerScreen() {
                       Start
                     </button>
                   </div>
-                </div>
+                </>
               )}
-              <InviteOthersLink />
             </div>
+          </div>
+        </div>
+        <div className="row mt-20">
+          <div className="col">
+            <InviteOthersLink />
           </div>
         </div>
       </div>

@@ -9,7 +9,7 @@ import {
   timer,
   timerHoursPubSub,
   timerMinutesPubSub,
-  timerSecondsPubSub
+  timerSecondsPubSub,
 } from "../../../../constants";
 import { DataConnection } from "peerjs";
 import { IParsedObject, notification, parse } from "jsonrpc-lite";
@@ -33,8 +33,8 @@ export function InitialScreen() {
         startValues: {
           hours: Number(getTimerHours()),
           minutes: Number(getTimerMinutes()),
-          seconds: Number(getTimerSeconds())
-        }
+          seconds: Number(getTimerSeconds()),
+        },
       })
     );
     listenToStopTimerButtonClicked(() => timer.stop());
@@ -45,7 +45,7 @@ export function InitialScreen() {
             notification("sync", {
               config: timer.getConfig(),
               timeValues: timer.getTimeValues(),
-              totalSeconds: timer.getTotalTimeValues().seconds
+              totalSeconds: timer.getTotalTimeValues().seconds,
             }).serialize()
           );
         };
@@ -57,7 +57,7 @@ export function InitialScreen() {
             notification("editTimer", {
               hours: getTimerHours(),
               minutes: getTimerMinutes(),
-              seconds: getTimerSeconds()
+              seconds: getTimerSeconds(),
             }).serialize()
           );
         };
@@ -87,8 +87,8 @@ export function InitialScreen() {
                   startValues: {
                     hours: Number(getTimerHours()),
                     minutes: Number(getTimerMinutes()),
-                    seconds: Number(getTimerSeconds())
-                  }
+                    seconds: Number(getTimerSeconds()),
+                  },
                 });
                 break;
               case "stop":
@@ -118,25 +118,24 @@ export function InitialScreen() {
   }, []);
 
   return (
-    <div className="card">
-      <div className="content">
-        <div className="container-fluid">
-          <div className="row row-eq-spacing">
-            <div className="col">
-              <button type="button" className="btn btn-primary btn-block mr-10" onClick={handleHostButtonClicked}>
-                Host a Timer
-              </button>
-            </div>
-            <div className="v-spacer d-sm-none"></div>
-            <div className="col">
-              <button
-                type="button"
-                className="btn btn-success btn-block"
-                onClick={() => setCurrentScreen(CurrentScreen.JoinScreen)}
-              >
-                Join a Timer
-              </button>
-            </div>
+    <div className="content">
+      <div className="container-fluid">
+        <div className="row">
+          <div className="col">
+            <button type="button" className="btn btn-primary btn-block mr-10" onClick={handleHostButtonClicked}>
+              Host a Timer
+            </button>
+          </div>
+        </div>
+        <div className="row mt-20">
+          <div className="col">
+            <button
+              type="button"
+              className="btn btn-success btn-block"
+              onClick={() => setCurrentScreen(CurrentScreen.JoinScreen)}
+            >
+              Join a Timer
+            </button>
           </div>
         </div>
       </div>

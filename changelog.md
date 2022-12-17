@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.2.1
+
+- Small improvements on the application layout.
+
 ## 1.2.0
 
 - Inviting others to connect is now easier in the browser, as there's a direct URL to join. And the link is hidden by default, to avoid stealing focus the timer.

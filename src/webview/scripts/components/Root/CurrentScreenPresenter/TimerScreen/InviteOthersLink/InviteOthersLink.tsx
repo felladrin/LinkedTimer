@@ -22,7 +22,7 @@ export function InviteOthersLink() {
   const handleCopyButtonClicked = () => setJustCopiedTimerId(true);
 
   return (
-    <details className="collapse-panel w-400 mw-full mt-20">
+    <details className="collapse-panel">
       <summary className="collapse-header">Invite others to join!</summary>
       <div className="collapse-content">
         <div className="input-group">

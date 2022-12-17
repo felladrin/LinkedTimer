@@ -9,7 +9,7 @@ import {
   timerHoursPubSub,
   timerIdToJoinPubSub,
   timerMinutesPubSub,
-  timerSecondsPubSub
+  timerSecondsPubSub,
 } from "../../../../constants";
 import { MutableRefObject, useEffect, useRef } from "react";
 import { IParsedObject, notification, parse } from "jsonrpc-lite";
@@ -39,7 +39,7 @@ export function JoinScreen() {
           notification("editTimer", {
             hours: getTimerHours(),
             minutes: getTimerMinutes(),
-            seconds: getTimerSeconds()
+            seconds: getTimerSeconds(),
           }).serialize()
         );
       };
@@ -73,7 +73,7 @@ export function JoinScreen() {
                 if (timer.isRunning()) timer.stop();
                 timer.start({
                   ...config,
-                  startValues: timeValues
+                  startValues: timeValues,
                 });
               }
               break;
@@ -82,8 +82,8 @@ export function JoinScreen() {
                 startValues: {
                   hours: Number(getTimerHours()),
                   minutes: Number(getTimerMinutes()),
-                  seconds: Number(getTimerSeconds())
-                }
+                  seconds: Number(getTimerSeconds()),
+                },
               });
               break;
             case "stop":
@@ -113,7 +113,7 @@ export function JoinScreen() {
   }, []);
 
   return (
-    <div className="card">
+    <>
       <div className="content">
         <div className="input-group">
           <input
@@ -143,6 +143,6 @@ export function JoinScreen() {
           </button>
         </div>
       </div>
-    </div>
+    </>
   );
 }
