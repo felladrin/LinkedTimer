@@ -5,9 +5,11 @@ import { TabTitleManager } from "./TabTitleManager/TabTitleManager";
 import { NotificationManager } from "./NotificationManager/NotificationManager";
 import { LocalStorageManager } from "./LocalStorageManager/LocalStorageManager";
 import { CurrentScreenPresenter } from "./CurrentScreenPresenter/CurrentScreenPresenter";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import halfmoon from "halfmoon";
 
 export function Root() {
+  const [currentScreenParent] = useAutoAnimate<HTMLDivElement>();
   return (
     <Features features={features}>
       <StickyAlertsContainer />
@@ -21,7 +23,7 @@ export function Root() {
         <LocalStorageManager />
       </Enable>
       <div className="d-flex justify-content-center">
-        <div className="card w-450 p-0">
+        <div className="card w-450 p-0" ref={currentScreenParent}>
           <div className="px-card py-10 border-bottom">
             <h2 className="card-title font-size-18 m-0  text-center">{extensionName}</h2>
           </div>

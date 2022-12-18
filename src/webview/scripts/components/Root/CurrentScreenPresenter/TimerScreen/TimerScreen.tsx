@@ -11,6 +11,7 @@ import { usePubSub } from "create-pubsub/react";
 import { TimerEventType } from "easytimer.js";
 import { InviteOthersLink } from "./InviteOthersLink/InviteOthersLink";
 import { AnimatedHourglass } from "./AnimatedHourglass/AnimatedHourglass";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 export function TimerScreen() {
   const [timerValues, setTimerValues] = useState(timer.getTimeValues().toString());
@@ -21,6 +22,7 @@ export function TimerScreen() {
   const [timerMinutes, setMinutes] = usePubSub(timerMinutesPubSub);
   const [timerSeconds, setSeconds] = usePubSub(timerSecondsPubSub);
   const timerIdInputReference = useRef<HTMLInputElement>() as MutableRefObject<HTMLInputElement>;
+  const [timerControlsParent] = useAutoAnimate<HTMLDivElement>();
 
   useEffect(() => timerIdInputReference.current.focus(), []);
 
@@ -43,7 +45,7 @@ export function TimerScreen() {
 
   return (
     <div className="content">
-      <div className="container-fluid">
+      <div className="container-fluid" ref={timerControlsParent}>
         <div className="row">
           <div className="col">
             <div className="input-group justify-content-center">

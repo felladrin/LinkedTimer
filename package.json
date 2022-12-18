@@ -43,6 +43,7 @@
     "watch": "run-p watch-extension watch-webview"
   },
   "devDependencies": {
+    "@formkit/auto-animate": "^1.0.0-beta.5",
     "@parcel/optimizer-data-url": "^2.8.0",
     "@parcel/transformer-inline-string": "^2.8.0",
     "@types/halfmoon": "^1.0.2",
