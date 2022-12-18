@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.3.0
+
+- Add an animated hourglass, displayed when the timer is running.
+- Disable zooming on the page.
+- Improve disconnection handling.
+
 ## 1.2.1
 
 - Small improvements on the application layout.
