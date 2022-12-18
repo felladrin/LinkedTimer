@@ -12,12 +12,11 @@ declare const acquireVsCodeApi: () => {
   setState(state: any): void;
 };
 const polyfillAcquireVsCodeApi: typeof acquireVsCodeApi = () => {
-  const voidFunction = () => {
-  };
+  const voidFunction = () => {};
   return {
     postMessage: voidFunction,
     getState: voidFunction,
-    setState: voidFunction
+    setState: voidFunction,
   };
 };
 export const isRunningInDevEnvironment = process.env.NODE_ENV === "development";
@@ -27,13 +26,18 @@ export const extensionName = "Linked Timer";
 export const features = [
   { name: TabTitleManager.name, defaultValue: true },
   { name: NotificationManager.name, defaultValue: true },
-  { name: LocalStorageManager.name, defaultValue: "localStorage" in window, noOverride: true }
+  { name: LocalStorageManager.name, defaultValue: "localStorage" in window, noOverride: true },
 ] as import("react-enable/dist/FeatureState").FeatureDescription[];
 export const timer = new Timer({
   countdown: true,
-  startValues: { hours: 0, minutes: 1, seconds: 0 }
+  startValues: { hours: 0, minutes: 1, seconds: 0 },
 });
-export const peer = new Peer();
+export const peer = isRunningInDevEnvironment
+  ? new Peer("", {
+      host: location.hostname,
+      port: 9000,
+    })
+  : new Peer();
 export const hostTimerIdPubSub = createPubSub("");
 export const timerIdToJoinPubSub = createPubSub("");
 export const startTimerButtonClickedPubSub = createPubSub();

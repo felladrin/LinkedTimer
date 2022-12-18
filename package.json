@@ -35,7 +35,9 @@
     "build-extension": "tsc -p ./src/extension/tsconfig.json",
     "build-webview": "parcel build ./src/webview/index.html --public-url ./",
     "build": "run-p build-extension build-webview",
-    "serve": "parcel ./src/webview/index.html --public-url ./",
+    "serve": "run-p peerjs-server parcel-server",
+    "parcel-server": "parcel ./src/webview/index.html --public-url ./",
+    "peerjs-server": "peerjs --port 9000",
     "watch-extension": "tsc -watch -p ./src/extension/tsconfig.json",
     "watch-webview": "parcel watch ./src/webview/index.html --public-url ./",
     "watch": "run-p watch-extension watch-webview"
@@ -55,6 +57,7 @@
     "jsonrpc-lite": "^2.2.0",
     "npm-run-all": "^4.1.5",
     "parcel": "^2.8.0",
+    "peer": "^0.6.1",
     "peerjs": "^1.4.7",
     "process": "^0.11.10",
     "react": "^18.2.0",
