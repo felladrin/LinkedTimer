@@ -66,17 +66,24 @@ export function InitialScreen() {
         const stopListeningToTimerMinutesUpdated = listenToTimerMinutesUpdated(sendEditTimerNotification);
         const stopListeningToTimerSecondsUpdated = listenToTimerSecondsUpdated(sendEditTimerNotification);
 
+        const sendStopTimerNotification = () => connectionWithGuest.send(notification("stop").serialize());
+
+        const sendStartTimerNotification = () => connectionWithGuest.send(notification("start").serialize());
+
+        timer.on("stopped", sendStopTimerNotification);
+
+        timer.on("started", sendStartTimerNotification);
+
+        timer.on("secondsUpdated", syncGuest);
+
         connectionWithGuest.on("close", () => {
           stopListeningToTimerHoursUpdated();
           stopListeningToTimerMinutesUpdated();
           stopListeningToTimerSecondsUpdated();
+          timer.off("stopped", sendStopTimerNotification);
+          timer.off("started", sendStartTimerNotification);
+          timer.off("secondsUpdated", syncGuest);
         });
-
-        timer.on("stopped", () => connectionWithGuest.send(notification("stop").serialize()));
-
-        timer.on("started", () => connectionWithGuest.send(notification("start").serialize()));
-
-        timer.on("secondsUpdated", syncGuest);
 
         connectionWithGuest.on("data", (data) => {
           const jsonRpc = parse(data as string) as IParsedObject;
