@@ -10,6 +10,7 @@ import {
 import { usePubSub } from "create-pubsub/react";
 import { TimerEventType } from "easytimer.js";
 import { InviteOthersLink } from "./InviteOthersLink/InviteOthersLink";
+import { AnimatedHourglass } from "./AnimatedHourglass/AnimatedHourglass";
 
 export function TimerScreen() {
   const [timerValues, setTimerValues] = useState(timer.getTimeValues().toString());
@@ -112,6 +113,15 @@ export function TimerScreen() {
             </div>
           </div>
         </div>
+        {timer.isRunning() ? (
+          <div className="row mt-20">
+            <div className="col">
+              <AnimatedHourglass />
+            </div>
+          </div>
+        ) : (
+          <></>
+        )}
         <div className="row mt-20">
           <div className="col">
             <InviteOthersLink />
