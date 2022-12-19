@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.4.0
+
+- Transitions now have smooth animations.
+- Timer ID is now generated on client-side, instead of fetched from the server.
+- When running in the browser, a link to install the extension in VS Code is displayed.
+
 ## 1.3.0
 
 - Add an animated hourglass, displayed when the timer is running.
