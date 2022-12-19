@@ -14,7 +14,7 @@ import {
 import { DataConnection } from "peerjs";
 import { IParsedObject, notification, parse } from "jsonrpc-lite";
 import { EditTimerNotification } from "../../../../types";
-import { CurrentScreen } from "../../../../enumerations";
+import { CurrentScreen, RpcMethod } from "../../../../enumerations";
 
 export function InitialScreen() {
   const [, setButtonDisabled] = useState(true);
@@ -42,7 +42,7 @@ export function InitialScreen() {
       connectionWithGuest.on("open", () => {
         const syncGuest = () => {
           connectionWithGuest.send(
-            notification("sync", {
+            notification(RpcMethod.Sync, {
               config: timer.getConfig(),
               timeValues: timer.getTimeValues(),
               totalSeconds: timer.getTotalTimeValues().seconds,
@@ -54,7 +54,7 @@ export function InitialScreen() {
 
         const sendEditTimerNotification = () => {
           connectionWithGuest.send(
-            notification("editTimer", {
+            notification(RpcMethod.EditTimer, {
               hours: getTimerHours(),
               minutes: getTimerMinutes(),
               seconds: getTimerSeconds(),
@@ -66,9 +66,9 @@ export function InitialScreen() {
         const stopListeningToTimerMinutesUpdated = listenToTimerMinutesUpdated(sendEditTimerNotification);
         const stopListeningToTimerSecondsUpdated = listenToTimerSecondsUpdated(sendEditTimerNotification);
 
-        const sendStopTimerNotification = () => connectionWithGuest.send(notification("stop").serialize());
+        const sendStopTimerNotification = () => connectionWithGuest.send(notification(RpcMethod.Stop).serialize());
 
-        const sendStartTimerNotification = () => connectionWithGuest.send(notification("start").serialize());
+        const sendStartTimerNotification = () => connectionWithGuest.send(notification(RpcMethod.Start).serialize());
 
         timer.on("stopped", sendStopTimerNotification);
 
@@ -89,7 +89,7 @@ export function InitialScreen() {
           const jsonRpc = parse(data as string) as IParsedObject;
           if (jsonRpc.type === "notification") {
             switch (jsonRpc.payload.method) {
-              case "start":
+              case RpcMethod.Start:
                 timer.start({
                   startValues: {
                     hours: Number(getTimerHours()),
@@ -98,10 +98,10 @@ export function InitialScreen() {
                   },
                 });
                 break;
-              case "stop":
+              case RpcMethod.Stop:
                 timer.stop();
                 break;
-              case "editTimer":
+              case RpcMethod.EditTimer:
                 const { hours, minutes, seconds } = jsonRpc.payload.params as EditTimerNotification;
                 if (hours !== getTimerHours()) setTimerHours(hours);
                 if (minutes !== getTimerMinutes()) setTimerMinutes(minutes);

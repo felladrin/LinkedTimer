@@ -14,7 +14,7 @@ import {
 import { MutableRefObject, useEffect, useRef } from "react";
 import { IParsedObject, notification, parse } from "jsonrpc-lite";
 import { SyncNotification } from "../../../../types";
-import { CurrentScreen } from "../../../../enumerations";
+import { CurrentScreen, RpcMethod } from "../../../../enumerations";
 
 export function JoinScreen() {
   const [timerIdToJoin, setTimerIdToJoin] = usePubSub(timerIdToJoinPubSub);
@@ -32,11 +32,9 @@ export function JoinScreen() {
     const [setTimerSeconds, listenToTimerSecondsUpdated, getTimerSeconds] = timerSecondsPubSub;
     const connectionWithHost = peer.connect(timerIdToJoin);
     connectionWithHost.on("open", () => {
-      setHostTimerId(timerIdToJoin);
-
       const sendEditTimerNotification = () => {
         connectionWithHost.send(
-          notification("editTimer", {
+          notification(RpcMethod.EditTimer, {
             hours: getTimerHours(),
             minutes: getTimerMinutes(),
             seconds: getTimerSeconds(),
@@ -49,10 +47,10 @@ export function JoinScreen() {
       const stopListeningToTimerSecondsUpdated = listenToTimerSecondsUpdated(sendEditTimerNotification);
 
       const stopListeningToStartTimerButtonClicked = listenToStartTimerButtonClicked(() =>
-        connectionWithHost.send(notification("start").serialize())
+        connectionWithHost.send(notification(RpcMethod.Start).serialize())
       );
       const stopListeningToStopTimerButtonClicked = listenToStopTimerButtonClicked(() =>
-        connectionWithHost.send(notification("stop").serialize())
+        connectionWithHost.send(notification(RpcMethod.Stop).serialize())
       );
 
       connectionWithHost.on("close", () => {
@@ -67,7 +65,7 @@ export function JoinScreen() {
         const jsonRpc = parse(data as string) as IParsedObject;
         if (jsonRpc.type === "notification") {
           switch (jsonRpc.payload.method) {
-            case "sync":
+            case RpcMethod.Sync:
               const { config, timeValues, totalSeconds } = jsonRpc.payload.params as SyncNotification;
               if (Math.abs(totalSeconds - timer.getTotalTimeValues().seconds) > 1) {
                 if (timer.isRunning()) timer.stop();
@@ -77,7 +75,7 @@ export function JoinScreen() {
                 });
               }
               break;
-            case "start":
+            case RpcMethod.Start:
               timer.start({
                 startValues: {
                   hours: Number(getTimerHours()),
@@ -86,10 +84,10 @@ export function JoinScreen() {
                 },
               });
               break;
-            case "stop":
+            case RpcMethod.Stop:
               timer.stop();
               break;
-            case "editTimer":
+            case RpcMethod.EditTimer:
               const { hours, minutes, seconds } = jsonRpc.payload.params as {
                 hours: string;
                 minutes: string;
@@ -102,6 +100,9 @@ export function JoinScreen() {
           }
         }
       });
+    });
+    connectionWithHost.on("open", () => {
+      setHostTimerId(timerIdToJoin);
       setCurrentScreen(CurrentScreen.TimerScreen);
     });
   };

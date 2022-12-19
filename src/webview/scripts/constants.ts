@@ -36,6 +36,7 @@ export const peer = isRunningInDevEnvironment
   ? new Peer("", {
       host: location.hostname,
       port: 9000,
+      debug: 2,
     })
   : new Peer();
 export const hostTimerIdPubSub = createPubSub("");
