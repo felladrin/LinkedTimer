@@ -24,6 +24,7 @@ export const isRunningInDevEnvironment = process.env.NODE_ENV === "development";
 export const isRunningInVsCodeWebview = "acquireVsCodeApi" in window;
 export const vsCodeApi = isRunningInVsCodeWebview ? acquireVsCodeApi() : polyfillAcquireVsCodeApi();
 export const extensionName = "Linked Timer";
+export const vsCodeMarketplaceUrl = "https://marketplace.visualstudio.com/items?itemName=felladrin.linked-timer";
 export const features = [
   { name: TabTitleManager.name, defaultValue: true },
   { name: NotificationManager.name, defaultValue: true },

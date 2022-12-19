@@ -1,5 +1,11 @@
 import { Enable, Features, ToggleFeatures } from "react-enable";
-import { extensionName, features, isRunningInDevEnvironment } from "../../constants";
+import {
+  extensionName,
+  features,
+  isRunningInDevEnvironment,
+  isRunningInVsCodeWebview,
+  vsCodeMarketplaceUrl,
+} from "../../constants";
 import { StickyAlertsContainer } from "./StickyAlertsContainer/StickyAlertsContainer";
 import { TabTitleManager } from "./TabTitleManager/TabTitleManager";
 import { NotificationManager } from "./NotificationManager/NotificationManager";
@@ -32,6 +38,13 @@ export function Root() {
             <button className="btn btn-link btn-sm text-muted" type="button" onClick={() => halfmoon.toggleDarkMode()}>
               Toggle Dark Mode
             </button>
+            {!isRunningInVsCodeWebview ? (
+              <a href={vsCodeMarketplaceUrl} target={"_blank"} className="btn btn-link btn-sm text-muted" type="button">
+                Install on VS Code
+              </a>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
       </div>
