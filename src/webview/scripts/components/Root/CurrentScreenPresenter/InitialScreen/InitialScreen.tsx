@@ -4,6 +4,7 @@ import {
   currentScreenPubSub,
   hostTimerIdPubSub,
   peer,
+  peerIdPrefix,
   startTimerButtonClickedPubSub,
   stopTimerButtonClickedPubSub,
   timer,
@@ -22,7 +23,7 @@ export function InitialScreen() {
   const [, setCurrentScreen] = usePubSub(currentScreenPubSub);
 
   const handleHostButtonClicked = () => {
-    setHostTimerId(peer.id);
+    setHostTimerId(peer.id.replace(peerIdPrefix, ""));
     const [, listenToStartTimerButtonClicked] = startTimerButtonClickedPubSub;
     const [, listenToStopTimerButtonClicked] = stopTimerButtonClickedPubSub;
     const [setTimerHours, listenToTimerHoursUpdated, getTimerHours] = timerHoursPubSub;

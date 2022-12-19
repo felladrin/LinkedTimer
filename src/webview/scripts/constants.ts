@@ -5,6 +5,7 @@ import Timer from "easytimer.js";
 import { TabTitleManager } from "./components/Root/TabTitleManager/TabTitleManager";
 import { NotificationManager } from "./components/Root/NotificationManager/NotificationManager";
 import { LocalStorageManager } from "./components/Root/LocalStorageManager/LocalStorageManager";
+import { v4 as uuidv4 } from "uuid";
 
 declare const acquireVsCodeApi: () => {
   postMessage(message: any): void;
@@ -32,13 +33,17 @@ export const timer = new Timer({
   countdown: true,
   startValues: { hours: 0, minutes: 1, seconds: 0 },
 });
-export const peer = isRunningInDevEnvironment
-  ? new Peer("", {
-      host: location.hostname,
-      port: 9000,
-      debug: 2,
-    })
-  : new Peer();
+export const peerIdPrefix = "linked-timer-";
+export const peer = new Peer(
+  `${peerIdPrefix}${uuidv4()}`,
+  isRunningInDevEnvironment
+    ? {
+        host: location.hostname,
+        port: 9000,
+        debug: 2,
+      }
+    : undefined
+);
 export const hostTimerIdPubSub = createPubSub("");
 export const timerIdToJoinPubSub = createPubSub("");
 export const startTimerButtonClickedPubSub = createPubSub();

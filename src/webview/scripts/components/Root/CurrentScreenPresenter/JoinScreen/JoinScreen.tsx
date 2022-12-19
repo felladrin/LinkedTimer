@@ -3,6 +3,7 @@ import {
   currentScreenPubSub,
   hostTimerIdPubSub,
   peer,
+  peerIdPrefix,
   startTimerButtonClickedPubSub,
   stopTimerButtonClickedPubSub,
   timer,
@@ -30,7 +31,7 @@ export function JoinScreen() {
     const [setTimerHours, listenToTimerHoursUpdated, getTimerHours] = timerHoursPubSub;
     const [setTimerMinutes, listenToTimerMinutesUpdated, getTimerMinutes] = timerMinutesPubSub;
     const [setTimerSeconds, listenToTimerSecondsUpdated, getTimerSeconds] = timerSecondsPubSub;
-    const connectionWithHost = peer.connect(timerIdToJoin);
+    const connectionWithHost = peer.connect(`${peerIdPrefix}${timerIdToJoin}`);
     connectionWithHost.on("open", () => {
       const sendEditTimerNotification = () => {
         connectionWithHost.send(
@@ -102,7 +103,7 @@ export function JoinScreen() {
       });
     });
     connectionWithHost.on("open", () => {
-      setHostTimerId(timerIdToJoin);
+      setHostTimerId(timerIdToJoin.replace(peerIdPrefix, ""));
       setCurrentScreen(CurrentScreen.TimerScreen);
     });
   };
