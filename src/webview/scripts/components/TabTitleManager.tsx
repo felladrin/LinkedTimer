@@ -1,20 +1,23 @@
-import { useEffect } from "react";
-import { extensionName, timer, vsCodeApi } from "../../../constants";
+import { useDocumentTitle } from "@mantine/hooks";
+import { useEffect, useState } from "react";
+import { extensionName, timer, vsCodeApi } from "../constants";
 
 export function TabTitleManager() {
-  useEffect(() => {
-    const initialTitle = document.title;
+  const [initialTitle] = useState(document.title);
+  const [title, setTitle] = useState(initialTitle);
+  useDocumentTitle(title);
 
+  useEffect(() => {
     const setTitleWithCurrentTime = () => {
       const timerValuesAsString = timer.getTimeValues().toString();
       vsCodeApi.postMessage({ panelTitle: timerValuesAsString });
-      document.title = `${timerValuesAsString} | ${extensionName}`;
+      setTitle(`${timerValuesAsString} | ${extensionName}`);
     };
 
     const handleTargetAchieved = () => {
       const title = `Time's up! | ${extensionName}`;
       vsCodeApi.postMessage({ panelTitle: title });
-      document.title = title;
+      setTitle(title);
     };
 
     timer.on("started", setTitleWithCurrentTime);
@@ -28,7 +31,7 @@ export function TabTitleManager() {
       timer.off("secondsUpdated", setTitleWithCurrentTime);
       timer.off("targetAchieved", handleTargetAchieved);
 
-      document.title = initialTitle;
+      setTitle(initialTitle);
     };
   }, []);
   return <></>;

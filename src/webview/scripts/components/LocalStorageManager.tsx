@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { timerHoursPubSub, timerMinutesPubSub, timerSecondsPubSub } from "../../../constants";
+import { timerHoursPubSub, timerMinutesPubSub, timerSecondsPubSub } from "../constants";
 
 export function LocalStorageManager() {
   useEffect(() => {

@@ -43,31 +43,28 @@
     "watch": "run-p watch-extension watch-webview"
   },
   "devDependencies": {
+    "@emotion/react": "^11.10.5",
     "@formkit/auto-animate": "^1.0.0-beta.5",
+    "@mantine/core": "^5.9.5",
+    "@mantine/hooks": "^5.9.5",
     "@parcel/optimizer-data-url": "^2.8.0",
     "@parcel/transformer-inline-string": "^2.8.0",
-    "@types/halfmoon": "^1.0.2",
+    "@tabler/icons": "^1.118.0",
     "@types/node": "^18.11.9",
     "@types/react": "^18.0.26",
-    "@types/react-copy-to-clipboard": "^5.0.4",
     "@types/react-dom": "^18.0.9",
-    "@types/uuid": "^9.0.0",
     "@types/vscode": "^1.32.0",
     "create-pubsub": "^1.4.0",
     "easytimer.js": "^4.5.4",
-    "halfmoon": "^1.1.1",
-    "jsonrpc-lite": "^2.2.0",
     "npm-run-all": "^4.1.5",
-    "parcel": "^2.8.0",
+    "parcel": "^2.8.2",
     "peer": "^0.6.1",
     "peerjs": "^1.4.7",
     "process": "^0.11.10",
     "react": "^18.2.0",
-    "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.2.0",
     "react-enable": "^3.0.1",
-    "typescript": "^4.8.4",
-    "uuid": "^9.0.0"
+    "typescript": "^4.8.4"
   },
   "targets": {
     "main": false

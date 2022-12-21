@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { extensionName, timer, vsCodeApi } from "../../../constants";
+import { extensionName, timer, vsCodeApi } from "../constants";
 
 export function NotificationManager() {
   useEffect(() => {
