@@ -1,13 +1,13 @@
 import { createRoot } from "react-dom/client";
 import { Root } from "./components/Root";
+import { StrictMode } from "react";
 
 window.addEventListener(
   "DOMContentLoaded",
-  () => {
-    const root = document.createElement("div");
-    root.classList.add("page-wrapper");
-    document.body.appendChild(root);
-    createRoot(root).render(<Root />);
-  },
+  () => createRoot(
+    document.body.appendChild(
+      document.createElement("div")
+    )
+  ).render(<StrictMode><Root /></StrictMode>),
   { once: true }
 );
