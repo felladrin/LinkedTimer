@@ -1,18 +1,19 @@
-import { usePubSub } from "create-pubsub/react";
-import { useEffect } from "react";
+import { useLocalStorage } from "@mantine/hooks";
+import { useContext, useEffect } from "react";
 import {
   startTimerButtonClickedPubSub,
   stopTimerButtonClickedPubSub,
-  timer,
-  timerHoursPubSub,
-  timerMinutesPubSub,
-  timerSecondsPubSub
+  TimerContext,
+  timerHoursLocalStorageProperties,
+  timerMinutesLocalStorageProperties,
+  timerSecondsLocalStorageProperties,
 } from "../constants";
 
 export function TimerManager() {
-  const [timerHours] = usePubSub(timerHoursPubSub);
-  const [timerMinutes] = usePubSub(timerMinutesPubSub);
-  const [timerSeconds] = usePubSub(timerSecondsPubSub);
+  const timer = useContext(TimerContext);
+  const [timerHours] = useLocalStorage(timerHoursLocalStorageProperties);
+  const [timerMinutes] = useLocalStorage(timerMinutesLocalStorageProperties);
+  const [timerSeconds] = useLocalStorage(timerSecondsLocalStorageProperties);
 
   useEffect(() => {
     const [, subStartTimerButtonClicked] = startTimerButtonClickedPubSub;
@@ -20,16 +21,14 @@ export function TimerManager() {
     const unsubscribe = subStartTimerButtonClicked(() => {
       timer.start({
         startValues: {
-          hours: Number(timerHours),
-          minutes: Number(timerMinutes),
-          seconds: Number(timerSeconds)
-        }
+          hours: timerHours,
+          minutes: timerMinutes,
+          seconds: timerSeconds,
+        },
       });
     });
 
-    return () => {
-      unsubscribe();
-    };
+    return unsubscribe;
   }, [timerHours, timerMinutes, timerSeconds]);
 
   useEffect(() => {
@@ -37,9 +36,7 @@ export function TimerManager() {
 
     const unsubscribe = subStopTimerButtonClicked(timer.stop);
 
-    return () => {
-      unsubscribe();
-    };
+    return unsubscribe;
   }, []);
 
   return <></>;

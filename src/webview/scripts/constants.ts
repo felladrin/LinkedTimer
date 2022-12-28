@@ -4,7 +4,8 @@ import { DataConnection } from "peerjs";
 import Timer from "easytimer.js";
 import { TabTitleManager } from "./components/TabTitleManager";
 import { NotificationManager } from "./components/NotificationManager";
-import { LocalStorageManager } from "./components/LocalStorageManager";
+import { IStorageProperties } from "@mantine/hooks/lib/use-local-storage/create-storage";
+import { createContext } from "react";
 
 declare const acquireVsCodeApi: () => {
   postMessage(message: any): void;
@@ -17,7 +18,7 @@ const polyfillAcquireVsCodeApi: typeof acquireVsCodeApi = () => {
   return {
     postMessage: voidFunction,
     getState: voidFunction,
-    setState: voidFunction
+    setState: voidFunction,
   };
 };
 export const isRunningInDevEnvironment = process.env.NODE_ENV === "development";
@@ -29,17 +30,28 @@ export const vsCodeMarketplaceUrl = "https://marketplace.visualstudio.com/items?
 export const features = [
   { name: TabTitleManager.name, defaultValue: true },
   { name: NotificationManager.name, defaultValue: true },
-  { name: LocalStorageManager.name, defaultValue: "localStorage" in window, noOverride: true }
 ] as import("react-enable/dist/FeatureState").FeatureDescription[];
-export const timer = new Timer({
-  countdown: true,
-  startValues: { hours: 0, minutes: 0, seconds: 15 }
-});
+export const TimerContext = createContext<Timer>(null!);
+export type PeerState = [
+  peer: Peer,
+  isPeerOpen: boolean,
+  peerConnections: DataConnection[],
+  connectToPeer: (requestedPeerIdToConnect: string) => void
+];
+export const PeerContext = createContext<PeerState>(null!);
 export const requestedPeerIdToConnectPubSub = createPubSub("");
 export const startTimerButtonClickedPubSub = createPubSub();
 export const stopTimerButtonClickedPubSub = createPubSub();
-export const timerHoursPubSub = createPubSub("00");
-export const timerMinutesPubSub = createPubSub("00");
-export const timerSecondsPubSub = createPubSub("15");
-export const peerPubSub = createPubSub<Peer | null>(null);
+export const timerHoursLocalStorageProperties: IStorageProperties<number> = {
+  key: "linked-timer-hours",
+  defaultValue: 0,
+};
+export const timerMinutesLocalStorageProperties: IStorageProperties<number> = {
+  key: "linked-timer-minutes",
+  defaultValue: 0,
+};
+export const timerSecondsLocalStorageProperties: IStorageProperties<number> = {
+  key: "linked-timer-seconds",
+  defaultValue: 15,
+};
 export const connectionsPubSub = createPubSub<DataConnection[]>([]);

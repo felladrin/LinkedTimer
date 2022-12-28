@@ -1,28 +1,28 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   stopTimerButtonClickedPubSub,
-  timer,
-  timerHoursPubSub,
-  timerMinutesPubSub,
-  timerSecondsPubSub
+  TimerContext,
+  timerHoursLocalStorageProperties,
+  timerMinutesLocalStorageProperties,
+  timerSecondsLocalStorageProperties,
 } from "../constants";
 import { usePubSub } from "create-pubsub/react";
 import { TimerEventType } from "easytimer.js";
 import { Button, Center, RingProgress, Text } from "@mantine/core";
+import { useLocalStorage } from "@mantine/hooks";
 
 export function TimeLeftRingChart() {
-  const [timerHours] = usePubSub(timerHoursPubSub);
-  const [timerMinutes] = usePubSub(timerMinutesPubSub);
-  const [timerSeconds] = usePubSub(timerSecondsPubSub);
+  const timer = useContext(TimerContext);
+  const [timerHours] = useLocalStorage(timerHoursLocalStorageProperties);
+  const [timerMinutes] = useLocalStorage(timerMinutesLocalStorageProperties);
+  const [timerSeconds] = useLocalStorage(timerSecondsLocalStorageProperties);
   const [percentageOfTimeLeft, setPercentageOfTimeLeft] = useState(100);
   const [, emitStopTimerButtonClicked] = usePubSub(stopTimerButtonClickedPubSub);
 
   useEffect(() => {
     const timerEventListener = () => {
       setPercentageOfTimeLeft(
-        (timer.getTotalTimeValues().seconds /
-          (Number(timerHours) * 3600 + Number(timerMinutes) * 60 + Number(timerSeconds))) *
-        100
+        (timer.getTotalTimeValues().seconds / (timerHours * 3600 + timerMinutes * 60 + timerSeconds)) * 100
       );
     };
 

@@ -1,27 +1,26 @@
-import { MutableRefObject, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   startTimerButtonClickedPubSub,
-  timer,
-  timerHoursPubSub,
-  timerMinutesPubSub,
-  timerSecondsPubSub
+  TimerContext,
+  timerHoursLocalStorageProperties,
+  timerMinutesLocalStorageProperties,
+  timerSecondsLocalStorageProperties,
 } from "../constants";
 import { usePubSub } from "create-pubsub/react";
 import { TimerEventType } from "easytimer.js";
 import { TimeLeftRingChart } from "./TimeLeftRingChart";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Button, Grid, NumberInput } from "@mantine/core";
+import { useLocalStorage } from "@mantine/hooks";
 
 export function TimerScreen() {
+  const timer = useContext(TimerContext);
   const [isTimerRunning, setTimerRunning] = useState(timer.isRunning());
   const [, emitStartTimerButtonClicked] = usePubSub(startTimerButtonClickedPubSub);
-  const [timerHours, setHours] = usePubSub(timerHoursPubSub);
-  const [timerMinutes, setMinutes] = usePubSub(timerMinutesPubSub);
-  const [timerSeconds, setSeconds] = usePubSub(timerSecondsPubSub);
-  const timerIdInputReference = useRef<HTMLInputElement>() as MutableRefObject<HTMLInputElement>;
+  const [timerHours, setTimerHours] = useLocalStorage(timerHoursLocalStorageProperties);
+  const [timerMinutes, setTimerMinutes] = useLocalStorage(timerMinutesLocalStorageProperties);
+  const [timerSeconds, setTimerSeconds] = useLocalStorage(timerSecondsLocalStorageProperties);
   const [timerControlsParent] = useAutoAnimate<HTMLDivElement>();
-
-  useEffect(() => timerIdInputReference.current.focus(), []);
 
   useEffect(() => {
     const timerEventListener = () => {
@@ -48,39 +47,35 @@ export function TimerScreen() {
           <Grid grow align="flex-end" p="md">
             <Grid.Col span={3}>
               <NumberInput
-                placeholder="0"
                 label="Hours"
-                value={Number(timerHours)}
+                value={timerHours}
                 max={24}
                 min={0}
-                ref={timerIdInputReference}
-                onChange={(value) => {
-                  if (value !== undefined) setHours(value.toString());
-                }}
+                onChange={(value) => setTimerHours(value || 0)}
+                classNames={{ input: "font-family-E1234" }}
+                formatter={(value) => value?.padStart(2, "0") as string}
               />
             </Grid.Col>
             <Grid.Col span={3}>
               <NumberInput
-                placeholder="0"
                 label="Minutes"
-                value={Number(timerMinutes)}
+                value={timerMinutes}
                 max={59}
                 min={0}
-                onChange={(value) => {
-                  if (value !== undefined) setMinutes(value.toString());
-                }}
+                onChange={(value) => setTimerMinutes(value || 0)}
+                classNames={{ input: "font-family-E1234" }}
+                formatter={(value) => value?.padStart(2, "0") as string}
               />
             </Grid.Col>
             <Grid.Col span={3}>
               <NumberInput
-                placeholder="0"
                 label="Seconds"
-                value={Number(timerSeconds)}
+                value={timerSeconds}
                 max={59}
                 min={0}
-                onChange={(value) => {
-                  if (value !== undefined) setSeconds(value.toString());
-                }}
+                onChange={(value) => setTimerSeconds(value || 0)}
+                classNames={{ input: "font-family-E1234" }}
+                formatter={(value) => value?.padStart(2, "0") as string}
               />
             </Grid.Col>
             <Grid.Col span={3}>

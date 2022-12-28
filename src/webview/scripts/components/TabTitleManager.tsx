@@ -1,8 +1,9 @@
 import { useDocumentTitle } from "@mantine/hooks";
-import { useEffect, useState } from "react";
-import { extensionName, timer, vsCodeApi } from "../constants";
+import { useContext, useEffect, useState } from "react";
+import { extensionName, TimerContext, vsCodeApi } from "../constants";
 
 export function TabTitleManager() {
+  const timer = useContext(TimerContext);
   const [initialTitle] = useState(document.title);
   const [title, setTitle] = useState(initialTitle);
   useDocumentTitle(title);

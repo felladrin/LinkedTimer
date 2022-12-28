@@ -1,7 +1,9 @@
-import { useEffect } from "react";
-import { extensionName, timer, vsCodeApi } from "../constants";
+import { useContext, useEffect } from "react";
+import { extensionName, TimerContext, vsCodeApi } from "../constants";
 
 export function NotificationManager() {
+  const timer = useContext(TimerContext);
+
   useEffect(() => {
     const targetAchievedListener = () => {
       vsCodeApi.postMessage({ informationMessage: `${extensionName}: Time's up!` });
