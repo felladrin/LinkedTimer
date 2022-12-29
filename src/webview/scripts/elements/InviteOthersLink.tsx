@@ -1,15 +1,12 @@
-import { PeerContext } from "../constants";
-import { useContext, useEffect, useState } from "react";
 import { Accordion, ActionIcon, CopyButton, Input, Tooltip } from "@mantine/core";
 import { IconCheck, IconCopy } from "@tabler/icons";
+import { usePubSub } from "create-pubsub/react";
+import { peerPubSub } from "../controllers/peerController";
 
 export function InviteOthersLink() {
-  const [peer, isPeerOpen] = useContext(PeerContext);
-  const [addressToJoin, setAddressToJoin] = useState("");
+  const [peer] = usePubSub(peerPubSub);
 
-  useEffect(() => {
-    if (isPeerOpen) setAddressToJoin(peer.id);
-  }, [peer, isPeerOpen]);
+  const addressToJoin = peer ? peer.id : "Loading...";
 
   return (
     <Accordion.Item value={InviteOthersLink.name}>

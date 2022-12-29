@@ -1,42 +1,22 @@
-import { useContext, useEffect, useState } from "react";
 import {
-  startTimerButtonClickedPubSub,
-  TimerContext,
+  emitStartTimerButtonClicked,
+  isTimerRunningPubSub,
   timerHoursLocalStorageProperties,
   timerMinutesLocalStorageProperties,
   timerSecondsLocalStorageProperties,
-} from "../constants";
-import { usePubSub } from "create-pubsub/react";
-import { TimerEventType } from "easytimer.js";
+} from "../controllers/timerController";
 import { TimeLeftRingChart } from "./TimeLeftRingChart";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Button, Grid, NumberInput } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
+import { usePubSub } from "create-pubsub/react";
 
 export function TimerScreen() {
-  const timer = useContext(TimerContext);
-  const [isTimerRunning, setTimerRunning] = useState(timer.isRunning());
-  const [, emitStartTimerButtonClicked] = usePubSub(startTimerButtonClickedPubSub);
+  const [isTimerRunning] = usePubSub(isTimerRunningPubSub);
   const [timerHours, setTimerHours] = useLocalStorage(timerHoursLocalStorageProperties);
   const [timerMinutes, setTimerMinutes] = useLocalStorage(timerMinutesLocalStorageProperties);
   const [timerSeconds, setTimerSeconds] = useLocalStorage(timerSecondsLocalStorageProperties);
   const [timerControlsParent] = useAutoAnimate<HTMLDivElement>();
-
-  useEffect(() => {
-    const timerEventListener = () => {
-      setTimerRunning(timer.isRunning());
-    };
-
-    (["started", "stopped", "secondsUpdated"] as TimerEventType[]).forEach((timerEventType) => {
-      timer.on(timerEventType, timerEventListener);
-    });
-
-    return () => {
-      (["started", "stopped", "secondsUpdated"] as TimerEventType[]).forEach((timerEventType) => {
-        timer.off(timerEventType, timerEventListener);
-      });
-    };
-  }, []);
 
   return (
     <>

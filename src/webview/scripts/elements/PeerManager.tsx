@@ -1,14 +1,15 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import Peer, { DataConnection } from "peerjs";
 import {
-  PeerContext,
-  TimerContext,
   timerHoursLocalStorageProperties,
   timerMinutesLocalStorageProperties,
   timerSecondsLocalStorageProperties,
-} from "../constants";
+} from "../controllers/timerController";
 import { useLocalStorage } from "@mantine/hooks";
 import { type PublishFunction } from "create-pubsub";
+import { connectToPeer, peerConnectionsPubSub, peerPubSub } from "../controllers/peerController";
+import { usePubSub } from "create-pubsub/react";
+import { timer } from "../controllers/timerController";
 
 enum RpcMethod {
   Start = "Start",
@@ -34,14 +35,15 @@ type PeerData<T = void> = {
   parameters: T;
 };
 
-export function PeerManager() {
-  const [peer, , connections, connectToPeer] = useContext(PeerContext);
+export const PeerManager = () => {
+  const [peer] = usePubSub(peerPubSub);
+  const [peerConnections] = usePubSub(peerConnectionsPubSub);
 
-  const connectedPeerIds = connections.map((connection) => connection.peer);
+  const connectedPeerIds = peerConnections.map((connection) => connection.peer);
 
   return (
     <>
-      {connections.map((connection) => (
+      {peerConnections.map((connection) => (
         <ConnectionManager
           key={connection.connectionId}
           connection={connection}
@@ -52,7 +54,7 @@ export function PeerManager() {
       ))}
     </>
   );
-}
+};
 
 function ConnectionManager({
   connection,
@@ -65,7 +67,6 @@ function ConnectionManager({
   connectToPeer: PublishFunction<string>;
   currentPeerId: string;
 }) {
-  const timer = useContext(TimerContext);
   const [timerHours, setTimerHours] = useLocalStorage(timerHoursLocalStorageProperties);
   const [timerMinutes, setTimerMinutes] = useLocalStorage(timerMinutesLocalStorageProperties);
   const [timerSeconds, setTimerSeconds] = useLocalStorage(timerSecondsLocalStorageProperties);
@@ -79,12 +80,12 @@ function ConnectionManager({
         seconds: timerSeconds,
       },
     } as PeerData<EditTimerParameters>);
-  }, [timerHours, timerMinutes, timerSeconds]);
+  }, [connection, timerHours, timerMinutes, timerSeconds]);
 
   useEffect(() => {
     const handleConnectionData = (data: unknown) => {
       switch ((data as PeerData).method) {
-        case RpcMethod.Sync:
+        case RpcMethod.Sync: {
           const { timeValues, totalSeconds, peerIds } = (data as PeerData<SyncParameters>).parameters;
           if (Math.abs(totalSeconds - timer.getTotalTimeValues().seconds) > 1) {
             if (timer.isRunning()) timer.stop();
@@ -98,7 +99,8 @@ function ConnectionManager({
             }
           });
           break;
-        case RpcMethod.Start:
+        }
+        case RpcMethod.Start: {
           if (timer.isRunning()) return;
           timer.start({
             startValues: {
@@ -108,15 +110,18 @@ function ConnectionManager({
             },
           });
           break;
-        case RpcMethod.Stop:
+        }
+        case RpcMethod.Stop: {
           if (timer.isRunning()) timer.stop();
           break;
-        case RpcMethod.EditTimer:
+        }
+        case RpcMethod.EditTimer: {
           const { hours, minutes, seconds } = (data as PeerData<EditTimerParameters>).parameters;
           if (hours !== timerHours) setTimerHours(hours);
           if (minutes !== timerMinutes) setTimerMinutes(minutes);
           if (seconds !== timerSeconds) setTimerSeconds(seconds);
           break;
+        }
       }
     };
 
@@ -125,7 +130,18 @@ function ConnectionManager({
     return () => {
       connection.off("data", handleConnectionData);
     };
-  }, [timerHours, timerMinutes, timerSeconds]);
+  }, [
+    connectToPeer,
+    connectedPeerIds,
+    connection,
+    currentPeerId,
+    setTimerHours,
+    setTimerMinutes,
+    setTimerSeconds,
+    timerHours,
+    timerMinutes,
+    timerSeconds,
+  ]);
 
   useEffect(() => {
     const sendStopTimerNotification = () => connection.send({ method: RpcMethod.Stop } as PeerData);
@@ -139,7 +155,7 @@ function ConnectionManager({
       timer.off("stopped", sendStopTimerNotification);
       timer.off("started", sendStartTimerNotification);
     };
-  }, []);
+  }, [connection]);
 
   useEffect(() => {
     const syncTime = () => {
@@ -161,7 +177,7 @@ function ConnectionManager({
     return () => {
       timer.off("secondsUpdated", syncTime);
     };
-  }, []);
+  }, [connectedPeerIds, connection]);
 
   return <></>;
 }
