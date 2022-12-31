@@ -1,5 +1,5 @@
-import { vsCodeMarketplaceUrl } from "../controllers/vsCodeController";
-import { appName, isRunningInBrowser } from "../controllers/appController";
+import { appName, vsCodeMarketplaceUrl } from "../constants/strings";
+import { isRunningInBrowser } from "../constants/booleans";
 import { Accordion, ActionIcon, Card, Container, Group, Menu, Title } from "@mantine/core";
 import { IconDots, IconExternalLink } from "@tabler/icons";
 import { TimerScreen } from "./TimerScreen";

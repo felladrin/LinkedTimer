@@ -1,4 +1,4 @@
-import { emitStopTimerButtonClicked, percentageOfTimeLeftPubSub, timerValuesStringPubSub } from "../controllers/timerController";
+import { emitStopTimerButtonClicked, percentageOfTimeLeftPubSub, timerValuesStringPubSub } from "../constants/timer";
 import { Button, Center, RingProgress, Text } from "@mantine/core";
 import { usePubSub } from "create-pubsub/react";
 

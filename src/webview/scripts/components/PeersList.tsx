@@ -1,7 +1,7 @@
 import { Accordion, Timeline } from "@mantine/core";
 import { IconLink, IconLinkOff } from "@tabler/icons";
 import { usePubSub } from "create-pubsub/react";
-import { peerConnectionsPubSub } from "../controllers/peerController";
+import { peerConnectionsPubSub } from "../constants/peer";
 
 export function PeersList() {
   const [peerConnections] = usePubSub(peerConnectionsPubSub);

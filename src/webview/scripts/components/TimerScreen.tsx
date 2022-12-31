@@ -1,8 +1,4 @@
-import {
-  emitStartTimerButtonClicked,
-  isTimerRunningPubSub,
-  timerStartValuesPubSub,
-} from "../controllers/timerController";
+import { emitStartTimerButtonClicked, isTimerRunningPubSub, timerStartValuesPubSub } from "../constants/timer";
 import { TimeLeftRingChart } from "./TimeLeftRingChart";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Button, Grid, NumberInput } from "@mantine/core";

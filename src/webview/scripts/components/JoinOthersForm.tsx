@@ -1,7 +1,7 @@
 import { Accordion, ActionIcon, Input, Tooltip } from "@mantine/core";
 import { IconPlugConnected } from "@tabler/icons";
 import { useState } from "react";
-import { connectToPeer } from "../controllers/peerController";
+import { connectToPeer } from "../commands/connectToPeer";
 
 export function JoinOthersForm() {
   const [timerIdToJoin, setTimerIdToJoin] = useState("");

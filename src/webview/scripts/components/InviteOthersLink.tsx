@@ -1,7 +1,7 @@
 import { Accordion, ActionIcon, CopyButton, Input, Tooltip } from "@mantine/core";
 import { IconCheck, IconCopy } from "@tabler/icons";
 import { usePubSub } from "create-pubsub/react";
-import { peerPubSub } from "../controllers/peerController";
+import { peerPubSub } from "../constants/peer";
 
 export function InviteOthersLink() {
   const [peer] = usePubSub(peerPubSub);
