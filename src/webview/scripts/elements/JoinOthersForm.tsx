@@ -12,10 +12,16 @@ export function JoinOthersForm() {
       <Accordion.Panel>
         <Input
           placeholder="ID to connect"
-          onChange={({ currentTarget }) => setTimerIdToJoin(currentTarget.value)}
+          value={timerIdToJoin}
+          onChange={({ currentTarget }) => setTimerIdToJoin(currentTarget.value.trim())}
           rightSection={
             <Tooltip label="Connect" position="left">
-              <ActionIcon onClick={() => connectToPeer(timerIdToJoin)}>
+              <ActionIcon
+                onClick={() => {
+                  connectToPeer(timerIdToJoin);
+                  setTimerIdToJoin("");
+                }}
+              >
                 <IconPlugConnected size={16} />
               </ActionIcon>
             </Tooltip>

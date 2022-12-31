@@ -1,5 +1,5 @@
 import { appName } from "./appController";
-import { listenToTimerTargetAchieved } from "./timerController";
+import { listenToTimerTargetAchieved, listenToTimerValuesString } from "./timerController";
 
 declare const acquireVsCodeApi: () => {
   postMessage(message: unknown): void;
@@ -24,4 +24,13 @@ export const vsCodeMarketplaceUrl = "https://marketplace.visualstudio.com/items?
 
 listenToTimerTargetAchieved(() => {
   vsCodeApi.postMessage({ informationMessage: `${appName}: Time's up!` });
+});
+
+listenToTimerTargetAchieved(() => {
+  const title = `Time's up! | ${appName}`;
+  vsCodeApi.postMessage({ panelTitle: title });
+});
+
+listenToTimerValuesString((timerValuesString) => {
+  vsCodeApi.postMessage({ panelTitle: timerValuesString });
 });

@@ -25,15 +25,29 @@ enum LogLevel {
 }
 
 export const peerPubSub = createPubSub<Peer | null>(null);
-const [emitPeerChanged, onPeerChanged, getPeer] = peerPubSub;
+export const [emitPeerChanged, onPeerChanged, getPeer] = peerPubSub;
 
 export const peerConnectionsPubSub = createPubSub<DataConnection[]>([]);
-const [setPeerConnections, , getPeerConnections] = peerConnectionsPubSub;
+export const [setPeerConnections, listenToPeerConnections, getPeerConnections] = peerConnectionsPubSub;
+
+export const connectedPeerIdsPubSub = createPubSub<string[]>([]);
+export const [setConnectedPeerIds, listenToConnectedPeerIds, getConnectedPeerIds] = connectedPeerIdsPubSub;
+
+export const connectionDataReceivedPubSub = createPubSub<unknown>();
+export const [setConnectionDataReceived, listenToConnectionDataReceived] = connectionDataReceivedPubSub;
 
 export const connectToPeer = (requestedPeerIdToConnect: string) => {
   const peer = getPeer();
 
-  if (requestedPeerIdToConnect.trim().length === 0 || !peer) return;
+  const connectedPeerIds = getConnectedPeerIds();
+
+  if (
+    !peer ||
+    requestedPeerIdToConnect.trim().length === 0 ||
+    requestedPeerIdToConnect === peer.id ||
+    connectedPeerIds.includes(requestedPeerIdToConnect)
+  )
+    return;
 
   const connectionWithPeer = peer.connect(requestedPeerIdToConnect);
 
@@ -59,6 +73,8 @@ function createPeer() {
   newPeer.on("close", () => emitPeerChanged(null));
 }
 
+export const [emitConnectionReceived, listenToConnectionReceived] = createPubSub<DataConnection>();
+
 onPeerChanged((peer) => {
   if (!peer) return;
 
@@ -74,16 +90,31 @@ onPeerChanged((peer) => {
     }
   });
 
-  peer.on("connection", handleConnectionWithPeer);
+  peer.on("connection", (connectionWithPeer) => {
+    connectionWithPeer.once("open", () => emitConnectionReceived(connectionWithPeer));
+    handleConnectionWithPeer(connectionWithPeer);
+  });
 });
 
 function handleConnectionWithPeer(connectionWithPeer: DataConnection) {
   connectionWithPeer.on("open", () => {
-    setPeerConnections([...getPeerConnections(), connectionWithPeer]);
+    const peerConnections = getPeerConnections();
+
+    const existingConnection = peerConnections.find(
+      (existingConnection) => existingConnection.peer === connectionWithPeer.peer
+    );
+
+    setPeerConnections([...peerConnections, connectionWithPeer]);
+
+    connectionWithPeer.on("data", setConnectionDataReceived);
+
+    existingConnection?.close();
   });
 
   connectionWithPeer.on("close", () => {
     setPeerConnections(getPeerConnections().filter((connection) => connection !== connectionWithPeer));
+
+    connectionWithPeer.off("data", setConnectionDataReceived);
   });
 }
 
@@ -102,3 +133,5 @@ window.addEventListener(
   },
   { once: true }
 );
+
+listenToPeerConnections((peerConnections) => setConnectedPeerIds(peerConnections.map((connection) => connection.peer)));
