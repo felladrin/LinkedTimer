@@ -6,9 +6,14 @@ onPeerChanged((peer) => {
   if (!peer) return;
 
   peer.on("disconnected", () => {
-    setTimeout(() => {
-      if (!peer.destroyed) peer.reconnect();
-    }, 3000);
+    const intervalId = window.setInterval(() => {
+      if (!peer.disconnected || peer.destroyed) {
+        window.clearInterval(intervalId);
+        return;
+      }
+
+      peer.reconnect();
+    }, 1000);
   });
 
   peer.on("error", (error: unknown) => {
