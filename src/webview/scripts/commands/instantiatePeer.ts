@@ -1,7 +1,7 @@
 import Peer, { PeerJSOption, util } from "peerjs";
 import { isRunningInDevEnvironment } from "../constants/booleans";
 import { emitPeerChanged, lastUsedPeerIdLocalStorageProperties } from "../constants/peer";
-import { LogLevel } from "../enumerations/LogLevel";
+import { PeerLogLevel } from "../enumerations/PeerLogLevel";
 import { PeerErrorType } from "../enumerations/PeerErrorType";
 import { destroyPeer } from "./destroyPeer";
 
@@ -11,7 +11,7 @@ export function instantiatePeer(withEmptyId = false) {
   const peerOptions = {
     host: isRunningInDevEnvironment ? window.location.hostname : util.CLOUD_HOST,
     port: isRunningInDevEnvironment ? 9000 : util.CLOUD_PORT,
-    debug: isRunningInDevEnvironment ? LogLevel.Warnings : LogLevel.Disabled,
+    debug: isRunningInDevEnvironment ? PeerLogLevel.Warnings : PeerLogLevel.Disabled,
   } as PeerJSOption;
 
   const lastUsedId =
