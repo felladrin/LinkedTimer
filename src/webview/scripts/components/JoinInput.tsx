@@ -1,4 +1,4 @@
-import { ActionIcon, Input, Tooltip } from "@mantine/core";
+import { ActionIcon, TextInput, Tooltip } from "@mantine/core";
 import { IconPlugConnected } from "@tabler/icons";
 import { usePubSub } from "create-pubsub/react";
 import { useEffect, useState } from "react";
@@ -14,8 +14,9 @@ export function JoinInput() {
   }, [idToJoin, peerConnections]);
 
   return (
-    <Input
+    <TextInput
       placeholder="ID to Join"
+      description="Has received an ID to join? Insert it here:"
       value={idToJoin}
       onChange={({ currentTarget }) => setTimerIdToJoin(currentTarget.value.trim())}
       rightSection={

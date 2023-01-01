@@ -1,4 +1,4 @@
-import { ActionIcon, CopyButton, Input, Tooltip } from "@mantine/core";
+import { ActionIcon, CopyButton, TextInput, Tooltip } from "@mantine/core";
 import { IconCheck, IconCopy } from "@tabler/icons";
 import { usePubSub } from "create-pubsub/react";
 import { peerPubSub } from "../constants/peer";
@@ -9,9 +9,10 @@ export function InviteInput() {
   const inviteId = peer ? peer.id : "Loading...";
 
   return (
-    <Input
+    <TextInput
       value={inviteId}
       readOnly
+      description="Ask people to join using the following ID:"
       rightSection={
         <CopyButton value={inviteId} timeout={2000}>
           {({ copied, copy }) => (
