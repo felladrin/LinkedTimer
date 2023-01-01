@@ -1,5 +1,8 @@
 import { createPubSub } from "create-pubsub";
-import Peer, { DataConnection } from "peerjs";
+import { type Peer, type DataConnection } from "peerjs";
+
+export const PingIntervalInMilliseconds = 5000;
+export const PeerConnectionTimeoutInMilliseconds = 30000;
 
 export const peerPubSub = createPubSub<Peer | null>(null);
 export const [emitPeerChanged, onPeerChanged, getPeer] = peerPubSub;
@@ -10,7 +13,7 @@ export const [setPeerConnections, onPeerConnectionsChanged, getPeerConnections] 
 export const connectedPeerIdsPubSub = createPubSub<string[]>([]);
 export const [setConnectedPeerIds, listenToConnectedPeerIds, getConnectedPeerIds] = connectedPeerIdsPubSub;
 
-export const connectionDataReceivedPubSub = createPubSub<unknown>();
+export const connectionDataReceivedPubSub = createPubSub<{ connection: DataConnection; data: unknown }>();
 export const [setConnectionDataReceived, onConnectionDataReceived] = connectionDataReceivedPubSub;
 
 export const [emitConnectionReceived, onConnectionReceived] = createPubSub<DataConnection>();

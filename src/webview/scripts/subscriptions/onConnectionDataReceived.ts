@@ -13,7 +13,7 @@ import {
   stopTimer,
 } from "../constants/timer";
 
-onConnectionDataReceived((data: unknown) => {
+onConnectionDataReceived(({ connection, data }) => {
   switch ((data as PeerData).method) {
     case RpcMethod.Sync: {
       const { isRunning, timeValues, totalSeconds, peerIds } = (data as PeerData<SyncParameters>).parameters;
@@ -41,6 +41,10 @@ onConnectionDataReceived((data: unknown) => {
           seconds,
         });
       }
+      break;
+    }
+    case RpcMethod.Ping: {
+      connection.metadata.lastPingTimestamp = Date.now();
       break;
     }
   }

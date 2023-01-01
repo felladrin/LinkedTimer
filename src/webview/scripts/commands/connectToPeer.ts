@@ -14,7 +14,7 @@ export function connectToPeer(requestedPeerIdToConnect: string) {
   )
     return;
 
-  const connectionWithPeer = peer.connect(requestedPeerIdToConnect);
+  const connectionWithPeer = peer.connect(requestedPeerIdToConnect, { metadata: { lastPingTimestamp: Date.now() } });
 
   handleConnectionWithPeer(connectionWithPeer);
 }

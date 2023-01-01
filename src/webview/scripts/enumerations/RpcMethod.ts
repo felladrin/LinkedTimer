@@ -3,4 +3,5 @@ export enum RpcMethod {
   Stop = "Stop",
   Sync = "Sync",
   EditTimer = "EditTimer",
+  Ping = "Ping",
 }
