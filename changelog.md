@@ -1,5 +1,15 @@
 # Change Log
 
+## 2.1.0
+
+- When disconnected, it will retry connecting once a second, to cover mobile browsers which disconnect when user switch apps.
+- When a new connection is established, it will focus the Links tab.
+- The input in Join tab now is only cleared when the connection succeeds.
+- A notification will be displayed in case of connection errors.
+- Added descriptions to Invite and Join input fields.
+- Links are now removed after 30 seconds timeout, as some browsers/devices won't inform the timer has been closed.
+- When possible, it will use the same ID as in the last time the timer was used.
+
 ## 2.0.0
 
 - The user interface has been completely redesigned.
