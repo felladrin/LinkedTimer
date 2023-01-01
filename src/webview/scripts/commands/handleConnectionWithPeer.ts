@@ -11,14 +11,16 @@ export function handleConnectionWithPeer(connectionWithPeer: DataConnection) {
 
     setPeerConnections([...peerConnections, connectionWithPeer]);
 
-    connectionWithPeer.on("data", setConnectionDataReceived);
-
     existingConnection?.close();
   });
 
   connectionWithPeer.on("close", () => {
     setPeerConnections(getPeerConnections().filter((connection) => connection !== connectionWithPeer));
-
-    connectionWithPeer.off("data", setConnectionDataReceived);
   });
+
+  connectionWithPeer.on("error", (error) => {
+    console.error(error.message);
+  });
+
+  connectionWithPeer.on("data", setConnectionDataReceived);
 }
