@@ -1,14 +1,14 @@
 import { createPubSub } from "create-pubsub";
-import Timer, { TimerEvent } from "easytimer.js";
+import Timer, { TimerEvent, TimerEventType } from "easytimer.js";
 
 const timerStartValues = { hours: 0, minutes: 0, seconds: 15 };
 
-export const timer = new Timer({
+const timer = new Timer({
   countdown: true,
   startValues: timerStartValues,
 });
 
-export const timerStartValuesLocalStorageProperties = {
+const timerStartValuesLocalStorageProperties = {
   key: "linked-timer-start-values",
   defaultValue: JSON.stringify(timerStartValues),
 };
@@ -24,11 +24,17 @@ export const [emitTimerTargetAchieved, onTimerTargetAchieved] = createPubSub<Tim
 export const percentageOfTimeLeftPubSub = createPubSub(100);
 export const [setPercentageOfTimeLeft] = percentageOfTimeLeftPubSub;
 
+export const [setTimerValues, onTimerValuesUpdated, getTimerValues] = createPubSub({
+  hours: timer.getTimeValues().hours,
+  minutes: timer.getTimeValues().minutes,
+  seconds: timer.getTimeValues().seconds,
+});
+
 export const timerValuesStringPubSub = createPubSub(timer.getTimeValues().toString());
 export const [setTimerValuesString, onTimerValuesStringUpdated] = timerValuesStringPubSub;
 
 export const isTimerRunningPubSub = createPubSub(timer.isRunning());
-export const [setTimerRunning] = isTimerRunningPubSub;
+export const [setTimerRunning, , isTimerRunning] = isTimerRunningPubSub;
 
 export const timerStartValuesPubSub = createPubSub(
   JSON.parse(
@@ -38,8 +44,57 @@ export const timerStartValuesPubSub = createPubSub(
 );
 export const [publishTimerStartValues, onTimerStartValuesUpdated, getTimerStartValues] = timerStartValuesPubSub;
 
-export const [publishTimerSecondsUpdated, onTimerSecondsUpdated] = createPubSub();
+export const [startTimerWithValues, onStartTimerWithValuesCommandReceived] = createPubSub<{
+  hours: number;
+  minutes: number;
+  seconds: number;
+}>();
 
-timer.on("secondsUpdated", () => publishTimerSecondsUpdated());
+export const [startTimer, onStartTimerCommandReceived] = createPubSub();
+
+export const [stopTimer, onStopTimerCommandReceived] = createPubSub();
+
+export const [setTotalTimerSeconds, onTotalTimerSecondsUpdated, getTotalTimerSeconds] = createPubSub(
+  timer.getTotalTimeValues().seconds
+);
 
 timer.on("targetAchieved", emitTimerTargetAchieved);
+
+(["started", "stopped"] as TimerEventType[]).forEach((eventType) => {
+  timer.on(eventType, () => {
+    setTimerRunning(timer.isRunning());
+  });
+});
+
+(["started", "stopped", "secondsUpdated"] as TimerEventType[]).forEach((eventType) => {
+  timer.on(eventType, () => {
+    setTimerValues({
+      hours: timer.getTimeValues().hours,
+      minutes: timer.getTimeValues().minutes,
+      seconds: timer.getTimeValues().seconds,
+    });
+    setTimerValuesString(timer.getTimeValues().toString());
+    setTotalTimerSeconds(timer.getTotalTimeValues().seconds);
+    const { hours, minutes, seconds } = getTimerStartValues();
+    setPercentageOfTimeLeft((getTotalTimerSeconds() / (hours * 3600 + minutes * 60 + seconds)) * 100);
+  });
+});
+
+onStartTimerWithValuesCommandReceived((startValues) => {
+  if (timer.isRunning()) timer.stop();
+  timer.start({ startValues });
+});
+
+onStartTimerCommandReceived(() => {
+  if (timer.isRunning()) return;
+  timer.start({ startValues: getTimerStartValues() });
+});
+
+onStopTimerCommandReceived(() => {
+  if (!timer.isRunning()) return;
+  timer.stop();
+});
+
+onTimerStartValuesUpdated((timerStartValues) => {
+  window.localStorage.setItem(timerStartValuesLocalStorageProperties.key, JSON.stringify(timerStartValues));
+});

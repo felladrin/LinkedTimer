@@ -4,7 +4,7 @@ import { emitPeerChanged } from "../constants/peer";
 import { LogLevel } from "../enumerations/LogLevel";
 import { destroyPeer } from "./destroyPeer";
 
-export function createPeer() {
+export function instantiatePeer() {
   destroyPeer();
 
   const peerOptions = {

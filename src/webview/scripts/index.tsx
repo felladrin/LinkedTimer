@@ -1,2 +1,1 @@
-import "./subscriptions/*.ts";
-import "./subscriptions/*.tsx";
+import "./**/*.(ts|tsx)";

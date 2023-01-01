@@ -1,15 +1,19 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { createPeer } from "../commands/createPeer";
+import { instantiatePeer } from "../commands/instantiatePeer";
 import { Root } from "../components/Root";
 import { isRunningInDevEnvironment } from "../constants/booleans";
 
 window.addEventListener(
   "DOMContentLoaded",
   () => {
-    if (isRunningInDevEnvironment) require("../modules/vconsole");
+    if (isRunningInDevEnvironment) {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const VConsole = require("vconsole");
+      new VConsole({ theme: "dark" });
+    }
 
-    createPeer();
+    instantiatePeer();
 
     createRoot(document.body.appendChild(document.createElement("div"))).render(
       <StrictMode>

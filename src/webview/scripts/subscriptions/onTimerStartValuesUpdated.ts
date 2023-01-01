@@ -1,9 +1,7 @@
 import { getPeerConnections } from "../constants/peer";
 import { sendEditTimerToPeerConnection } from "../commands/sendEditTimerToPeerConnection";
-import { onTimerStartValuesUpdated, timerStartValuesLocalStorageProperties } from "../constants/timer";
+import { onTimerStartValuesUpdated } from "../constants/timer";
 
-onTimerStartValuesUpdated((timerStartValues) => {
+onTimerStartValuesUpdated(() => {
   getPeerConnections().forEach(sendEditTimerToPeerConnection);
-
-  window.localStorage.setItem(timerStartValuesLocalStorageProperties.key, JSON.stringify(timerStartValues));
 });
