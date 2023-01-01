@@ -1,7 +1,7 @@
 import { appName, vsCodeMarketplaceUrl } from "../constants/strings";
 import { isRunningInBrowser } from "../constants/booleans";
 import { ActionIcon, Card, Container, Group, Menu, Title } from "@mantine/core";
-import { IconDots, IconExternalLink } from "@tabler/icons";
+import { IconExternalLink, IconMenu2 } from "@tabler/icons";
 import { TimerScreen } from "./TimerScreen";
 import { Mantine } from "./Mantine";
 import { ActionTabs } from "./ActionTabs";
@@ -19,7 +19,7 @@ export function Root() {
               <Menu withinPortal position="bottom-end" shadow="sm">
                 <Menu.Target>
                   <ActionIcon>
-                    <IconDots size={24} />
+                    <IconMenu2 size={24} />
                   </ActionIcon>
                 </Menu.Target>
                 <Menu.Dropdown>
