@@ -3,7 +3,7 @@ import { Button, Center, RingProgress, Text } from "@mantine/core";
 import { usePubSub } from "create-pubsub/react";
 import { useElementSize } from "@mantine/hooks";
 
-export function TimeLeftRingChart() {
+export function TimerProgress() {
   const [percentageOfTimeLeft] = usePubSub(percentageOfTimeLeftPubSub);
   const [timerValuesString] = usePubSub(timerValuesStringPubSub);
   const { ref, width } = useElementSize();
