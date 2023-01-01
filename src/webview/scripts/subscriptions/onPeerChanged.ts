@@ -1,6 +1,5 @@
-import { PeerErrorType } from "../enumerations/PeerErrorType";
 import { handleConnectionWithPeer } from "../commands/handleConnectionWithPeer";
-import { onPeerChanged, emitConnectionReceived } from "../constants/peer";
+import { onPeerChanged, emitConnectionReceived, emitPeerError } from "../constants/peer";
 
 onPeerChanged((peer) => {
   if (!peer) return;
@@ -16,11 +15,7 @@ onPeerChanged((peer) => {
     }, 1000);
   });
 
-  peer.on("error", (error: unknown) => {
-    if ((error as { type: PeerErrorType }).type === PeerErrorType.UnavailableID) {
-      throw error;
-    }
-  });
+  peer.on("error", emitPeerError);
 
   peer.on("connection", (connectionWithPeer) => {
     connectionWithPeer.once("open", () => emitConnectionReceived(connectionWithPeer));

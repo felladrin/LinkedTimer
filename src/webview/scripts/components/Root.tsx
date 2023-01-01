@@ -3,12 +3,12 @@ import { isRunningInBrowser } from "../constants/booleans";
 import { ActionIcon, Card, Container, Group, Menu, Title } from "@mantine/core";
 import { IconDots, IconExternalLink } from "@tabler/icons";
 import { TimerScreen } from "./TimerScreen";
-import { MantineColorScheme } from "./MantineColorScheme";
+import { Mantine } from "./Mantine";
 import { ActionTabs } from "./ActionTabs";
 
 export function Root() {
   return (
-    <MantineColorScheme component="provider">
+    <Mantine component="provider">
       <Container size={482} py="xs">
         <Card withBorder radius="md">
           <Card.Section withBorder inheritPadding py="xs">
@@ -23,7 +23,7 @@ export function Root() {
                   </ActionIcon>
                 </Menu.Target>
                 <Menu.Dropdown>
-                  <MantineColorScheme component="menuItem" />
+                  <Mantine component="menuItem" />
                   {isRunningInBrowser && (
                     <Menu.Item
                       icon={<IconExternalLink size={14} />}
@@ -47,6 +47,6 @@ export function Root() {
           </Card.Section>
         </Card>
       </Container>
-    </MantineColorScheme>
+    </Mantine>
   );
 }

@@ -17,7 +17,4 @@ export function instantiatePeer() {
 
   newPeer.on("open", () => emitPeerChanged(newPeer));
   newPeer.on("close", () => emitPeerChanged(null));
-  newPeer.on("error", (error) => {
-    console.error(`[${(error as unknown as { type: string }).type}] ${error.message}`);
-  });
 }

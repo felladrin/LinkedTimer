@@ -14,3 +14,5 @@ export const connectionDataReceivedPubSub = createPubSub<unknown>();
 export const [setConnectionDataReceived, onConnectionDataReceived] = connectionDataReceivedPubSub;
 
 export const [emitConnectionReceived, onConnectionReceived] = createPubSub<DataConnection>();
+
+export const [emitPeerError, onPeerErrorReceived] = createPubSub<Error & { type?: string }>();

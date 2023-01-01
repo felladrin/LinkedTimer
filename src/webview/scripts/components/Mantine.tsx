@@ -2,14 +2,9 @@ import { ColorScheme, ColorSchemeProvider, MantineProvider, Menu } from "@mantin
 import { useColorScheme, useLocalStorage } from "@mantine/hooks";
 import { IconMoonStars, IconSun } from "@tabler/icons";
 import { ReactNode } from "react";
+import { NotificationsProvider } from "@mantine/notifications";
 
-export function MantineColorScheme({
-  children,
-  component,
-}: {
-  children?: ReactNode;
-  component: "provider" | "menuItem";
-}) {
+export function Mantine({ children, component }: { children?: ReactNode; component: "provider" | "menuItem" }) {
   const preferredColorScheme = useColorScheme("dark");
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: "mantine-color-scheme",
@@ -24,7 +19,7 @@ export function MantineColorScheme({
       return (
         <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
           <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
-            {children}
+            <NotificationsProvider>{children}</NotificationsProvider>
           </MantineProvider>
         </ColorSchemeProvider>
       );

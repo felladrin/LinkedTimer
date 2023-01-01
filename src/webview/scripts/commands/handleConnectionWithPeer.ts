@@ -1,5 +1,5 @@
 import { DataConnection } from "peerjs";
-import { getPeerConnections, setPeerConnections, setConnectionDataReceived } from "../constants/peer";
+import { getPeerConnections, setPeerConnections, setConnectionDataReceived, emitPeerError } from "../constants/peer";
 
 export function handleConnectionWithPeer(connectionWithPeer: DataConnection) {
   connectionWithPeer.on("open", () => {
@@ -18,9 +18,7 @@ export function handleConnectionWithPeer(connectionWithPeer: DataConnection) {
     setPeerConnections(getPeerConnections().filter((connection) => connection !== connectionWithPeer));
   });
 
-  connectionWithPeer.on("error", (error) => {
-    console.error(error.message);
-  });
+  connectionWithPeer.on("error", emitPeerError);
 
   connectionWithPeer.on("data", setConnectionDataReceived);
 }
