@@ -1,12 +1,10 @@
-@import "../../../node_modules/halfmoon/css/halfmoon-variables.css";
-
 @font-face {
-  font-family: "E1234";
-  src: url("data-url:./fonts/E1234.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
+    font-family: "E1234";
+    src: url("data-url:./fonts/E1234.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
 }
 
 .font-family-E1234 {
-  font-family: "E1234", monospace;
+    font-family: "E1234", monospace;
 }

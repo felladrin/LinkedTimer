@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.0.0
+
+- The user interface has been completely redesigned.
+- It now uses a Mesh network topology, allowing users to connect to the network via any node.
+- It now informs how many timers are linked.
+
 ## 1.4.0
 
 - Transitions now have smooth animations.
