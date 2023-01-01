@@ -1,12 +1,10 @@
 import { appName, vsCodeMarketplaceUrl } from "../constants/strings";
 import { isRunningInBrowser } from "../constants/booleans";
-import { ActionIcon, Card, Container, Group, Menu, Tabs, Title } from "@mantine/core";
-import { IconBroadcast, IconDots, IconExternalLink, IconLink, IconPlugConnected } from "@tabler/icons";
+import { ActionIcon, Card, Container, Group, Menu, Title } from "@mantine/core";
+import { IconDots, IconExternalLink } from "@tabler/icons";
 import { TimerScreen } from "./TimerScreen";
-import { LinksList } from "./LinksList";
-import { InviteInput } from "./InviteInput";
-import { JoinInput } from "./JoinInput";
 import { MantineColorScheme } from "./MantineColorScheme";
+import { ActionTabs } from "./ActionTabs";
 
 export function Root() {
   return (
@@ -45,28 +43,7 @@ export function Root() {
             <TimerScreen />
           </Card.Section>
           <Card.Section>
-            <Tabs defaultValue={LinksList.name}>
-              <Tabs.List grow>
-                <Tabs.Tab value={LinksList.name} icon={<IconLink size={14} />}>
-                  Links
-                </Tabs.Tab>
-                <Tabs.Tab value={InviteInput.name} icon={<IconBroadcast size={14} />}>
-                  Invite
-                </Tabs.Tab>
-                <Tabs.Tab value={JoinInput.name} icon={<IconPlugConnected size={14} />}>
-                  Join
-                </Tabs.Tab>
-              </Tabs.List>
-              <Tabs.Panel value={LinksList.name} p="md">
-                <LinksList />
-              </Tabs.Panel>
-              <Tabs.Panel value={InviteInput.name} p="md">
-                <InviteInput />
-              </Tabs.Panel>
-              <Tabs.Panel value={JoinInput.name} p="md">
-                <JoinInput />
-              </Tabs.Panel>
-            </Tabs>
+            <ActionTabs />
           </Card.Section>
         </Card>
       </Container>
