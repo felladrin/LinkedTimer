@@ -4,6 +4,11 @@ import { type Peer, type DataConnection } from "peerjs";
 export const PingIntervalInMilliseconds = 5000;
 export const PeerConnectionTimeoutInMilliseconds = 30000;
 
+export const lastUsedPeerIdLocalStorageProperties = {
+  key: "linked-timer-last-used-peer-id",
+  defaultValue: "",
+};
+
 export const peerPubSub = createPubSub<Peer | null>(null);
 export const [emitPeerChanged, onPeerChanged, getPeer] = peerPubSub;
 

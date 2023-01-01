@@ -1,10 +1,11 @@
 import Peer, { PeerJSOption, util } from "peerjs";
 import { isRunningInDevEnvironment } from "../constants/booleans";
-import { emitPeerChanged } from "../constants/peer";
+import { emitPeerChanged, lastUsedPeerIdLocalStorageProperties } from "../constants/peer";
 import { LogLevel } from "../enumerations/LogLevel";
+import { PeerErrorType } from "../enumerations/PeerErrorType";
 import { destroyPeer } from "./destroyPeer";
 
-export function instantiatePeer() {
+export function instantiatePeer(withEmptyId = false) {
   destroyPeer();
 
   const peerOptions = {
@@ -13,8 +14,20 @@ export function instantiatePeer() {
     debug: isRunningInDevEnvironment ? LogLevel.Warnings : LogLevel.Disabled,
   } as PeerJSOption;
 
-  const newPeer = new Peer("", peerOptions);
+  const lastUsedId =
+    window.localStorage.getItem(lastUsedPeerIdLocalStorageProperties.key) ??
+    lastUsedPeerIdLocalStorageProperties.defaultValue;
 
-  newPeer.on("open", () => emitPeerChanged(newPeer));
+  const newPeer = new Peer(withEmptyId ? "" : lastUsedId, peerOptions);
+
+  newPeer.on("open", (id) => {
+    window.localStorage.setItem(lastUsedPeerIdLocalStorageProperties.key, id);
+    emitPeerChanged(newPeer);
+  });
   newPeer.on("close", () => emitPeerChanged(null));
+  newPeer.on("error", (error) => {
+    if ("type" in error && error.type === PeerErrorType.UnavailableID) {
+      instantiatePeer(true);
+    }
+  });
 }
