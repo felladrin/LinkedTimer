@@ -12,7 +12,7 @@ export function InviteInput() {
     <TextInput
       value={inviteId}
       readOnly
-      description="Ask people to join using the following ID:"
+      description="Ask people to join using the following ID."
       rightSection={
         <CopyButton value={inviteId} timeout={2000}>
           {({ copied, copy }) => (
