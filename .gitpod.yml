@@ -1,0 +1,14 @@
+tasks:
+  - init: npm ci
+    command: npm run serve
+ports:
+  - name: Dev Server
+    description: Http Server from Parcel.
+    port: 1234
+    visibility: public
+    onOpen: open-preview
+  - name: Peer Server
+    description: Websocket Server from PeerJS.
+    port: 9000
+    visibility: public
+    onOpen: ignore
