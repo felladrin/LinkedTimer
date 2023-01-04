@@ -1,4 +1,5 @@
 import { createPubSub } from "create-pubsub";
+import { createImmerPubSub } from "create-pubsub/immer";
 import { type Peer, type DataConnection } from "peerjs";
 import { LocalStorageProperties } from "../types/LocalStorageProperties";
 
@@ -13,7 +14,7 @@ export const lastUsedPeerIdLocalStorageProperties: LocalStorageProperties = {
 export const peerPubSub = createPubSub<Peer | null>(null);
 export const [emitPeerChanged, onPeerChanged, getPeer] = peerPubSub;
 
-export const peerConnectionsPubSub = createPubSub<DataConnection[]>([]);
+export const peerConnectionsPubSub = createImmerPubSub<DataConnection[]>([]);
 export const [setPeerConnections, onPeerConnectionsChanged, getPeerConnections] = peerConnectionsPubSub;
 
 export const connectedPeerIdsPubSub = createPubSub<string[]>([]);

@@ -32,14 +32,14 @@ onConnectionDataReceived(({ connection, data }) => {
       break;
     }
     case RpcMethod.EditTimer: {
-      const { hours, minutes, seconds } = (data as PeerData<EditTimerParameters>).parameters;
-      const { hours: currentTours, minutes: currentMinutes, seconds: currentSeconds } = getTimerStartValues();
-      if (hours !== currentTours || minutes !== currentMinutes || seconds !== currentSeconds) {
-        publishTimerStartValues({
-          hours,
-          minutes,
-          seconds,
-        });
+      const current = getTimerStartValues();
+      const expected = (data as PeerData<EditTimerParameters>).parameters;
+      if (
+        current.hours !== expected.hours ||
+        current.minutes !== expected.minutes ||
+        current.seconds !== expected.seconds
+      ) {
+        publishTimerStartValues(() => expected);
       }
       break;
     }

@@ -1,4 +1,5 @@
 import { createPubSub } from "create-pubsub";
+import { createImmerPubSub } from "create-pubsub/immer";
 import Timer, { TimerEvent, TimerEventType } from "easytimer.js";
 import { CreatePubSubMethods } from "../enumerations/CreatePubSubMethods";
 import { LocalStorageProperties } from "../types/LocalStorageProperties";
@@ -40,7 +41,7 @@ export const isTimerRunningPubSub = createPubSub(timer.isRunning());
 const setTimerRunning = isTimerRunningPubSub[CreatePubSubMethods.Publish];
 export const isTimerRunning = isTimerRunningPubSub[CreatePubSubMethods.Get];
 
-export const timerStartValuesPubSub = createPubSub<{
+export const timerStartValuesPubSub = createImmerPubSub<{
   hours: number;
   minutes: number;
   seconds: number;

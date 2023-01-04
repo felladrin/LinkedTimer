@@ -20,7 +20,9 @@ export function handleConnectionWithPeer(connectionWithPeer: DataConnection) {
       (existingConnection) => existingConnection.peer === connectionWithPeer.peer
     );
 
-    setPeerConnections([...peerConnections, connectionWithPeer]);
+    setPeerConnections((peerConnections) => {
+      peerConnections.push(connectionWithPeer);
+    });
 
     existingConnection?.close();
 
@@ -34,7 +36,7 @@ export function handleConnectionWithPeer(connectionWithPeer: DataConnection) {
   });
 
   connectionWithPeer.on("close", () => {
-    setPeerConnections(getPeerConnections().filter((connection) => connection !== connectionWithPeer));
+    setPeerConnections((peerConnections) => peerConnections.filter((connection) => connection !== connectionWithPeer));
 
     if (pingCheckerInterval) window.clearInterval(pingCheckerInterval);
   });

@@ -14,9 +14,8 @@ export function TimerEditor() {
           max={24}
           min={0}
           onChange={(value) =>
-            setTimerStartValues({
-              ...timerStartValues,
-              hours: value || 0,
+            setTimerStartValues((timerStartValues) => {
+              timerStartValues.hours = value || 0;
             })
           }
           classNames={{ input: "font-family-E1234" }}
@@ -30,9 +29,8 @@ export function TimerEditor() {
           max={59}
           min={0}
           onChange={(value) =>
-            setTimerStartValues({
-              ...timerStartValues,
-              minutes: value || 0,
+            setTimerStartValues((timerStartValues) => {
+              timerStartValues.minutes = value || 0;
             })
           }
           classNames={{ input: "font-family-E1234" }}
@@ -46,9 +44,8 @@ export function TimerEditor() {
           max={59}
           min={0}
           onChange={(value) =>
-            setTimerStartValues({
-              ...timerStartValues,
-              seconds: value || 0,
+            setTimerStartValues((timerStartValues) => {
+              timerStartValues.seconds = value || 0;
             })
           }
           classNames={{ input: "font-family-E1234" }}
