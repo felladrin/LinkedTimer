@@ -1,8 +1,9 @@
-import { appName, vsCodeMarketplaceUrl } from "../constants/strings";
+import { appName, changelogUrl, vsCodeMarketplaceUrl } from "../constants/strings";
 import { isRunningInBrowser } from "../constants/booleans";
 import { ActionIcon, Group, Menu, Title } from "@mantine/core";
-import { IconExternalLink, IconMenu2 } from "@tabler/icons";
+import { IconBrandGithub, IconBrandVscode, IconMenu2, IconVersions } from "@tabler/icons";
 import { Mantine } from "./Mantine";
+import { repository } from "../../../../package.json";
 
 export function TopBar() {
   return (
@@ -18,15 +19,33 @@ export function TopBar() {
           <Mantine component="menuItem" />
           {isRunningInBrowser && (
             <Menu.Item
-              icon={<IconExternalLink size={14} />}
+              icon={<IconBrandVscode size={14} />}
               component="a"
               target="_blank"
               rel="noopener noreferrer"
               href={vsCodeMarketplaceUrl}
             >
-              Install on VS Code
+              VS Code extension
             </Menu.Item>
           )}
+          <Menu.Item
+            icon={<IconBrandGithub size={14} />}
+            component="a"
+            target="_blank"
+            rel="noopener noreferrer"
+            href={repository.url}
+          >
+            Source code
+          </Menu.Item>
+          <Menu.Item
+            icon={<IconVersions size={14} />}
+            component="a"
+            target="_blank"
+            rel="noopener noreferrer"
+            href={changelogUrl}
+          >
+            Changelog
+          </Menu.Item>
         </Menu.Dropdown>
       </Menu>
     </Group>

@@ -1,5 +1,9 @@
 # Change Log
 
+## 2.1.1
+
+- Added links to source code and changelog in the menu bar.
+
 ## 2.1.0
 
 - When disconnected, it will retry connecting once a second, to cover mobile browsers which disconnect when user switch apps.

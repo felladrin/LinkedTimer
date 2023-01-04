@@ -1,5 +1,4 @@
-import Peer, { PeerJSOption, util } from "peerjs";
-import { isRunningInDevEnvironment } from "../constants/booleans";
+import Peer, { PeerJSOption } from "peerjs";
 import { emitPeerChanged, lastUsedPeerIdLocalStorageProperties } from "../constants/peer";
 import { PeerLogLevel } from "../enumerations/PeerLogLevel";
 import { PeerErrorType } from "../enumerations/PeerErrorType";
@@ -8,17 +7,20 @@ import { destroyPeer } from "./destroyPeer";
 export function instantiatePeer(withEmptyId = false) {
   destroyPeer();
 
-  const peerOptions = {
-    host: isRunningInDevEnvironment ? window.location.hostname : util.CLOUD_HOST,
-    port: isRunningInDevEnvironment ? 9000 : util.CLOUD_PORT,
-    debug: isRunningInDevEnvironment ? PeerLogLevel.Warnings : PeerLogLevel.Disabled,
-  } as PeerJSOption;
-
   const lastUsedId =
     window.localStorage.getItem(lastUsedPeerIdLocalStorageProperties.key) ??
     lastUsedPeerIdLocalStorageProperties.defaultValue;
 
-  const newPeer = new Peer(withEmptyId ? "" : lastUsedId, peerOptions);
+  const newPeer = new Peer(
+    withEmptyId ? "" : lastUsedId,
+    process.env.NODE_ENV === "development"
+      ? ({
+          host: window.location.hostname,
+          port: 9000,
+          debug: PeerLogLevel.Warnings,
+        } as PeerJSOption)
+      : undefined
+  );
 
   newPeer.on("open", (id) => {
     window.localStorage.setItem(lastUsedPeerIdLocalStorageProperties.key, id);

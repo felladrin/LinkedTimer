@@ -2,16 +2,12 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { instantiatePeer } from "../commands/instantiatePeer";
 import { Root } from "../components/Root";
-import { isRunningInDevEnvironment } from "../constants/booleans";
+import VConsole from "vconsole";
 
 window.addEventListener(
   "DOMContentLoaded",
   () => {
-    if (isRunningInDevEnvironment) {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const VConsole = require("vconsole");
-      new VConsole({ theme: "dark" });
-    }
+    if (process.env.NODE_ENV === "development") new VConsole({ theme: "dark" });
 
     instantiatePeer();
 

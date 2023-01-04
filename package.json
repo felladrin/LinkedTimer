@@ -41,7 +41,8 @@
     "watch-extension": "tsc -watch -p ./src/extension/tsconfig.json",
     "watch-webview": "parcel watch ./src/webview/index.html --public-url ./",
     "watch": "run-p watch-extension watch-webview",
-    "lint": "npx eslint --fix ."
+    "lint": "npx eslint --fix .",
+    "package-extension": "npx vsce package"
   },
   "devDependencies": {
     "@emotion/react": "^11.10.5",
@@ -60,7 +61,7 @@
     "@types/vscode": "^1.32.0",
     "@typescript-eslint/eslint-plugin": "^5.47.1",
     "@typescript-eslint/parser": "^5.47.1",
-    "create-pubsub": "^1.4.0",
+    "create-pubsub": "^1.5.0",
     "debug": "^4.3.4",
     "easytimer.js": "^4.5.4",
     "eslint": "^8.30.0",
