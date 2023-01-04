@@ -1,5 +1,9 @@
 # Change Log
 
+## 2.1.2
+
+- Added Open Graph Meta Tags to the web version.
+
 ## 2.1.1
 
 - Added links to source code and changelog in the menu bar.
@@ -23,7 +27,6 @@
 ## 1.4.0
 
 - Transitions now have smooth animations.
-- Timer ID is now generated on client-side, instead of fetched from the server.
 - When running in the browser, a link to install the extension in VS Code is displayed.
 
 ## 1.3.0
