@@ -1,10 +1,11 @@
 import { createPubSub } from "create-pubsub";
 import { type Peer, type DataConnection } from "peerjs";
+import { LocalStorageProperties } from "../types/LocalStorageProperties";
 
 export const PingIntervalInMilliseconds = 5000;
 export const PeerConnectionTimeoutInMilliseconds = 30000;
 
-export const lastUsedPeerIdLocalStorageProperties = {
+export const lastUsedPeerIdLocalStorageProperties: LocalStorageProperties = {
   key: "linked-timer-last-used-peer-id",
   defaultValue: "",
 };

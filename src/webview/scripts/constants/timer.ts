@@ -1,5 +1,6 @@
 import { createPubSub } from "create-pubsub";
 import Timer, { TimerEvent, TimerEventType } from "easytimer.js";
+import { LocalStorageProperties } from "../types/LocalStorageProperties";
 
 const timerStartValues = { hours: 0, minutes: 0, seconds: 15 };
 
@@ -8,7 +9,7 @@ const timer = new Timer({
   startValues: timerStartValues,
 });
 
-const timerStartValuesLocalStorageProperties = {
+const timerStartValuesLocalStorageProperties: LocalStorageProperties = {
   key: "linked-timer-start-values",
   defaultValue: JSON.stringify(timerStartValues),
 };
@@ -36,7 +37,11 @@ export const [setTimerValuesString, onTimerValuesStringUpdated] = timerValuesStr
 export const isTimerRunningPubSub = createPubSub(timer.isRunning());
 export const [setTimerRunning, , isTimerRunning] = isTimerRunningPubSub;
 
-export const timerStartValuesPubSub = createPubSub(
+export const timerStartValuesPubSub = createPubSub<{
+  hours: number;
+  minutes: number;
+  seconds: number;
+}>(
   JSON.parse(
     window.localStorage.getItem(timerStartValuesLocalStorageProperties.key) ??
       timerStartValuesLocalStorageProperties.defaultValue
