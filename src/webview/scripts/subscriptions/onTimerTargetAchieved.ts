@@ -1,13 +1,13 @@
 import { onTimerTargetAchieved } from "../constants/timer";
-import { appName } from "../constants/strings";
+import { displayName } from "../../../../package.json";
 import { vsCodeApi } from "../constants/vsCodeApi";
 
-const title = `Time's up! | ${appName}`;
+const title = `Time's up! | ${displayName}`;
 
 onTimerTargetAchieved(() => {
   window.document.title = title;
 
-  vsCodeApi.postMessage({ informationMessage: `${appName}: Time's up!` });
+  vsCodeApi.postMessage({ informationMessage: `${displayName}: Time's up!` });
 
   vsCodeApi.postMessage({ panelTitle: title });
 });

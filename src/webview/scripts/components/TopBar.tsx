@@ -1,14 +1,14 @@
-import { appName, changelogUrl, vsCodeMarketplaceUrl } from "../constants/strings";
+import { changelogUrl, vsCodeMarketplaceUrl } from "../constants/strings";
 import { isRunningInBrowser } from "../constants/booleans";
 import { ActionIcon, Group, Menu, Title } from "@mantine/core";
 import { IconBrandGithub, IconBrandVscode, IconMenu2, IconVersions } from "@tabler/icons";
 import { Mantine } from "./Mantine";
-import { repository } from "../../../../package.json";
+import { repository, displayName } from "../../../../package.json";
 
 export function TopBar() {
   return (
     <Group position="apart">
-      <Title order={3}>{appName}</Title>
+      <Title order={3}>{displayName}</Title>
       <Menu withinPortal position="bottom-end" shadow="sm">
         <Menu.Target>
           <ActionIcon>
