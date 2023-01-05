@@ -53,6 +53,7 @@
     "@parcel/optimizer-data-url": "^2.8.0",
     "@parcel/resolver-glob": "^2.8.2",
     "@parcel/transformer-inline-string": "^2.8.0",
+    "@parcel/transformer-yaml": "^2.8.2",
     "@tabler/icons": "^1.118.0",
     "@types/debug": "^4.1.7",
     "@types/node": "^18.11.9",

@@ -3,6 +3,8 @@ import { emitPeerChanged, lastUsedPeerIdLocalStorageProperties } from "../consta
 import { PeerLogLevel } from "../enumerations/PeerLogLevel";
 import { PeerErrorType } from "../enumerations/PeerErrorType";
 import { destroyPeer } from "./destroyPeer";
+// @ts-expect-error - Parcel supports importing YAML files (https://parceljs.org/languages/yaml)
+import gitpodConfiguration from "../../../../.gitpod.yml";
 
 export function instantiatePeer(withEmptyId = false) {
   destroyPeer();
@@ -11,16 +13,31 @@ export function instantiatePeer(withEmptyId = false) {
     window.localStorage.getItem(lastUsedPeerIdLocalStorageProperties.key) ??
     lastUsedPeerIdLocalStorageProperties.defaultValue;
 
-  const newPeer = new Peer(
-    withEmptyId ? "" : lastUsedId,
-    process.env.NODE_ENV === "development"
-      ? ({
-          host: window.location.hostname,
-          port: 9000,
-          debug: PeerLogLevel.Warnings,
-        } as PeerJSOption)
-      : undefined
-  );
+  let peerOptions: PeerJSOption | undefined;
+
+  if (process.env.NODE_ENV === "development") {
+    const [parcelServer, peerServer] = gitpodConfiguration.ports;
+    const parcelServerPort = parcelServer.port;
+    const peerServerPort = peerServer.port;
+    const { protocol, hostname } = window.location;
+    const isGitpodEnvironment = protocol === "https:" && hostname.startsWith(`${parcelServerPort}-`);
+
+    if (isGitpodEnvironment) {
+      peerOptions = {
+        host: hostname.replace(parcelServerPort.toString(), peerServerPort.toString()),
+        port: 443,
+        debug: PeerLogLevel.Warnings,
+      };
+    } else {
+      peerOptions = {
+        host: hostname,
+        port: peerServerPort,
+        debug: PeerLogLevel.Warnings,
+      };
+    }
+  }
+
+  const newPeer = new Peer(withEmptyId ? "" : lastUsedId, peerOptions);
 
   newPeer.on("open", (id) => {
     window.localStorage.setItem(lastUsedPeerIdLocalStorageProperties.key, id);

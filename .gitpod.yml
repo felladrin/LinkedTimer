@@ -2,7 +2,7 @@ tasks:
   - init: npm ci
     command: npm run serve
 ports:
-  - name: Dev Server
+  - name: Parcel Server
     description: Http Server from Parcel.
     port: 1234
     visibility: public
