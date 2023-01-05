@@ -1,5 +1,11 @@
-import { handleConnectionWithPeer } from "../commands/handleConnectionWithPeer";
-import { onPeerChanged, emitConnectionReceived, emitPeerError } from "../constants/peer";
+import { connectToPeer } from "../constants/peer";
+import { handleConnectionWithPeer } from "../constants/peer";
+import {
+  onPeerChanged,
+  emitConnectionReceived,
+  emitPeerError,
+  getConnectedPeerIdsOnLastSession,
+} from "../constants/peer";
 
 onPeerChanged((peer) => {
   if (!peer) return;
@@ -21,4 +27,6 @@ onPeerChanged((peer) => {
     connectionWithPeer.once("open", () => emitConnectionReceived(connectionWithPeer));
     handleConnectionWithPeer(connectionWithPeer);
   });
+
+  getConnectedPeerIdsOnLastSession(peer.id)?.forEach(connectToPeer);
 });

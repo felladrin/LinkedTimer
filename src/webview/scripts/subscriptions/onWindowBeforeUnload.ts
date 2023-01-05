@@ -1,4 +1,4 @@
-import { destroyPeer } from "../commands/destroyPeer";
+import { destroyPeer } from "../constants/peer";
 
 window.addEventListener(
   "beforeunload",

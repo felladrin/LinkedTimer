@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { instantiatePeer } from "../commands/instantiatePeer";
+import { instantiatePeer } from "../constants/peer";
 import { Root } from "../components/Root";
 import VConsole from "vconsole";
 

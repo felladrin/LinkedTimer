@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.2.0
+
+- Now, when opening a timer tab, it will try to automatically reconnect to peers in case the timer has been previously closed in the middle of a session.
+- Now it's possible to get a fresh new ID, to completely break links with previous peers.
+- Improvements to the UI.
+
 ## 2.1.2
 
 - Added Open Graph Meta Tags to the web version.

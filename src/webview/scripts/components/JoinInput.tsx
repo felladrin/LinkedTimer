@@ -3,7 +3,7 @@ import { getHotkeyHandler } from "@mantine/hooks";
 import { IconPlugConnected } from "@tabler/icons";
 import { usePubSub } from "create-pubsub/react";
 import { useEffect, useState } from "react";
-import { connectToPeer } from "../commands/connectToPeer";
+import { connectToPeer } from "../constants/peer";
 import { peerConnectionsPubSub } from "../constants/peer";
 
 export function JoinInput() {

@@ -28,7 +28,7 @@ export function ActionTabs() {
           Join
         </Tabs.Tab>
       </Tabs.List>
-      <Tabs.Panel value={LinksList.name} p="md">
+      <Tabs.Panel value={LinksList.name} p="md" pb="xs">
         <LinksList />
       </Tabs.Panel>
       <Tabs.Panel value={InviteInput.name} p="md">

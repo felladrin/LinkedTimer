@@ -1,5 +1,5 @@
 import { onConnectionDataReceived } from "../constants/peer";
-import { connectToPeer } from "../commands/connectToPeer";
+import { connectToPeer } from "../constants/peer";
 import { RpcMethod } from "../enumerations/RpcMethod";
 import { EditTimerParameters } from "../types/EditTimerParameters";
 import { SyncParameters } from "../types/SyncParameters";
