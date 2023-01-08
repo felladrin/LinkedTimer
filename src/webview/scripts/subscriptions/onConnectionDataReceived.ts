@@ -1,7 +1,7 @@
 import { onConnectionDataReceived } from "../constants/peer";
 import { connectToPeer } from "../constants/peer";
 import { RpcMethod } from "../enumerations/RpcMethod";
-import { EditTimerParameters } from "../types/EditTimerParameters";
+import { HoursMinutesSeconds } from "../types/HoursMinutesSeconds";
 import { SyncParameters } from "../types/SyncParameters";
 import { PeerData } from "../types/PeerData";
 import {
@@ -33,7 +33,7 @@ onConnectionDataReceived(({ connection, data }) => {
     }
     case RpcMethod.EditTimer: {
       const current = getTimerStartValues();
-      const expected = (data as PeerData<EditTimerParameters>).parameters;
+      const expected = (data as PeerData<HoursMinutesSeconds>).parameters;
       if (
         current.hours !== expected.hours ||
         current.minutes !== expected.minutes ||

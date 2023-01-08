@@ -11,29 +11,33 @@ import { RpcMethod } from "../enumerations/RpcMethod";
 import { PeerData } from "../types/PeerData";
 
 export const PingIntervalInMilliseconds = 5000;
-export const PeerConnectionTimeoutInMilliseconds = 30000;
+const PeerConnectionTimeoutInMilliseconds = 30000;
 
-export const lastUsedPeerIdLocalStorageProperties: LocalStorageProperties = {
+const lastUsedPeerIdLocalStorageProperties: LocalStorageProperties = {
   key: "linked-timer-last-used-peer-id",
   defaultValue: "",
 };
 
-export const connectedPeerIdsLocalStorageProperties: LocalStorageProperties = {
+const connectedPeerIdsLocalStorageProperties: LocalStorageProperties = {
   key: "linked-timer-connected-peer-ids",
   defaultValue: "{}",
 };
 
 export const peerPubSub = createPubSub<Peer | null>(null);
-export const [emitPeerChanged, onPeerChanged, getPeer] = peerPubSub;
+const [emitPeerChanged, onPeerChanged, getPeer] = peerPubSub;
+export { onPeerChanged, getPeer };
 
 export const peerConnectionsPubSub = createImmerPubSub<DataConnection[]>([]);
-export const [setPeerConnections, onPeerConnectionsChanged, getPeerConnections] = peerConnectionsPubSub;
+const [setPeerConnections, onPeerConnectionsChanged, getPeerConnections] = peerConnectionsPubSub;
+export { onPeerConnectionsChanged, getPeerConnections };
 
-export const connectedPeerIdsPubSub = createPubSub<string[]>([]);
-export const [setConnectedPeerIds, onConnectedPeerIdsUpdated, getConnectedPeerIds] = connectedPeerIdsPubSub;
+export const [setConnectedPeerIds, onConnectedPeerIdsUpdated, getConnectedPeerIds] = createPubSub<string[]>([]);
 
-export const connectionDataReceivedPubSub = createPubSub<{ connection: DataConnection; data: unknown }>();
-export const [setConnectionDataReceived, onConnectionDataReceived] = connectionDataReceivedPubSub;
+const [setConnectionDataReceived, onConnectionDataReceived] = createPubSub<{
+  connection: DataConnection;
+  data: unknown;
+}>();
+export { onConnectionDataReceived };
 
 export const [emitConnectionReceived, onConnectionReceived] = createPubSub<DataConnection>();
 

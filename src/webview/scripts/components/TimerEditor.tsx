@@ -1,6 +1,7 @@
 import { emitStartTimerButtonClicked, timerStartValuesPubSub } from "../constants/timer";
-import { Button, Grid, NumberInput } from "@mantine/core";
+import { Button, Grid } from "@mantine/core";
 import { usePubSub } from "create-pubsub/react";
+import { TimerInput } from "./TimerInput";
 
 export function TimerEditor() {
   const [timerStartValues, setTimerStartValues] = usePubSub(timerStartValuesPubSub);
@@ -8,7 +9,7 @@ export function TimerEditor() {
   return (
     <Grid grow p="md">
       <Grid.Col span={4}>
-        <NumberInput
+        <TimerInput
           label="Hours"
           value={timerStartValues.hours}
           max={24}
@@ -18,12 +19,10 @@ export function TimerEditor() {
               timerStartValues.hours = value || 0;
             })
           }
-          classNames={{ input: "font-family-E1234" }}
-          formatter={(value) => value?.padStart(2, "0") as string}
         />
       </Grid.Col>
       <Grid.Col span={4}>
-        <NumberInput
+        <TimerInput
           label="Minutes"
           value={timerStartValues.minutes}
           max={59}
@@ -33,12 +32,10 @@ export function TimerEditor() {
               timerStartValues.minutes = value || 0;
             })
           }
-          classNames={{ input: "font-family-E1234" }}
-          formatter={(value) => value?.padStart(2, "0") as string}
         />
       </Grid.Col>
       <Grid.Col span={4}>
-        <NumberInput
+        <TimerInput
           label="Seconds"
           value={timerStartValues.seconds}
           max={59}
@@ -48,8 +45,6 @@ export function TimerEditor() {
               timerStartValues.seconds = value || 0;
             })
           }
-          classNames={{ input: "font-family-E1234" }}
-          formatter={(value) => value?.padStart(2, "0") as string}
         />
       </Grid.Col>
       <Grid.Col span={12}>
