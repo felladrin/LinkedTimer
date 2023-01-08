@@ -5,6 +5,7 @@ import { usePubSub } from "create-pubsub/react";
 import { useEffect, useState } from "react";
 import { connectToPeer } from "../constants/peer";
 import { peerConnectionsPubSub } from "../constants/peer";
+import { monospaceFontFamily } from "../constants/strings";
 
 export function JoinInput() {
   const [idToJoin, setTimerIdToJoin] = useState("");
@@ -23,6 +24,8 @@ export function JoinInput() {
       value={idToJoin}
       onChange={({ currentTarget }) => setTimerIdToJoin(currentTarget.value.trim())}
       onKeyDown={getHotkeyHandler([["Enter", connect]])}
+      size="xs"
+      sx={{ fontFamily: monospaceFontFamily }}
       rightSection={
         <Tooltip label="Join" position="left">
           <ActionIcon onClick={connect}>

@@ -1,5 +1,9 @@
 # Change Log
 
+## 2.2.1
+
+- UI improvements.
+
 ## 2.2.0
 
 - Now, when opening a timer tab, it will try to automatically reconnect to peers in case the timer has been previously closed in the middle of a session.

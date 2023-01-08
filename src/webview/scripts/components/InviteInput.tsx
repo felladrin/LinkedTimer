@@ -2,6 +2,7 @@ import { ActionIcon, Anchor, Box, Center, Col, CopyButton, Grid, TextInput, Tool
 import { IconCheck, IconCopy, IconRefresh } from "@tabler/icons";
 import { usePubSub } from "create-pubsub/react";
 import { clearConnectedPeerIdsOnLastSession, instantiatePeer, peerPubSub } from "../constants/peer";
+import { monospaceFontFamily } from "../constants/strings";
 
 export function InviteInput() {
   const [peer] = usePubSub(peerPubSub);
@@ -11,6 +12,8 @@ export function InviteInput() {
   return (
     <TextInput
       value={inviteId}
+      size="xs"
+      sx={{ fontFamily: monospaceFontFamily }}
       readOnly
       description={
         <Grid grow justify="flex-end" align="center">

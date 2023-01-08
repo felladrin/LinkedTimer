@@ -6,8 +6,8 @@ export function TimerEditor() {
   const [timerStartValues, setTimerStartValues] = usePubSub(timerStartValuesPubSub);
 
   return (
-    <Grid grow align="flex-end" p="md">
-      <Grid.Col span={3}>
+    <Grid grow p="md">
+      <Grid.Col span={4}>
         <NumberInput
           label="Hours"
           value={timerStartValues.hours}
@@ -22,7 +22,7 @@ export function TimerEditor() {
           formatter={(value) => value?.padStart(2, "0") as string}
         />
       </Grid.Col>
-      <Grid.Col span={3}>
+      <Grid.Col span={4}>
         <NumberInput
           label="Minutes"
           value={timerStartValues.minutes}
@@ -37,7 +37,7 @@ export function TimerEditor() {
           formatter={(value) => value?.padStart(2, "0") as string}
         />
       </Grid.Col>
-      <Grid.Col span={3}>
+      <Grid.Col span={4}>
         <NumberInput
           label="Seconds"
           value={timerStartValues.seconds}
@@ -52,7 +52,7 @@ export function TimerEditor() {
           formatter={(value) => value?.padStart(2, "0") as string}
         />
       </Grid.Col>
-      <Grid.Col span={3}>
+      <Grid.Col span={12}>
         <Button variant="light" color="cyan" onClick={() => emitStartTimerButtonClicked()} fullWidth>
           Start
         </Button>

@@ -7,7 +7,7 @@ import { TopBar } from "./TopBar";
 export function Root() {
   return (
     <Mantine component="provider">
-      <Container size={482} py="xs">
+      <Container size={375} py="xs">
         <Card withBorder radius="md">
           <Card.Section withBorder inheritPadding py="xs">
             <TopBar />

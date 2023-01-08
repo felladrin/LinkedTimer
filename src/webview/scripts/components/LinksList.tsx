@@ -1,8 +1,9 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { Timeline, Text } from "@mantine/core";
+import { Timeline, Text, Center } from "@mantine/core";
 import { IconLink, IconLinkOff } from "@tabler/icons";
 import { usePubSub } from "create-pubsub/react";
 import { peerConnectionsPubSub } from "../constants/peer";
+import { monospaceFontFamily } from "../constants/strings";
 
 export function LinksList() {
   const [peerConnections] = usePubSub(peerConnectionsPubSub);
@@ -15,11 +16,11 @@ export function LinksList() {
           <Timeline.Item
             key={connection.connectionId}
             title={
-              <div>
-                <Text truncate size="sm">
+              <Center>
+                <Text truncate size="xs" sx={{ fontFamily: monospaceFontFamily }}>
                   {connection.peer}
                 </Text>
-              </div>
+              </Center>
             }
             bullet={<IconLink size={12} />}
             lineVariant="dashed"
