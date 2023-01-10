@@ -41,7 +41,7 @@
     "watch-extension": "tsc -watch -p ./src/extension/tsconfig.json",
     "watch-webview": "parcel watch ./src/webview/index.html --public-url ./",
     "watch": "run-p watch-extension watch-webview",
-    "lint": "npx eslint --fix . && ts-prune -p src/webview/tsconfig.json && jscpd src && dpdm --tree false --warning false src/webview/scripts/subscriptions/onWindowDOMContentLoaded.tsx",
+    "lint": "eslint --fix . && ts-prune -p src/webview/tsconfig.json && jscpd src && dpdm --tree false --warning false src/webview/scripts/subscriptions/onWindowDOMContentLoaded.tsx",
     "package-extension": "npx vsce package"
   },
   "devDependencies": {
