@@ -15,7 +15,7 @@ export function TimerInput(props: {
       min={props.min}
       onChange={props.onChange}
       classNames={{ input: "font-family-E1234" }}
-      formatter={(value) => value?.padStart(2, "0") as string}
+      formatter={(value) => value?.padStart(2, "0") ?? ""}
     />
   );
 }

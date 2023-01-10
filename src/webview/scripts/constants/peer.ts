@@ -140,7 +140,7 @@ export function handleConnectionWithPeer(connectionWithPeer: DataConnection) {
     existingConnection?.close();
 
     pingCheckerInterval = window.setInterval(() => {
-      connectionWithPeer.send({ method: RpcMethod.Ping } as PeerData);
+      connectionWithPeer.send({ method: RpcMethod.Ping, parameters: null } satisfies PeerData);
 
       if (Date.now() - connectionWithPeer.metadata.lastPingTimestamp > PeerConnectionTimeoutInMilliseconds) {
         connectionWithPeer.close();

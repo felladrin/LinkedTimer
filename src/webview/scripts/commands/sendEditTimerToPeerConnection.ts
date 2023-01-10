@@ -8,5 +8,5 @@ export function sendEditTimerToPeerConnection(peerConnection: DataConnection) {
   peerConnection.send({
     method: RpcMethod.EditTimer,
     parameters: getTimerStartValues(),
-  } as PeerData<HoursMinutesSeconds>);
+  } satisfies PeerData<HoursMinutesSeconds>);
 }

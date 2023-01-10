@@ -68,7 +68,7 @@ export const handleTimerStartedOrStopped = (eventType: TimerEventType) => {
 };
 
 export function onTimerStartedOrStopped(handler: (eventType: TimerEventType) => void) {
-  (["started", "stopped"] as TimerEventType[]).forEach(handler);
+  (["started", "stopped"] satisfies TimerEventType[]).forEach(handler);
 }
 
 export function handleTimerUpdated(eventType: TimerEventType) {
@@ -85,7 +85,7 @@ export function handleTimerUpdated(eventType: TimerEventType) {
   });
 }
 export function onTimerUpdated(handler: (eventType: TimerEventType) => void) {
-  (["started", "stopped", "secondsUpdated"] as TimerEventType[]).forEach(handler);
+  (["started", "stopped", "secondsUpdated"] satisfies TimerEventType[]).forEach(handler);
 }
 
 export function handleStartTimerWithValuesCommandReceived(startValues: HoursMinutesSeconds) {

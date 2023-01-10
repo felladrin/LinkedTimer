@@ -14,5 +14,5 @@ export function sendSyncTimerToPeerConnection(peerConnection: DataConnection) {
       totalSeconds: getTotalTimerSeconds(),
       peerIds: getConnectedPeerIds(),
     },
-  } as PeerData<SyncParameters>);
+  } satisfies PeerData<SyncParameters>);
 }

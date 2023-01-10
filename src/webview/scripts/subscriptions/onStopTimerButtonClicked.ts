@@ -6,6 +6,6 @@ import { onStopTimerButtonClicked, stopTimer } from "../constants/timer";
 onStopTimerButtonClicked(() => {
   stopTimer();
   getPeerConnections().forEach((peerConnection) => {
-    peerConnection.send({ method: RpcMethod.Stop } as PeerData);
+    peerConnection.send({ method: RpcMethod.Stop, parameters: null } satisfies PeerData);
   });
 });

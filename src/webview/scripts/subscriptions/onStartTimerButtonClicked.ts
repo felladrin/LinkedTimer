@@ -6,6 +6,6 @@ import { onStartTimerButtonClicked, startTimer } from "../constants/timer";
 onStartTimerButtonClicked(() => {
   startTimer();
   getPeerConnections().forEach((peerConnection) => {
-    peerConnection.send({ method: RpcMethod.Start } as PeerData);
+    peerConnection.send({ method: RpcMethod.Start, parameters: null } satisfies PeerData);
   });
 });
