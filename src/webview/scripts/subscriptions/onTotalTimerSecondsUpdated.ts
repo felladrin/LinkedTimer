@@ -1,9 +1,10 @@
-import { getPeerConnections } from "../constants/peer";
-import { sendSyncTimerToPeerConnection } from "../commands/sendSyncTimerToPeerConnection";
-import { onTotalTimerSecondsUpdated } from "../constants/timer";
+import { broadcastPeriodicSyncAction } from "../constants/room";
+import { getTimerValues, getTotalTimerSeconds, isTimerRunning, onTotalTimerSecondsUpdated } from "../constants/timer";
 
 onTotalTimerSecondsUpdated(() => {
-  getPeerConnections().forEach((peerConnection) => {
-    sendSyncTimerToPeerConnection(peerConnection);
+  broadcastPeriodicSyncAction({
+    isRunning: isTimerRunning(),
+    timeValues: getTimerValues(),
+    totalSeconds: getTotalTimerSeconds(),
   });
 });

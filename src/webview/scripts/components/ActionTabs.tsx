@@ -5,15 +5,13 @@ import { InviteInput } from "./InviteInput";
 import { JoinInput } from "./JoinInput";
 import { useEffect, useState } from "react";
 import { usePubSub } from "create-pubsub/react";
-import { peerConnectionsPubSub } from "../constants/peer";
+import { roomPeersPubSub } from "../constants/room";
 
 export function ActionTabs() {
   const [activeTab, setActiveTab] = useState<string | null>(LinksList.name);
-  const [peerConnections] = usePubSub(peerConnectionsPubSub);
+  const [roomPeers] = usePubSub(roomPeersPubSub);
 
-  useEffect(() => {
-    setActiveTab(LinksList.name);
-  }, [peerConnections]);
+  useEffect(() => setActiveTab(LinksList.name), [roomPeers]);
 
   return (
     <Tabs value={activeTab} onTabChange={setActiveTab}>

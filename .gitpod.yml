@@ -1,3 +1,4 @@
+image: gitpod/workspace-node-lts
 tasks:
   - init: npm ci
     command: npm run serve
@@ -7,8 +8,3 @@ ports:
     port: 1234
     visibility: public
     onOpen: open-preview
-  - name: Peer Server
-    description: Websocket Server from PeerJS.
-    port: 9000
-    visibility: public
-    onOpen: ignore

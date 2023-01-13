@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.0.0
+
+- The networking logic has been rewritten. It's easier to link timers now.
+- When using the web version, users can share their URL, which allows others to start a timer already-linked timer.
+- Timer IDs are shorter now, making them easier to copy and share.
+
 ## 2.2.1
 
 - UI improvements.

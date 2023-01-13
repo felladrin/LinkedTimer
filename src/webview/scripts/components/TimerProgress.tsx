@@ -2,6 +2,7 @@ import { emitStopTimerButtonClicked, percentageOfTimeLeftPubSub, timerValuesStri
 import { Button, Center, RingProgress, Text } from "@mantine/core";
 import { usePubSub } from "create-pubsub/react";
 import { useElementSize } from "@mantine/hooks";
+import { appWidth } from "../constants/numbers";
 
 export function TimerProgress() {
   const [percentageOfTimeLeft] = usePubSub(percentageOfTimeLeftPubSub);
@@ -11,7 +12,7 @@ export function TimerProgress() {
   return (
     <div ref={ref}>
       <RingProgress
-        size={width || 450}
+        size={width || appWidth}
         thickness={width * 0.05}
         roundCaps
         sections={[{ value: percentageOfTimeLeft, color: "cyan" }]}

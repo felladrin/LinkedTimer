@@ -1,11 +1,7 @@
-import { getPeerConnections } from "../constants/peer";
-import { RpcMethod } from "../enumerations/RpcMethod";
-import { PeerData } from "../types/PeerData";
+import { broadcastStartAction } from "../constants/room";
 import { onStartTimerButtonClicked, startTimer } from "../constants/timer";
 
 onStartTimerButtonClicked(() => {
   startTimer();
-  getPeerConnections().forEach((peerConnection) => {
-    peerConnection.send({ method: RpcMethod.Start, parameters: null } satisfies PeerData);
-  });
+  broadcastStartAction(null);
 });

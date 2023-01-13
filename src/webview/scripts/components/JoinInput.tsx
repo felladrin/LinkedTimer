@@ -3,19 +3,16 @@ import { getHotkeyHandler } from "@mantine/hooks";
 import { IconPlugConnected } from "@tabler/icons";
 import { usePubSub } from "create-pubsub/react";
 import { useEffect, useState } from "react";
-import { connectToPeer } from "../constants/peer";
-import { peerConnectionsPubSub } from "../constants/peer";
+import { roomPeersPubSub, connectToRoom } from "../constants/room";
 import { monospaceFontFamily } from "../constants/strings";
 
 export function JoinInput() {
   const [idToJoin, setTimerIdToJoin] = useState("");
-  const [peerConnections] = usePubSub(peerConnectionsPubSub);
+  const [roomPeers] = usePubSub(roomPeersPubSub);
 
-  useEffect(() => {
-    if (peerConnections.find(({ peer }) => peer === idToJoin)) setTimerIdToJoin("");
-  }, [idToJoin, peerConnections]);
+  useEffect(() => setTimerIdToJoin(""), [roomPeers]);
 
-  const connect = () => connectToPeer(idToJoin);
+  const connect = () => connectToRoom(idToJoin);
 
   return (
     <TextInput

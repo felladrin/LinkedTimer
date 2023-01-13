@@ -1,7 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { instantiatePeer } from "../constants/peer";
+import { connectToRoom, tryGettingRoomFromHash } from "../constants/room";
 import { Root } from "../components/Root";
+import { selfId } from "trystero";
 import VConsole from "vconsole";
 
 window.addEventListener(
@@ -9,7 +10,7 @@ window.addEventListener(
   () => {
     if (process.env.NODE_ENV === "development") new VConsole({ theme: "dark" });
 
-    instantiatePeer();
+    connectToRoom(tryGettingRoomFromHash() ?? selfId);
 
     createRoot(document.body.appendChild(document.createElement("div"))).render(
       <StrictMode>

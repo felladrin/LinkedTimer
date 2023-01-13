@@ -1,8 +1,7 @@
 import { HoursMinutesSeconds } from "./HoursMinutesSeconds";
 
-export type SyncParameters = {
+export type PeriodicSyncParameters = {
   isRunning: boolean;
   timeValues: HoursMinutesSeconds;
   totalSeconds: number;
-  peerIds: string[];
 };

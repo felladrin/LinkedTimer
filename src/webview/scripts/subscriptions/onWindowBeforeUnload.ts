@@ -1,3 +1,3 @@
-import { destroyPeer } from "../constants/peer";
+import { leaveRoom } from "../constants/room";
 
-window.addEventListener("beforeunload", () => destroyPeer(), { once: true });
+window.addEventListener("beforeunload", () => leaveRoom(), { once: true });

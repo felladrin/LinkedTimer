@@ -46,12 +46,6 @@ export const timerStartValuesPubSub = createImmerPubSub<HoursMinutesSeconds>(
 );
 export const [publishTimerStartValues, onTimerStartValuesUpdated, getTimerStartValues] = timerStartValuesPubSub;
 
-export const [startTimerWithValues, onStartTimerWithValuesCommandReceived] = createPubSub<HoursMinutesSeconds>();
-
-export const [startTimer, onStartTimerCommandReceived] = createPubSub();
-
-export const [stopTimer, onStopTimerCommandReceived] = createPubSub();
-
 const [setTotalTimerSeconds, onTotalTimerSecondsUpdated, getTotalTimerSeconds] = createPubSub(
   timer.getTotalTimeValues().seconds
 );
@@ -84,21 +78,22 @@ export function handleTimerUpdated(eventType: TimerEventType) {
     setPercentageOfTimeLeft((getTotalTimerSeconds() / (hours * 3600 + minutes * 60 + seconds)) * 100);
   });
 }
+
 export function onTimerUpdated(handler: (eventType: TimerEventType) => void) {
   (["started", "stopped", "secondsUpdated"] satisfies TimerEventType[]).forEach(handler);
 }
 
-export function handleStartTimerWithValuesCommandReceived(startValues: HoursMinutesSeconds) {
+export function startTimerWithValues(startValues: HoursMinutesSeconds) {
   if (timer.isRunning()) timer.stop();
   timer.start({ startValues });
 }
 
-export function handleStartTimerCommandReceived() {
+export function startTimer() {
   if (timer.isRunning()) return;
   timer.start({ startValues: getTimerStartValues() });
 }
 
-export function handleStopTimerCommandReceived() {
+export function stopTimer() {
   if (!timer.isRunning()) return;
   timer.stop();
 }

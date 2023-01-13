@@ -1,26 +1,34 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { Timeline, Text, Center } from "@mantine/core";
-import { IconLink, IconLinkOff } from "@tabler/icons";
+import { Timeline, Text } from "@mantine/core";
+import { IconLink } from "@tabler/icons";
 import { usePubSub } from "create-pubsub/react";
-import { peerConnectionsPubSub } from "../constants/peer";
+import { selfId } from "trystero";
+import { roomPeersPubSub } from "../constants/room";
 import { monospaceFontFamily } from "../constants/strings";
 
 export function LinksList() {
-  const [peerConnections] = usePubSub(peerConnectionsPubSub);
+  const [roomPeers] = usePubSub(roomPeersPubSub);
   const [autoAnimatedRef] = useAutoAnimate<HTMLDivElement>();
 
   return (
-    <Timeline active={peerConnections.length - 1} bulletSize={20} lineWidth={2} ref={autoAnimatedRef}>
-      {peerConnections.length > 0 ? (
-        peerConnections.map((connection) => (
+    <Timeline active={roomPeers.length} bulletSize={20} lineWidth={2} ref={autoAnimatedRef}>
+      <Timeline.Item
+        title={
+          <Text truncate size="xs" sx={{ fontFamily: monospaceFontFamily }}>
+            {selfId} (You)
+          </Text>
+        }
+        bullet={<IconLink size={12} />}
+        lineVariant="dashed"
+      />
+      {roomPeers.length > 0 ? (
+        roomPeers.map((peer) => (
           <Timeline.Item
-            key={connection.connectionId}
+            key={peer}
             title={
-              <Center>
-                <Text truncate size="xs" sx={{ fontFamily: monospaceFontFamily }}>
-                  {connection.peer}
-                </Text>
-              </Center>
+              <Text truncate size="xs" sx={{ fontFamily: monospaceFontFamily }}>
+                {peer}
+              </Text>
             }
             bullet={<IconLink size={12} />}
             lineVariant="dashed"
@@ -31,11 +39,11 @@ export function LinksList() {
           title={
             <div>
               <Text truncate size="sm">
-                Not linked. Invite or join someone.
+                Invite or join someone else.
               </Text>
             </div>
           }
-          bullet={<IconLinkOff size={12} />}
+          bullet={<IconLink size={12} />}
           lineVariant="dashed"
         />
       )}

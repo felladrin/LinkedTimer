@@ -1,8 +1,7 @@
-import { getPeerConnections } from "../constants/peer";
-import { sendEditTimerToPeerConnection } from "../commands/sendEditTimerToPeerConnection";
-import { handleTimerStartValueUpdated, onTimerStartValuesUpdated } from "../constants/timer";
+import { broadcastEditTimerAction } from "../constants/room";
+import { getTimerStartValues, handleTimerStartValueUpdated, onTimerStartValuesUpdated } from "../constants/timer";
 
 onTimerStartValuesUpdated((timerStartValues) => {
   handleTimerStartValueUpdated(timerStartValues);
-  getPeerConnections().forEach(sendEditTimerToPeerConnection);
+  broadcastEditTimerAction(getTimerStartValues());
 });
