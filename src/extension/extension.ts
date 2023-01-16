@@ -6,7 +6,7 @@ export function activate({ subscriptions, extensionPath }: vscode.ExtensionConte
   const startTimerCommand = vscode.commands.registerCommand("linked-timer.new-timer", () => {
     const panel = vscode.window.createWebviewPanel("linked-timer", "Linked Timer", vscode.ViewColumn.One, {
       enableScripts: true,
-      retainContextWhenHidden: true
+      retainContextWhenHidden: true,
     });
 
     const { webview } = panel;
@@ -22,8 +22,6 @@ export function activate({ subscriptions, extensionPath }: vscode.ExtensionConte
         vscode.window.showInformationMessage(event.informationMessage);
       }
     });
-
-    webview.postMessage({ message: "Hello from extension.ts!" });
   });
 
   subscriptions.push(startTimerCommand);

@@ -3,6 +3,7 @@ import { ActionReceiver, ActionSender, joinRoom, Room } from "trystero";
 import { HoursMinutesSeconds } from "../types/HoursMinutesSeconds";
 import { PeriodicSyncParameters } from "../types/PeriodicSyncParameters";
 import { InitialSyncParameters } from "../types/InitialSyncParameters";
+import { name as appId } from "../../../../package.json";
 
 enum RoomActionName {
   Start = "Start",
@@ -42,7 +43,7 @@ export function leaveRoom() {
 export function connectToRoom(roomId: string) {
   leaveRoom();
 
-  const room = joinRoom({ appId: "linked-timer" }, roomId);
+  const room = joinRoom({ appId }, roomId);
 
   setRoomId(roomId);
   setJoinRoomTimestamp(Date.now());
