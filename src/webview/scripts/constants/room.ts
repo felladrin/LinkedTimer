@@ -1,5 +1,5 @@
 import { createPubSub } from "create-pubsub";
-import { ActionReceiver, ActionSender, joinRoom, Room } from "trystero";
+import { ActionReceiver, ActionSender, joinRoom, Room, selfId } from "trystero";
 import { HoursMinutesSeconds } from "../types/HoursMinutesSeconds";
 import { PeriodicSyncParameters } from "../types/PeriodicSyncParameters";
 import { InitialSyncParameters } from "../types/InitialSyncParameters";
@@ -13,9 +13,9 @@ enum RoomActionName {
   EditTimer = "EditTimer",
 }
 
-export const roomIdPubSub = createPubSub("Obtaining ID...");
-const [setRoomId, onRoomIdUpdated] = roomIdPubSub;
-export { onRoomIdUpdated };
+export const roomIdPubSub = createPubSub(tryGettingRoomFromHash() ?? selfId);
+const [setRoomId, onRoomIdUpdated, getRoomId] = roomIdPubSub;
+export { onRoomIdUpdated, getRoomId };
 
 const [setJoinRoomTimestamp, , getJoinRoomTimestamp] = createPubSub(Date.now());
 export { getJoinRoomTimestamp };
@@ -68,7 +68,7 @@ export function updateRoomPeers(room: Room) {
   setRoomPeers(room.getPeers());
 }
 
-export function tryGettingRoomFromHash() {
+function tryGettingRoomFromHash() {
   const { hash } = window.location;
 
   if (hash.startsWith("#") && hash.length > 1) return hash.replace("#", "");
