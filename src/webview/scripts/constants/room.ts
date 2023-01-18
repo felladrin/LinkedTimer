@@ -43,10 +43,17 @@ export function leaveRoom() {
 export function connectToRoom(roomId: string) {
   leaveRoom();
 
-  const room = joinRoom({ appId }, roomId);
-
   setRoomId(roomId);
   setJoinRoomTimestamp(Date.now());
+
+  let room: Room;
+
+  try {
+    room = joinRoom({ appId }, roomId);
+  } catch {
+    window.setTimeout(() => connectToRoom(roomId), 1000);
+    return;
+  }
 
   [broadcastEditTimerAction, onEditTimerActionReceived] = room.makeAction<HoursMinutesSeconds>(
     RoomActionName.EditTimer
