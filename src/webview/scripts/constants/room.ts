@@ -1,9 +1,7 @@
 import { createPubSub } from "create-pubsub";
 import { ActionReceiver, ActionSender, joinRoom, Room, selfId } from "trystero";
-import { HoursMinutesSeconds } from "../types/HoursMinutesSeconds";
-import { PeriodicSyncParameters } from "../types/PeriodicSyncParameters";
-import { InitialSyncParameters } from "../types/InitialSyncParameters";
 import { name as appId } from "../../../../package.json";
+import { HoursMinutesSeconds, InitialSyncParameters, PeriodicSyncParameters } from "../types";
 
 enum RoomActionName {
   Start = "Start",
@@ -13,17 +11,16 @@ enum RoomActionName {
   EditTimer = "EditTimer",
 }
 
-export const roomIdPubSub = createPubSub(tryGettingRoomFromHash() ?? selfId);
-const [setRoomId, onRoomIdUpdated, getRoomId] = roomIdPubSub;
-export { onRoomIdUpdated, getRoomId };
-
-const [setJoinRoomTimestamp, , getJoinRoomTimestamp] = createPubSub(Date.now());
-export { getJoinRoomTimestamp };
-
-const [setRoom, onRoomChanged, getRoom] = createPubSub<Room | null>(null);
-export { onRoomChanged };
+export const roomPubSub = createPubSub({
+  instance: null as Room | null,
+  id: tryGettingRoomFromHash() ?? selfId,
+  joinTimestamp: Date.now(),
+});
+const [setRoom, onRoomUpdated, getRoom] = roomPubSub;
+export { onRoomUpdated, getRoom };
 
 export const roomPeersPubSub = createPubSub<string[]>([]);
+const [setRoomPeers] = roomPeersPubSub;
 
 export let broadcastEditTimerAction: ActionSender<HoursMinutesSeconds>;
 export let onEditTimerActionReceived: ActionReceiver<HoursMinutesSeconds>;
@@ -37,16 +34,13 @@ export let broadcastInitialSyncAction: ActionSender<InitialSyncParameters>;
 export let onInitialSyncActionReceived: ActionReceiver<InitialSyncParameters>;
 
 export function leaveRoom() {
-  getRoom()?.leave();
+  getRoom().instance?.leave();
 }
 
 export function connectToRoom(roomId: string) {
   leaveRoom();
 
   const room = joinRoom({ appId }, roomId);
-
-  setRoomId(roomId);
-  setJoinRoomTimestamp(Date.now());
 
   [broadcastEditTimerAction, onEditTimerActionReceived] = room.makeAction<HoursMinutesSeconds>(
     RoomActionName.EditTimer
@@ -60,18 +54,18 @@ export function connectToRoom(roomId: string) {
     RoomActionName.InitialSync
   );
 
-  setRoom(room);
+  setRoom({
+    instance: room,
+    id: roomId,
+    joinTimestamp: Date.now(),
+  });
 }
 
-export function updateRoomPeers(room: Room) {
-  const [setRoomPeers] = roomPeersPubSub;
-  setRoomPeers(room.getPeers());
+export function updateRoomPeers() {
+  setRoomPeers(getRoom().instance?.getPeers() ?? []);
 }
 
 function tryGettingRoomFromHash() {
   const { hash } = window.location;
-
-  if (hash.startsWith("#") && hash.length > 1) return hash.replace("#", "");
-
-  return null;
+  return hash.startsWith("#") && hash.length > 1 ? hash.replace("#", "") : null;
 }

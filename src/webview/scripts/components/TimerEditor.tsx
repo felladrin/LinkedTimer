@@ -14,11 +14,7 @@ export function TimerEditor() {
           value={timerStartValues.hours}
           max={24}
           min={0}
-          onChange={(value) =>
-            setTimerStartValues((timerStartValues) => {
-              timerStartValues.hours = value || 0;
-            })
-          }
+          onChange={(value) => setTimerStartValues({ ...timerStartValues, hours: value || 0 })}
         />
       </Grid.Col>
       <Grid.Col span={4}>
@@ -27,11 +23,7 @@ export function TimerEditor() {
           value={timerStartValues.minutes}
           max={59}
           min={0}
-          onChange={(value) =>
-            setTimerStartValues((timerStartValues) => {
-              timerStartValues.minutes = value || 0;
-            })
-          }
+          onChange={(value) => setTimerStartValues({ ...timerStartValues, minutes: value || 0 })}
         />
       </Grid.Col>
       <Grid.Col span={4}>
@@ -40,11 +32,7 @@ export function TimerEditor() {
           value={timerStartValues.seconds}
           max={59}
           min={0}
-          onChange={(value) =>
-            setTimerStartValues((timerStartValues) => {
-              timerStartValues.seconds = value || 0;
-            })
-          }
+          onChange={(value) => setTimerStartValues({ ...timerStartValues, seconds: value || 0 })}
         />
       </Grid.Col>
       <Grid.Col span={12}>

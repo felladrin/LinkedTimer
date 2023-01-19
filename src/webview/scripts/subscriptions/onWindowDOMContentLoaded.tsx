@@ -1,7 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { connectToRoom, getRoomId } from "../constants/room";
+import { connectToRoom, getRoom } from "../constants/room";
 import { Root } from "../components/Root";
+import { configureTimerEventHandlers } from "../constants/timer";
 import VConsole from "vconsole";
 
 window.addEventListener(
@@ -9,7 +10,9 @@ window.addEventListener(
   () => {
     if (process.env.NODE_ENV === "development") new VConsole({ theme: "dark" });
 
-    connectToRoom(getRoomId());
+    configureTimerEventHandlers();
+
+    connectToRoom(getRoom().id);
 
     createRoot(document.body.appendChild(document.createElement("div"))).render(
       <StrictMode>

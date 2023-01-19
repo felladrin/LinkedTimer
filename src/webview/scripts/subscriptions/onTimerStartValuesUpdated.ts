@@ -1,7 +1,7 @@
 import { broadcastEditTimerAction } from "../constants/room";
-import { getTimerStartValues, handleTimerStartValueUpdated, onTimerStartValuesUpdated } from "../constants/timer";
+import { saveTimerStartValuesToLocalStorage, onTimerStartValuesUpdated } from "../constants/timer";
 
 onTimerStartValuesUpdated((timerStartValues) => {
-  handleTimerStartValueUpdated(timerStartValues);
-  broadcastEditTimerAction(getTimerStartValues());
+  saveTimerStartValuesToLocalStorage(timerStartValues);
+  broadcastEditTimerAction(timerStartValues);
 });

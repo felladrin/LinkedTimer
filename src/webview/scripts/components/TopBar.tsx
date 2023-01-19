@@ -1,11 +1,13 @@
-import { changelogUrl, vsCodeMarketplaceUrl } from "../constants/strings";
-import { isRunningInBrowser } from "../constants/booleans";
 import { ActionIcon, Group, Menu, Title } from "@mantine/core";
-import { IconBrandGithub, IconBrandVscode, IconMenu2, IconVersions } from "@tabler/icons";
-import { Mantine } from "./Mantine";
-import { repository, displayName } from "../../../../package.json";
+import { IconBrandGithub, IconBrandVscode, IconMenu2, IconMoonStars, IconSun, IconVersions } from "@tabler/icons";
+import { displayName, repository } from "../../../../package.json";
+import { isRunningInBrowser } from "../constants/booleans";
+import { changelogUrl, vsCodeMarketplaceUrl } from "../constants/strings";
+import { useColorSchemeFromLocalStorage } from "./hooks/useColorSchemeFromLocalStorage";
 
 export function TopBar() {
+  const [colorScheme, toggleColorScheme] = useColorSchemeFromLocalStorage();
+
   return (
     <Group position="apart">
       <Title order={3}>{displayName}</Title>
@@ -16,7 +18,12 @@ export function TopBar() {
           </ActionIcon>
         </Menu.Target>
         <Menu.Dropdown>
-          <Mantine component="menuItem" />
+          <Menu.Item
+            icon={colorScheme === "dark" ? <IconSun size={14} /> : <IconMoonStars size={14} />}
+            onClick={() => toggleColorScheme()}
+          >
+            {colorScheme === "dark" ? "Light" : "Dark"} mode
+          </Menu.Item>
           {isRunningInBrowser && (
             <Menu.Item
               icon={<IconBrandVscode size={14} />}
