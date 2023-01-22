@@ -1,5 +1,9 @@
 # Change Log
 
+## 3.0.2
+
+- Fixed the tab title showed when the timer is stopped before the time is up.
+
 ## 3.0.1
 
 - A loading overlay is now displayed while waiting for the connection to be established when joining another timer.

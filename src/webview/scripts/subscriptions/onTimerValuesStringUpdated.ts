@@ -3,7 +3,11 @@ import { displayName } from "../../../../package.json";
 import { vsCodeApi } from "../constants/vsCodeApi";
 
 onTimerValuesStringUpdated((timerValuesString) => {
-  window.document.title = `${timerValuesString} | ${displayName}`;
+  let title = `${timerValuesString} | ${displayName}`;
 
-  vsCodeApi.postMessage({ panelTitle: timerValuesString });
+  if (timerValuesString === "00:00:00") title = displayName;
+
+  window.document.title = title;
+
+  vsCodeApi.postMessage({ panelTitle: title });
 });
