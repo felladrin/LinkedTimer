@@ -3,12 +3,16 @@ import { createRoot } from "react-dom/client";
 import { connectToRoom, getRoom } from "../constants/room";
 import { Root } from "../components/Root";
 import { configureTimerEventHandlers } from "../constants/timer";
-import VConsole from "vconsole";
+import loadScript from "load-script";
 
 window.addEventListener(
   "DOMContentLoaded",
   () => {
-    if (process.env.NODE_ENV === "development") new VConsole({ theme: "dark" });
+    if (/plugin=eruda/.test(window.location.search)) {
+      loadScript("//cdn.jsdelivr.net/npm/eruda", () => {
+        if ("eruda" in window) (window.eruda as { init: () => void }).init();
+      });
+    }
 
     configureTimerEventHandlers();
 
