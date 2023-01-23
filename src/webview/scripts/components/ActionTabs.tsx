@@ -1,5 +1,5 @@
 import { Tabs } from "@mantine/core";
-import { IconBroadcast, IconLink, IconPlugConnected } from "@tabler/icons";
+import { IconBroadcast, IconLink, IconPlugConnected } from "@tabler/icons-react";
 import { LinksList } from "./LinksList";
 import { InviteInput } from "./InviteInput";
 import { JoinInput } from "./JoinInput";

@@ -1,5 +1,5 @@
 import { ActionIcon, CopyButton, TextInput, Tooltip } from "@mantine/core";
-import { IconCheck, IconCopy } from "@tabler/icons";
+import { IconCheck, IconCopy } from "@tabler/icons-react";
 import { usePubSub } from "create-pubsub/react";
 import { roomPubSub } from "../constants/room";
 import { monospaceFontFamily } from "../constants/strings";

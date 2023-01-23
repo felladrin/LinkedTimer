@@ -1,6 +1,6 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Timeline, Text } from "@mantine/core";
-import { IconLink } from "@tabler/icons";
+import { IconLink } from "@tabler/icons-react";
 import { usePubSub } from "create-pubsub/react";
 import { selfId } from "trystero";
 import { roomPeersPubSub } from "../constants/room";

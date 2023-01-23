@@ -1,6 +1,6 @@
 import { ActionIcon, LoadingOverlay, TextInput, Tooltip } from "@mantine/core";
 import { getHotkeyHandler } from "@mantine/hooks";
-import { IconPlugConnected } from "@tabler/icons";
+import { IconPlugConnected } from "@tabler/icons-react";
 import { usePubSub } from "create-pubsub/react";
 import { useEffect, useState } from "react";
 import { roomPeersPubSub, connectToRoom } from "../constants/room";

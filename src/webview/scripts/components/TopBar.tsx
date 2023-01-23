@@ -1,5 +1,5 @@
 import { ActionIcon, Group, Menu, Title } from "@mantine/core";
-import { IconBrandGithub, IconBrandVscode, IconMenu2, IconMoonStars, IconSun, IconVersions } from "@tabler/icons";
+import { IconBrandGithub, IconBrandVscode, IconMenu2, IconMoonStars, IconSun, IconVersions } from "@tabler/icons-react";
 import { displayName, repository } from "../../../../package.json";
 import { isRunningInBrowser } from "../constants/booleans";
 import { changelogUrl, vsCodeMarketplaceUrl } from "../constants/strings";
