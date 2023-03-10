@@ -1,5 +1,4 @@
 import { Card, ColorSchemeProvider, Container, MantineProvider } from "@mantine/core";
-import { NotificationsProvider } from "@mantine/notifications";
 import { appWidth } from "../constants/numbers";
 import { ActionTabs } from "./ActionTabs";
 import { useColorSchemeFromLocalStorage } from "./hooks/useColorSchemeFromLocalStorage";
@@ -12,21 +11,19 @@ export function Root() {
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
       <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
-        <NotificationsProvider>
-          <Container size={appWidth} py="xs">
-            <Card withBorder radius="md">
-              <Card.Section withBorder inheritPadding py="xs">
-                <TopBar />
-              </Card.Section>
-              <Card.Section>
-                <Timer />
-              </Card.Section>
-              <Card.Section>
-                <ActionTabs />
-              </Card.Section>
-            </Card>
-          </Container>
-        </NotificationsProvider>
+        <Container size={appWidth} py="xs">
+          <Card withBorder radius="md">
+            <Card.Section withBorder inheritPadding py="xs">
+              <TopBar />
+            </Card.Section>
+            <Card.Section>
+              <Timer />
+            </Card.Section>
+            <Card.Section>
+              <ActionTabs />
+            </Card.Section>
+          </Card>
+        </Container>
       </MantineProvider>
     </ColorSchemeProvider>
   );
