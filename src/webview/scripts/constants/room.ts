@@ -19,7 +19,7 @@ export const roomPubSub = createPubSub({
 const [setRoom, onRoomUpdated, getRoom] = roomPubSub;
 export { onRoomUpdated, getRoom };
 
-export const roomPeersPubSub = createPubSub<string[]>([]);
+export const roomPeersPubSub = createPubSub<ReturnType<Room["getPeers"]>>({});
 const [setRoomPeers] = roomPeersPubSub;
 
 export let broadcastEditTimerAction: ActionSender<HoursMinutesSeconds>;
@@ -62,7 +62,8 @@ export function connectToRoom(roomId: string) {
 }
 
 export function updateRoomPeers() {
-  setRoomPeers(getRoom().instance?.getPeers() ?? []);
+  const roomInstance = getRoom().instance;
+  if (roomInstance) setRoomPeers(roomInstance.getPeers());
 }
 
 function tryGettingRoomFromHash() {

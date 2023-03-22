@@ -10,8 +10,10 @@ export function LinksList() {
   const [roomPeers] = usePubSub(roomPeersPubSub);
   const [autoAnimatedRef] = useAutoAnimate<HTMLDivElement>();
 
+  const roomPeersIds = Object.keys(roomPeers);
+
   return (
-    <Timeline active={roomPeers.length} bulletSize={20} lineWidth={2} ref={autoAnimatedRef}>
+    <Timeline active={roomPeersIds.length} bulletSize={20} lineWidth={2} ref={autoAnimatedRef}>
       <Timeline.Item
         title={
           <Text truncate size="xs" sx={{ fontFamily: monospaceFontFamily }}>
@@ -21,8 +23,8 @@ export function LinksList() {
         bullet={<IconLink size={12} />}
         lineVariant="dashed"
       />
-      {roomPeers.length > 0 ? (
-        roomPeers.map((peer) => (
+      {roomPeersIds.length > 0 ? (
+        roomPeersIds.map((peer) => (
           <Timeline.Item
             key={peer}
             title={
