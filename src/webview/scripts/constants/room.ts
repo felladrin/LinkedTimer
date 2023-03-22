@@ -62,8 +62,8 @@ export function connectToRoom(roomId: string) {
 }
 
 export function updateRoomPeers() {
-  const roomInstance = getRoom().instance;
-  if (roomInstance) setRoomPeers(roomInstance.getPeers());
+  const { instance } = getRoom();
+  if (instance) setRoomPeers(instance.getPeers());
 }
 
 function tryGettingRoomFromHash() {
