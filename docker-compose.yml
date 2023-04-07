@@ -1,0 +1,34 @@
+version: "3"
+
+x-base-service: &base-service
+  image: node:19
+  volumes:
+    - .:/app
+  working_dir: /app
+
+services:
+  serve:
+    <<: *base-service
+    command: npm run serve
+    ports:
+      - ${PORT:-1234}:1234
+  build:
+    <<: *base-service
+    command: npm run build
+    profiles:
+      - build
+  lint:
+    <<: *base-service
+    command: npm run lint
+    profiles:
+      - lint
+  npm:
+    <<: *base-service
+    entrypoint: npm
+    profiles:
+      - npm
+  bash:
+    <<: *base-service
+    command: bash
+    profiles:
+      - bash
