@@ -4,7 +4,7 @@
   "description": "Real-time collaborative timer to use with your team.",
   "homepage": "https://linkedtimer.com",
   "icon": "icon.png",
-  "version": "3.0.2",
+  "version": "3.1.0",
   "publisher": "felladrin",
   "author": {
     "name": "Victor Nogueira"
