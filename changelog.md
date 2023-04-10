@@ -1,5 +1,13 @@
 # Change Log
 
+## 3.1.1
+
+- Minimum required version of VS Code to run this extension is now v1.77.0.
+
+## 3.1.0
+
+- Improved the connectivity with peers.
+
 ## 3.0.2
 
 - Fixed the tab title showed when the timer is stopped before the time is up.
