@@ -3,18 +3,18 @@ import { getHotkeyHandler } from "@mantine/hooks";
 import { IconPlugConnected } from "@tabler/icons-react";
 import { usePubSub } from "create-pubsub/react";
 import { useEffect, useState } from "react";
-import { roomPeersPubSub, connectToRoom } from "../constants/room";
+import { roomPeersIdsPubSub, connectToRoom } from "../constants/room";
 import { monospaceFontFamily } from "../constants/strings";
 
 export function JoinInput() {
   const [idToJoin, setTimerIdToJoin] = useState("");
   const [isLoadingOverlayVisible, setLoadingOverlayVisible] = useState(false);
-  const [roomPeers] = usePubSub(roomPeersPubSub);
+  const [roomPeersIds] = usePubSub(roomPeersIdsPubSub);
 
   useEffect(() => {
     setTimerIdToJoin("");
     setLoadingOverlayVisible(false);
-  }, [roomPeers]);
+  }, [roomPeersIds]);
 
   const connect = () => {
     connectToRoom(idToJoin);

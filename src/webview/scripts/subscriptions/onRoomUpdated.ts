@@ -1,12 +1,11 @@
 import {
-  broadcastInitialSyncAction,
-  onEditTimerActionReceived,
-  onInitialSyncActionReceived,
-  onPeriodicSyncActionReceived,
+  emitInitialSync,
+  listenToEditTimer,
+  listenToInitialSync,
+  listenToPeriodicSync,
   onRoomUpdated,
-  onStartActionReceived,
-  onStopActionReceived,
-  updateRoomPeers,
+  listenToStart,
+  listenToStop,
   getRoom,
 } from "../constants/room";
 import {
@@ -22,42 +21,38 @@ import {
 import { HoursMinutesSeconds, InitialSyncParameters, PeriodicSyncParameters } from "../types";
 
 onRoomUpdated((room) => {
-  if (!room.instance) return;
+  if (!room) return;
 
   window.location.hash = `#${room.id}`;
 
-  onEditTimerActionReceived(handleEditTimerActionReceived);
-  onStartActionReceived(startTimer);
-  onStopActionReceived(stopTimer);
-  onPeriodicSyncActionReceived(handlePeriodicSyncActionReceived);
-  onInitialSyncActionReceived(handleInitialSyncActionReceived);
+  listenToEditTimer(handleEditTimerEvent);
+  listenToStart(startTimer);
+  listenToStop(stopTimer);
+  listenToPeriodicSync(handlePeriodicSyncEvent);
+  listenToInitialSync(handleInitialSyncEvent);
 
-  room.instance.onPeerJoin((peerId) => {
-    updateRoomPeers();
-
-    broadcastInitialSyncAction(
+  room.onPeerJoined((peerId) => {
+    emitInitialSync(
       {
         isRunning: isTimerRunning(),
         timeValues: getTimerValues(),
         totalSeconds: getTotalTimerSeconds(),
         timerEditorConfiguration: getTimerStartValues(),
-        joinRoomTimestamp: room.joinTimestamp,
+        joinRoomTimestamp: room.creationTimestamp,
       },
-      peerId
+      [peerId]
     );
   });
-
-  room.instance.onPeerLeave(() => updateRoomPeers());
 });
 
-function handlePeriodicSyncActionReceived(data: PeriodicSyncParameters): void {
+function handlePeriodicSyncEvent(data: PeriodicSyncParameters): void {
   const { isRunning, timeValues, totalSeconds } = data;
   if (isRunning && Math.abs(totalSeconds - getTotalTimerSeconds()) > 1) {
     startTimerWithValues(timeValues);
   }
 }
 
-function handleEditTimerActionReceived(data: HoursMinutesSeconds) {
+function handleEditTimerEvent(data: HoursMinutesSeconds) {
   const timerStartValues = getTimerStartValues();
   const expected = data;
   if (
@@ -69,12 +64,12 @@ function handleEditTimerActionReceived(data: HoursMinutesSeconds) {
   }
 }
 
-function handleInitialSyncActionReceived(data: InitialSyncParameters): void {
+function handleInitialSyncEvent(data: InitialSyncParameters): void {
   const { isRunning, timeValues, totalSeconds, timerEditorConfiguration, joinRoomTimestamp } = data;
 
-  const isReceivingActionFromAPeerThatJoinedLater = joinRoomTimestamp > getRoom().joinTimestamp;
+  const isReceivingThisEventFromAPeerThatJoinedLater = joinRoomTimestamp > (getRoom()?.creationTimestamp ?? 0);
 
-  if (isReceivingActionFromAPeerThatJoinedLater) return;
+  if (isReceivingThisEventFromAPeerThatJoinedLater) return;
 
   if (isRunning && Math.abs(totalSeconds - getTotalTimerSeconds()) > 1) {
     startTimerWithValues(timeValues);
