@@ -1,1 +1,1 @@
-export const appWidth = 375;
+export const appWidth = 400;

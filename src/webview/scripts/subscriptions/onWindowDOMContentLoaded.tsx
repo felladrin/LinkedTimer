@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { connectToRoom, getRoom } from "../constants/room";
+import { connectToRoom, getRoomIdFromLocationHash } from "../constants/room";
 import { Root } from "../components/Root";
 import { configureTimerEventHandlers } from "../constants/timer";
 import loadScript from "load-script";
@@ -16,7 +16,7 @@ window.addEventListener(
 
     configureTimerEventHandlers();
 
-    connectToRoom(getRoom().id);
+    connectToRoom(getRoomIdFromLocationHash());
 
     createRoot(document.body.appendChild(document.createElement("div"))).render(
       <StrictMode>
