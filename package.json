@@ -25,8 +25,16 @@
   "categories": [
     "Other"
   ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "linked-timer.new-timer",
+        "title": "New Timer",
+        "category": "Linked Timer"
+      }
+    ]
+  },
   "activationEvents": [
-    "onCommand:linked-timer.new-timer",
     "onWebviewPanel:linked-timer"
   ],
   "main": "./out/extension.js",
@@ -78,22 +86,12 @@
     "typescript": "^5.0.3"
   },
   "overrides": {
-    "xml2js": "^0.5.0",
-    "svgo": "^3.0.2"
+    "xml2js": "^0.5.0"
   },
   "targets": {
     "main": false
   },
   "browserslist": [
     "last 2 Chrome versions"
-  ],
-  "contributes": {
-    "commands": [
-      {
-        "command": "linked-timer.new-timer",
-        "title": "New Timer",
-        "category": "Linked Timer"
-      }
-    ]
-  }
+  ]
 }
