@@ -13,12 +13,12 @@ export function LinksList() {
 
   return (
     <Timeline active={roomPeersIds.length} bulletSize={20} lineWidth={2} ref={autoAnimatedRef}>
-      {room?.selfPeerId && (
+      {room?.peerId && (
         <Timeline.Item
           title={
             <TimerIdTooltip label="Your Timer ID">
               <Text truncate size="xs" sx={{ fontFamily: monospaceFontFamily }}>
-                {room.selfPeerId}
+                {room.peerId}
               </Text>
             </TimerIdTooltip>
           }
@@ -33,7 +33,7 @@ export function LinksList() {
             title={
               <TimerIdTooltip label="Linked Timer ID">
                 <Text truncate size="xs" sx={{ fontFamily: monospaceFontFamily }}>
-                  {peerId}
+                  {Buffer.from(peerId, "hex").toString("utf-8")}
                 </Text>
               </TimerIdTooltip>
             }
@@ -63,7 +63,7 @@ function TimerIdTooltip({ label, children }: { label: string; children: ReactNod
     <Tooltip
       label={label}
       color="blue"
-      position="bottom"
+      position="bottom-start"
       withArrow
       transitionProps={{ transition: "pop", duration: 300 }}
     >
