@@ -1,5 +1,9 @@
 # Change Log
 
+## 3.2.0
+
+- Linked Timers now have a random nickname instead of a random alphanumeric string.
+
 ## 3.1.1
 
 - Minimum required version of VS Code to run this extension is now v1.77.0.

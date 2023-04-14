@@ -10,10 +10,9 @@ Real-time collaborative countdown timer to use with your team.
 
 ## Usage in VS Code
 
-Type `>Linked Timer: New Timer` in the Command Palette to open a new Timer Tab, from there you can host or join a timer from someone else.
+Type `> Linked Timer: New Timer` in the Command Palette to open a new Timer Tab, from there you can host or join a timer from someone else.
 
 | Screenshots                                  |
 | -------------------------------------------- |
 | ![Screenshot 1](./.github/screenshots/1.png) |
 | ![Screenshot 2](./.github/screenshots/2.png) |
-| ![Screenshot 3](./.github/screenshots/3.png) |
