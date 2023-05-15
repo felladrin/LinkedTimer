@@ -12,7 +12,7 @@ export function Root() {
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
       <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
-        <Container size={appWidth} py="xs">
+        <Container style={{height: "100vh", display: "flex", alignItems: "center"}} size={appWidth} py="xs">
           <NoWebRtcSupportModal />
           <Card withBorder radius="md">
             <Card.Section withBorder inheritPadding py="xs">
