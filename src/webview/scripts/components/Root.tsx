@@ -5,14 +5,22 @@ import { useColorSchemeFromLocalStorage } from "./hooks/useColorSchemeFromLocalS
 import { Timer } from "./Timer";
 import { TopBar } from "./TopBar";
 import { NoWebRtcSupportModal } from "./NoWebRtcSupportModal";
+import { useViewportSize } from "@mantine/hooks";
 
 export function Root() {
   const [colorScheme, toggleColorScheme] = useColorSchemeFromLocalStorage();
+  const { height } = useViewportSize();
 
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
       <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
-        <Container style={{height: "100vh", display: "flex", alignItems: "center"}} size={appWidth} py="xs">
+        <Container
+          display="flex"
+          style={{ alignItems: "center", justifyContent: "center" }}
+          h={height}
+          miw={appWidth}
+          size={appWidth}
+        >
           <NoWebRtcSupportModal />
           <Card withBorder radius="md">
             <Card.Section withBorder inheritPadding py="xs">
