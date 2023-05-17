@@ -1,5 +1,10 @@
 # Change Log
 
+## 3.3.0
+
+- Now, it's possible to rename the timer (change the title) to differentiate it when several timers are opened.
+- The timer is now vertically centred on the screen.
+
 ## 3.2.0
 
 - Linked Timers now have a random nickname instead of a random alphanumeric string.
