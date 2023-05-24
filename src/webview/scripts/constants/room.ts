@@ -61,6 +61,8 @@ function prepareRoom({
     }
 
     const onConnect = () => {
+      const onMessage = (data: string) => emitDataReceived([peer, data]);
+
       const onClose = () => {
         peer.removeListener("data", onMessage);
         peer.removeListener("close", onClose);
@@ -71,10 +73,6 @@ function prepareRoom({
         emitPeerClosed(peer.id);
         client.update();
       };
-
-      function onMessage(data: string) {
-        emitDataReceived([peer, data]);
-      }
 
       peer.on("data", onMessage);
       peer.on("close", onClose);
