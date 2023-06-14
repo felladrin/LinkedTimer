@@ -70,7 +70,7 @@
     "@types/vscode": "^1.77.0",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
-    "bittorrent-tracker": "^10.0.2",
+    "bittorrent-tracker": "^10.0.8",
     "camelcase": "^7.0.1",
     "create-pubsub": "^1.6.0",
     "dpdm": "^3.13.0",
@@ -88,7 +88,8 @@
     "react-dom": "^18.2.0",
     "tiny-hashes": "^1.0.1",
     "ts-prune": "^0.10.3",
-    "typescript": "^5.0.3"
+    "typescript": "^5.0.3",
+    "uint8-util": "^2.1.9"
   },
   "overrides": {
     "xml2js": "^0.6.0"

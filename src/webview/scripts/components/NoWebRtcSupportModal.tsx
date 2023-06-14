@@ -1,9 +1,10 @@
 import { Anchor, Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { WEBRTC_SUPPORT } from "simple-peer";
+// @ts-expect-error - Module with no types.
+import Peer from "@thaunknown/simple-peer";
 
 export function NoWebRtcSupportModal() {
-  const [isModalOpened, modal] = useDisclosure(!WEBRTC_SUPPORT);
+  const [isModalOpened, modal] = useDisclosure(!Peer.WEBRTC_SUPPORT);
 
   return (
     <Modal opened={isModalOpened} onClose={modal.close} title="WebRTC is not supported in this browser!">

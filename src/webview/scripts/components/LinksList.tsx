@@ -5,6 +5,7 @@ import { usePubSub } from "create-pubsub/react";
 import { roomPeersIdsPubSub, roomPubSub } from "../constants/room";
 import { monospaceFontFamily } from "../constants/strings";
 import { ReactNode } from "react";
+import { hexToUtf8 } from "../constants/functions";
 
 export function LinksList() {
   const [roomPeersIds] = usePubSub(roomPeersIdsPubSub);
@@ -33,7 +34,7 @@ export function LinksList() {
             title={
               <TimerIdTooltip label="Linked Timer ID">
                 <Text truncate size="xs" sx={{ fontFamily: monospaceFontFamily }}>
-                  {Buffer.from(peerId, "hex").toString("utf-8")}
+                  {hexToUtf8(peerId)}
                 </Text>
               </TimerIdTooltip>
             }
