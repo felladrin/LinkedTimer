@@ -3,7 +3,6 @@ import BitTorrentTrackerClient from "bittorrent-tracker/client";
 import getSha1Hash from "tiny-hashes/sha1";
 import getRandomElementFromArray from "random-item";
 import changeCase from "camelcase";
-import { arr2text, text2arr } from "uint8-util";
 import { name as packageName } from "../../../../package.json";
 import { HoursMinutesSeconds, InitialSyncParameters, PeriodicSyncParameters } from "../types";
 import { possiblePeerIdSuffixes } from "./strings";
@@ -50,7 +49,7 @@ function prepareRoom({
   const peers = new Map<string, Peer>();
 
   const client = new BitTorrentTrackerClient({
-    peerId: text2arr(peerId) as Buffer,
+    peerId: Buffer.from(peerId),
     announce: trackersAnnounceURLs,
     infoHash: getSha1Hash(`${packageName}-${id}`),
   });
@@ -62,7 +61,7 @@ function prepareRoom({
     }
 
     const onConnect = () => {
-      const onMessage = (data: Uint8Array) => emitDataReceived([peer, data]);
+      const onMessage = (data: Buffer) => emitDataReceived([peer, data]);
 
       const onClose = () => {
         peer.removeListener("data", onMessage);
@@ -108,7 +107,7 @@ function prepareRoom({
       const peersToBroadcastTo = Array.isArray(targetPeersIds)
         ? peersArray.filter((peer) => targetPeersIds.includes(peer.id))
         : peersArray;
-      const promises = peersToBroadcastTo.map((peer) => peer.send(text2arr(JSON.stringify([eventName, data]))));
+      const promises = peersToBroadcastTo.map((peer) => peer.send(Buffer.from(JSON.stringify([eventName, data]))));
       await Promise.all(promises);
     };
 
@@ -119,7 +118,7 @@ function prepareRoom({
     };
 
     onDataReceived(([peer, data]) => {
-      const [receivedEventName, payload] = JSON.parse(arr2text(data, "utf-8"));
+      const [receivedEventName, payload] = JSON.parse(Buffer.from(data).toString("utf-8"));
       if (receivedEventName === eventName) eventHandlers.forEach((handle) => handle(payload, peer.id));
     });
 
