@@ -34,7 +34,7 @@ export function LinksList() {
             title={
               <TimerIdTooltip label="Linked Timer ID">
                 <Text truncate size="xs" sx={{ fontFamily: monospaceFontFamily }}>
-                  {Buffer.from(peerId, "hex").toString("utf-8")}
+                  {hexToUtf8(peerId)}
                 </Text>
               </TimerIdTooltip>
             }
