@@ -17,7 +17,7 @@ export function LinksList() {
         <Timeline.Item
           title={
             <TimerIdTooltip label="Your Timer ID">
-              <Text truncate size="xs" sx={{ fontFamily: monospaceFontFamily }}>
+              <Text truncate size="xs" style={{ fontFamily: monospaceFontFamily }}>
                 {room.peerId}
               </Text>
             </TimerIdTooltip>
@@ -32,7 +32,7 @@ export function LinksList() {
             key={peerId}
             title={
               <TimerIdTooltip label="Linked Timer ID">
-                <Text truncate size="xs" sx={{ fontFamily: monospaceFontFamily }}>
+                <Text truncate size="xs" style={{ fontFamily: monospaceFontFamily }}>
                   {Buffer.from(peerId, "hex").toString("utf-8")}
                 </Text>
               </TimerIdTooltip>

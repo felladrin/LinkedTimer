@@ -11,14 +11,14 @@ export function InviteInput() {
     <TextInput
       value={room?.id ?? ""}
       size="xs"
-      sx={{ fontFamily: monospaceFontFamily }}
+      style={{ fontFamily: monospaceFontFamily }}
       readOnly
       description="Ask people to join using this ID."
       rightSection={
         <CopyButton value={room?.id ?? ""} timeout={2000}>
           {({ copied, copy }) => (
             <Tooltip label={copied ? "Copied" : "Copy"} withArrow position="right">
-              <ActionIcon color={copied ? "teal" : "gray"} onClick={copy}>
+              <ActionIcon color={copied ? "teal" : "gray"} onClick={copy} variant="subtle">
                 {copied ? <IconCheck size={16} /> : <IconCopy size={16} />}
               </ActionIcon>
             </Tooltip>

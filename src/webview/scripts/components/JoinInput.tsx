@@ -23,7 +23,7 @@ export function JoinInput() {
 
   return (
     <>
-      <LoadingOverlay visible={isLoadingOverlayVisible} overlayBlur={2} />
+      <LoadingOverlay visible={isLoadingOverlayVisible} overlayProps={{ blur: 2 }} />
       <TextInput
         placeholder="ID to Join"
         description="Received an ID to join? Insert it below."
@@ -31,10 +31,10 @@ export function JoinInput() {
         onChange={({ currentTarget }) => setTimerIdToJoin(currentTarget.value.trim())}
         onKeyDown={getHotkeyHandler([["Enter", connect]])}
         size="xs"
-        sx={{ fontFamily: monospaceFontFamily }}
+        style={{ fontFamily: monospaceFontFamily }}
         rightSection={
           <Tooltip label="Join" position="left">
-            <ActionIcon onClick={connect}>
+            <ActionIcon onClick={connect} variant="subtle" color="gray">
               <IconPlugConnected size={16} />
             </ActionIcon>
           </Tooltip>

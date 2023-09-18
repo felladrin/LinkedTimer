@@ -3,6 +3,7 @@ import { Button, Center, RingProgress, Text } from "@mantine/core";
 import { usePubSub } from "create-pubsub/react";
 import { useElementSize } from "@mantine/hooks";
 import { appWidth } from "../constants/numbers";
+import { clockFontFamily } from "../constants/strings";
 
 export function TimerProgress() {
   const [percentageOfTimeLeft] = usePubSub(percentageOfTimeLeftPubSub);
@@ -18,11 +19,11 @@ export function TimerProgress() {
         sections={[{ value: percentageOfTimeLeft, color: "cyan" }]}
         label={
           <>
-            <Text color="cyan" weight={700} align="center" size={width * 0.1} className="font-family-E1234">
+            <Text c="cyan" fw={700} ta="center" style={{ fontSize: width * 0.1, fontFamily: clockFontFamily }}>
               {timerValuesString}
             </Text>
             <Center>
-              <Button variant="light" color="gray" compact onClick={() => emitStopTimerButtonClicked()}>
+              <Button variant="light" color="gray" size="compact-sm" onClick={() => emitStopTimerButtonClicked()}>
                 Stop / Edit
               </Button>
             </Center>
