@@ -9,7 +9,7 @@ x-base-service: &base-service
 services:
   serve:
     <<: *base-service
-    command: npm run serve
+    command: ["bash", "-c", "npm install && npm run serve"]
     ports:
       - ${PORT:-1234}:1234
   build:

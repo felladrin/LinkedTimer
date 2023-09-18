@@ -1,4 +1,5 @@
 import { NumberInput } from "@mantine/core";
+import { clockFontFamily } from "../constants/strings";
 
 export function TimerInput(props: {
   label: string;
@@ -11,11 +12,15 @@ export function TimerInput(props: {
     <NumberInput
       label={props.label}
       value={props.value}
+      prefix={props.value < 10 ? "0" : ""}
       max={props.max}
       min={props.min}
       onChange={props.onChange}
-      classNames={{ input: "font-family-E1234" }}
-      formatter={(value) => value?.padStart(2, "0") ?? ""}
+      styles={{
+        input: {
+          fontFamily: clockFontFamily,
+        },
+      }}
     />
   );
 }

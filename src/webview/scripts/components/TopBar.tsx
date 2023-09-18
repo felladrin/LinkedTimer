@@ -1,13 +1,23 @@
-import { ActionIcon, Menu, TextInput, Tooltip, Text, Grid } from "@mantine/core";
+import {
+  ActionIcon,
+  Menu,
+  TextInput,
+  Tooltip,
+  Text,
+  Grid,
+  useMantineColorScheme,
+  useComputedColorScheme,
+  Center,
+} from "@mantine/core";
 import { IconBrandGithub, IconBrandVscode, IconMenu2, IconMoonStars, IconSun, IconVersions } from "@tabler/icons-react";
 import { displayName, repository } from "../../../../package.json";
 import { isRunningInBrowser } from "../constants/booleans";
 import { changelogUrl, vsCodeMarketplaceUrl } from "../constants/strings";
-import { useColorSchemeFromLocalStorage } from "./hooks/useColorSchemeFromLocalStorage";
 import { CSSProperties, useState } from "react";
 
 export function TopBar() {
-  const [colorScheme, toggleColorScheme] = useColorSchemeFromLocalStorage();
+  const { toggleColorScheme } = useMantineColorScheme();
+  const colorScheme = useComputedColorScheme("light", { getInitialValueInEffect: true });
 
   return (
     <Grid align="center" justify="space-between">
@@ -15,50 +25,52 @@ export function TopBar() {
         <EditableTimerName fontSize="1.375rem" fontWeight="bold" lineHeight="1.65" height="36px" />
       </Grid.Col>
       <Grid.Col span="content">
-        <Menu withinPortal position="bottom-end" shadow="sm">
-          <Menu.Target>
-            <ActionIcon>
-              <IconMenu2 size={24} />
-            </ActionIcon>
-          </Menu.Target>
-          <Menu.Dropdown>
-            <Menu.Item
-              icon={colorScheme === "dark" ? <IconSun size={14} /> : <IconMoonStars size={14} />}
-              onClick={() => toggleColorScheme()}
-            >
-              {colorScheme === "dark" ? "Light" : "Dark"} mode
-            </Menu.Item>
-            {isRunningInBrowser && (
+        <Center>
+          <Menu withinPortal position="bottom-end" shadow="sm">
+            <Menu.Target>
+              <ActionIcon variant="subtle" aria-label="Menu" color="gray">
+                <IconMenu2 size={24} />
+              </ActionIcon>
+            </Menu.Target>
+            <Menu.Dropdown>
               <Menu.Item
-                icon={<IconBrandVscode size={14} />}
+                leftSection={colorScheme === "dark" ? <IconSun size={14} /> : <IconMoonStars size={14} />}
+                onClick={() => toggleColorScheme()}
+              >
+                {colorScheme === "dark" ? "Light" : "Dark"} mode
+              </Menu.Item>
+              {isRunningInBrowser && (
+                <Menu.Item
+                  leftSection={<IconBrandVscode size={14} />}
+                  component="a"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={vsCodeMarketplaceUrl}
+                >
+                  VS Code extension
+                </Menu.Item>
+              )}
+              <Menu.Item
+                leftSection={<IconBrandGithub size={14} />}
                 component="a"
                 target="_blank"
                 rel="noopener noreferrer"
-                href={vsCodeMarketplaceUrl}
+                href={repository.url}
               >
-                VS Code extension
+                Source code
               </Menu.Item>
-            )}
-            <Menu.Item
-              icon={<IconBrandGithub size={14} />}
-              component="a"
-              target="_blank"
-              rel="noopener noreferrer"
-              href={repository.url}
-            >
-              Source code
-            </Menu.Item>
-            <Menu.Item
-              icon={<IconVersions size={14} />}
-              component="a"
-              target="_blank"
-              rel="noopener noreferrer"
-              href={changelogUrl}
-            >
-              Changelog
-            </Menu.Item>
-          </Menu.Dropdown>
-        </Menu>
+              <Menu.Item
+                leftSection={<IconVersions size={14} />}
+                component="a"
+                target="_blank"
+                rel="noopener noreferrer"
+                href={changelogUrl}
+              >
+                Changelog
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
+        </Center>
       </Grid.Col>
     </Grid>
   );
@@ -93,7 +105,6 @@ function EditableTimerName({
       styles={{
         input: {
           padding: "0",
-          // @ts-expect-error - Types don't match.
           fontWeight,
           fontSize,
           lineHeight,
@@ -114,7 +125,7 @@ function EditableTimerName({
       withArrow
       transitionProps={{ transition: "pop", duration: 300 }}
     >
-      <Text size={fontSize} fw={fontWeight} lh={lineHeight} h={height} onClick={() => setEditing(true)} truncate>
+      <Text style={{ fontSize }} fw={fontWeight} lh={lineHeight} h={height} onClick={() => setEditing(true)} truncate>
         {currentText}
       </Text>
     </Tooltip>

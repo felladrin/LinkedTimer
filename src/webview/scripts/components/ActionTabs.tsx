@@ -14,15 +14,15 @@ export function ActionTabs() {
   useEffect(() => setActiveTab(LinksList.name), [roomPeersIds]);
 
   return (
-    <Tabs value={activeTab} onTabChange={setActiveTab}>
+    <Tabs value={activeTab} onChange={setActiveTab}>
       <Tabs.List grow>
-        <Tabs.Tab value={LinksList.name} icon={<IconLink size={14} />}>
+        <Tabs.Tab value={LinksList.name} leftSection={<IconLink size={14} />}>
           Links
         </Tabs.Tab>
-        <Tabs.Tab value={InviteInput.name} icon={<IconBroadcast size={14} />}>
+        <Tabs.Tab value={InviteInput.name} leftSection={<IconBroadcast size={14} />}>
           Invite
         </Tabs.Tab>
-        <Tabs.Tab value={JoinInput.name} icon={<IconPlugConnected size={14} />}>
+        <Tabs.Tab value={JoinInput.name} leftSection={<IconPlugConnected size={14} />}>
           Join
         </Tabs.Tab>
       </Tabs.List>
