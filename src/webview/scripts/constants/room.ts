@@ -1,5 +1,5 @@
 import { createPubSub } from "create-pubsub";
-import BitTorrentTrackerClient from "bittorrent-tracker/client";
+import BitTorrentTrackerClient from "bittorrent-tracker-websocket-client";
 import getSha1Hash from "tiny-hashes/sha1";
 import getRandomElementFromArray from "random-item";
 import changeCase from "camelcase";
