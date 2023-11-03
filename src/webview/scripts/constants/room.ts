@@ -44,7 +44,9 @@ function prepareRoom({
 
   const [emitPeerConnected, onPeerJoined] = createPubSub<string>();
   const [emitPeerClosed, onPeerLeft] = createPubSub<string>();
-  const [emitDataReceived, onDataReceived] = createPubSub<[Peer, string]>();
+  const [emitDataReceived, onDataReceived] = createPubSub<[Peer, Uint8Array]>();
+
+  const textDecoder = new TextDecoder();
 
   const peers = new Map<string, Peer>();
 
@@ -61,7 +63,7 @@ function prepareRoom({
     }
 
     const onConnect = () => {
-      const onMessage = (data: string) => emitDataReceived([peer, data]);
+      const onMessage = (data: Uint8Array) => emitDataReceived([peer, data]);
 
       const onClose = () => {
         peer.removeListener("data", onMessage);
@@ -118,7 +120,7 @@ function prepareRoom({
     };
 
     onDataReceived(([peer, data]) => {
-      const [receivedEventName, payload] = JSON.parse(data);
+      const [receivedEventName, payload] = JSON.parse(textDecoder.decode(data));
       if (receivedEventName === eventName) eventHandlers.forEach((handle) => handle(payload, peer.id));
     });
 
