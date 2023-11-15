@@ -20,7 +20,7 @@
     "type": "git"
   },
   "engines": {
-    "vscode": "^1.77.0"
+    "vscode": "^2023.0.0"
   },
   "categories": [
     "Other"
