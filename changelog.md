@@ -1,5 +1,13 @@
 # Change Log
 
+## 3.4.1
+
+- Fixed a bug that prevented the web version to run.
+
+## 3.4.0
+
+- Major update on the dependencies.
+
 ## 3.3.0
 
 - Now, it's possible to rename the timer (change the title) to differentiate it when several timers are opened.
