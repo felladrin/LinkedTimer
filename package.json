@@ -60,7 +60,7 @@
     "@parcel/resolver-glob": "^2.8.3",
     "@parcel/transformer-inline-string": "^2.8.3",
     "@parcel/transformer-yaml": "^2.8.3",
-    "@tabler/icons-react": "^2.14.0",
+    "@tabler/icons-react": "^3.0.0",
     "@types/debug": "^4.1.7",
     "@types/node": "^20.0.0",
     "@types/react": "^18.0.33",
