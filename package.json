@@ -74,7 +74,7 @@
     "create-pubsub": "^1.6.0",
     "dpdm": "^3.13.0",
     "easytimer.js": "^4.5.4",
-    "eslint": "^8.37.0",
+    "eslint": "^9.0.0",
     "eslint-config-react-app": "^7.0.1",
     "events": "^3.3.0",
     "jscpd": "^3.5.4",
