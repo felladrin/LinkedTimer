@@ -47,11 +47,12 @@
     "watch-extension": "tsc -watch -p ./src/extension/tsconfig.json",
     "watch-webview": "parcel watch ./src/webview/index.html --public-url ./",
     "watch": "run-p watch-extension watch-webview",
-    "lint": "eslint --fix . && ts-prune -p src/webview/tsconfig.json && jscpd src && dpdm --tree false --warning false src/webview/scripts/subscriptions/onWindowDOMContentLoaded.tsx",
+    "lint": "eslint --fix src && ts-prune -p src/webview/tsconfig.json && jscpd src && dpdm --tree false --warning false src/webview/scripts/subscriptions/onWindowDOMContentLoaded.tsx",
     "package-extension": "npx vsce package"
   },
   "devDependencies": {
     "@emotion/react": "^11.10.6",
+    "@eslint/js": "^9.0.0",
     "@faker-js/faker": "^8.0.0",
     "@formkit/auto-animate": "^0.8.0",
     "@mantine/core": "^7.0.0",
@@ -67,16 +68,15 @@
     "@types/react-dom": "^18.0.11",
     "@types/simple-peer": "^9.11.5",
     "@types/vscode": "^1.77.0",
-    "@typescript-eslint/eslint-plugin": "^7.0.0",
-    "@typescript-eslint/parser": "^7.0.0",
     "bittorrent-tracker-websocket-client": "github:felladrin/bittorrent-tracker-websocket-client#v12.0.1",
     "camelcase": "^8.0.0",
     "create-pubsub": "^1.6.0",
     "dpdm": "^3.13.0",
     "easytimer.js": "^4.5.4",
-    "eslint": "^8.37.0",
-    "eslint-config-react-app": "^7.0.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.1",
     "events": "^3.3.0",
+    "globals": "^15.0.0",
     "jscpd": "^3.5.4",
     "load-script": "^2.0.0",
     "npm-run-all2": "^6.0.0",
@@ -90,7 +90,8 @@
     "react-dom": "^18.2.0",
     "tiny-hashes": "^1.0.1",
     "ts-prune": "^0.10.3",
-    "typescript": "^5.0.3"
+    "typescript": "^5.0.3",
+    "typescript-eslint": "^7.6.0"
   },
   "overrides": {
     "xml2js": "^0.6.0"
