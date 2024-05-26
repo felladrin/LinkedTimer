@@ -76,7 +76,7 @@
     "eslint": "^9.0.0",
     "events": "^3.3.0",
     "globals": "^15.0.0",
-    "jscpd": "^3.5.4",
+    "jscpd": "^4.0.0",
     "load-script": "^2.0.0",
     "npm-run-all2": "^6.0.0",
     "parcel": "^2.8.3",
