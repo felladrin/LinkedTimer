@@ -4,7 +4,7 @@ Real-time collaborative countdown timer to use with your team.
 
 ## Features
 
-- Available as a web app at [LinkedTimer.com](https://linkedtimer.com), which it can be accessed from any device with a web browser. No installation required!
+- Available as a web app at [LinkedTimer.pages.dev](https://linkedtimer.pages.dev), which it can be accessed from any device with a web browser. No installation required!
 - Downloadable as an extension for VS Code at [VS Marketplace](https://marketplace.visualstudio.com/items?itemName=felladrin.linked-timer) and [Open VSX Registry](https://open-vsx.org/extension/felladrin/linked-timer).
 - The timer is kept in sync for everyone connected.
 
