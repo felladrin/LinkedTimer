@@ -1,5 +1,9 @@
 # Change Log
 
+## 3.4.2
+
+- Update the web app URL to https://linkedtimer.pages.dev
+
 ## 3.4.1
 
 - Fixed a bug that prevented the web version to run.
