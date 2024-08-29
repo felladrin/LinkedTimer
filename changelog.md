@@ -1,5 +1,9 @@
 # Change Log
 
+## 3.4.3
+
+- Fix the deployment process to publish the extension to the Open VSX Registry and Visual Studio Marketplace.
+
 ## 3.4.2
 
 - Update the web app URL to https://linkedtimer.pages.dev
