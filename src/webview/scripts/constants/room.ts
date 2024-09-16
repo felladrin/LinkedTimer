@@ -6,10 +6,7 @@ import changeCase from "camelcase";
 import { name as packageName } from "../../../../package.json";
 import { HoursMinutesSeconds, InitialSyncParameters, PeriodicSyncParameters } from "../types";
 import { possiblePeerIdSuffixes } from "./strings";
-// @ts-expect-error - Importing untyped module.
-import adjectives from "../../../../node_modules/@faker-js/faker/dist/cjs/locales/en/word/adjective";
-// @ts-expect-error - Importing untyped module.
-import colorNames from "../../../../node_modules/@faker-js/faker/dist/cjs/locales/en/color/human";
+import { fakerEN } from "@faker-js/faker";
 
 type Peer = import("simple-peer").Instance & { id: string };
 type RoomEventEmitter<T = void> = (data: T, targetPeersIds?: string[]) => Promise<void>;
@@ -146,17 +143,17 @@ function generatePeerId() {
   const peerIdRequiredLength = 20;
 
   while (peerId.length !== peerIdRequiredLength) {
-    const randomColorName = getRandomElementFromArray<string>(colorNames);
+    const randomColorName = fakerEN.color.human();
 
     const idSuffix = getRandomElementFromArray(possiblePeerIdSuffixes);
 
-    const fittingAdjectives = (adjectives as string[]).filter(
-      (adjective) => adjective.length === peerIdRequiredLength - (randomColorName.length + idSuffix.length)
-    );
+    const expectedAdjectiveLength = peerIdRequiredLength - (randomColorName.length + idSuffix.length);
 
-    if (fittingAdjectives.length === 0) continue;
+    const fittingAdjective = fakerEN.word.adjective(expectedAdjectiveLength);
 
-    peerId = changeCase([getRandomElementFromArray(fittingAdjectives), randomColorName, idSuffix], {
+    if (fittingAdjective.length !== expectedAdjectiveLength) continue;
+
+    peerId = changeCase([fittingAdjective, randomColorName, idSuffix], {
       pascalCase: true,
     });
   }
