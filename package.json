@@ -50,7 +50,7 @@
   "devDependencies": {
     "@emotion/react": "^11.10.6",
     "@eslint/js": "^9.0.0",
-    "@faker-js/faker": "^8.0.0",
+    "@faker-js/faker": "^9.0.0",
     "@formkit/auto-animate": "^0.8.0",
     "@mantine/core": "^7.0.0",
     "@mantine/hooks": "^7.0.0",
