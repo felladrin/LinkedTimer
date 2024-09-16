@@ -1,5 +1,9 @@
 # Change Log
 
+## 3.4.4
+
+- Dependencies updated.
+
 ## 3.4.3
 
 - Fix the deployment process to publish the extension to the Open VSX Registry and Visual Studio Marketplace.
