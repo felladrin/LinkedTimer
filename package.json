@@ -60,7 +60,7 @@
     "@parcel/transformer-yaml": "^2.8.3",
     "@tabler/icons-react": "^3.0.0",
     "@types/debug": "^4.1.7",
-    "@types/node": "^22.0.0",
+    "@types/node": "^24.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@types/simple-peer": "^9.11.5",
