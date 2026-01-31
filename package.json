@@ -68,7 +68,7 @@
     "bittorrent-tracker-websocket-client": "github:felladrin/bittorrent-tracker-websocket-client#v12.0.1",
     "camelcase": "^9.0.0",
     "create-pubsub": "^1.6.0",
-    "dpdm": "^3.13.0",
+    "dpdm": "^4.0.0",
     "easytimer.js": "^4.5.4",
     "eslint": "^9.0.0",
     "events": "^3.3.0",
