@@ -66,6 +66,7 @@
     "@types/simple-peer": "^9.11.5",
     "@types/vscode": "^1.77.0",
     "bittorrent-tracker-websocket-client": "github:felladrin/bittorrent-tracker-websocket-client#v12.0.1",
+    "buffer": "^6.0.3",
     "camelcase": "^9.0.0",
     "create-pubsub": "^1.6.0",
     "dpdm": "^4.0.0",
@@ -97,8 +98,5 @@
   },
   "browserslist": [
     "last 2 Chrome versions"
-  ],
-  "dependencies": {
-    "buffer": "^6.0.3"
-  }
+  ]
 }
