@@ -1,0 +1,21 @@
+export const colorsByLength: Record<number, string[]> = {
+  3: ["red", "tan"],
+  4: ["blue", "gold", "lime", "jade", "navy", "pink", "plum", "rose", "rust", "sage", "teal"],
+  5: ["amber", "beige", "black", "brown", "coral", "cream", "green", "ivory", "khaki", "lilac", "mauve", "olive", "peach", "wheat", "white"],
+  6: ["bisque", "cherry", "cobalt", "copper", "indigo", "maroon", "orange", "orchid", "salmon", "sienna", "silver", "violet", "yellow"],
+  7: ["carmine", "celadon", "crimson", "emerald", "fuchsia", "magenta", "mustard", "saffron", "scarlet"],
+  8: ["charcoal", "chestnut", "lavender", "mahogany"],
+};
+
+export const adjectivesByLength: Record<number, string[]> = {
+  3: ["big", "dim", "dry", "hot", "icy", "new", "odd", "old", "raw", "shy"],
+  4: ["bold", "busy", "calm", "cool", "dark", "deep", "dull", "fast", "firm", "free", "full", "good", "hard", "high", "huge", "kind", "lazy", "lean", "long", "loud", "mild", "neat", "nice", "pale", "pure", "rare", "real", "rich", "safe", "slim", "slow", "soft", "sure", "tall", "thin", "tiny", "warm", "wide", "wild", "wise"],
+  5: ["alert", "angry", "brave", "brief", "broad", "cheap", "clean", "clear", "close", "crazy", "crisp", "dense", "dizzy", "eager", "early", "exact", "faint", "fancy", "final", "foggy", "frail", "frank", "fresh", "funny", "fuzzy", "giant", "grand", "grave", "great", "gruff", "happy", "harsh", "hasty", "humid", "ideal", "inner", "jumpy", "juicy", "large", "light", "lofty", "loose", "lucky", "lumpy", "major", "messy", "minor", "misty", "mixed", "muddy", "murky", "naive", "nasty", "noisy", "noted", "outer", "pasty", "petty", "plain", "plump", "polar", "prime", "prior", "proud", "quick", "quiet", "rainy", "rapid", "ready", "rocky", "rough", "round", "royal", "rusty", "sassy", "savvy", "scary", "shady", "shaky", "sharp", "shiny", "silly", "small", "smoky", "solid", "spare", "spicy", "stark", "steep", "stern", "stiff", "stoic", "stout", "super", "sweet", "swift", "tasty", "thick", "tight", "tired", "total", "tough", "toxic", "ultra", "upper", "valid", "vivid", "vital", "weird", "whole", "young", "zesty"],
+  6: ["absurd", "active", "actual", "analog", "ardent", "atomic", "august", "bright", "broken", "casual", "clever", "coarse", "common", "crispy", "curved", "dapper", "decent", "direct", "divine", "dreamy", "earthy", "elated", "exotic", "expert", "fabled", "finite", "fluent", "flimsy", "formal", "frozen", "gentle", "gifted", "global", "glossy", "greasy", "gritty", "groovy", "heated", "hidden", "hollow", "honest", "humble", "hushed", "lively", "lucent", "mighty", "modern", "molten", "nimble", "ornate", "packed", "placid", "polite", "potent", "pretty", "primal", "proper", "proven", "quaint", "robust", "rugged", "rustic", "sacred", "serene", "silent", "simple", "snappy", "solemn", "sticky", "stormy", "subtle", "sudden", "supple", "tender", "unique", "urgent", "wicked", "wooden", "worthy"],
+  7: ["ancient", "archaic", "arduous", "bizarre", "capable", "careful", "central", "certain", "complex", "correct", "curious", "devoted", "distant", "dynamic", "elegant", "eternal", "evolved", "fervent", "focused", "glowing", "gradual", "helpful", "honored", "logical", "organic", "perfect", "precise", "renewed", "shapely", "skilled", "slender", "soaring", "spatial", "storied", "studded", "tenuous", "trusted", "unusual", "vibrant", "vintage", "willing"],
+  8: ["absolute", "accurate", "advanced", "animated", "artistic", "balanced", "cheerful", "creative", "detailed", "diligent", "faithful", "flawless", "flexible", "glorious", "graceful", "grateful", "harmless", "inspired", "magnetic", "measured", "powerful", "pristine", "reliable", "resolute", "seasoned", "skillful", "spirited", "sterling", "striking", "studious", "thorough", "timeless", "virtuous", "youthful"],
+  9: ["brilliant", "committed", "confident", "dedicated", "energetic", "inventive", "legendary", "masterful", "motivated", "objective", "organized", "prominent", "resilient", "steadfast", "tenacious", "universal", "validated", "versatile", "visionary", "wholesome"],
+  10: ["analytical", "courageous", "determined", "remarkable", "thoughtful"],
+  11: ["comfortable", "considerate", "exceptional", "experienced", "outstanding", "resourceful"],
+  12: ["accomplished", "conventional", "enthusiastic", "professional"],
+};

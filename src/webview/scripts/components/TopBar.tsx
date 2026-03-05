@@ -15,6 +15,8 @@ import { isRunningInBrowser } from "../constants/booleans";
 import { changelogUrl, vsCodeMarketplaceUrl } from "../constants/strings";
 import { CSSProperties, useState } from "react";
 
+const timerNameStorageKey = "linked-timer-name";
+
 export function TopBar() {
   const { toggleColorScheme } = useMantineColorScheme();
   const colorScheme = useComputedColorScheme("light", { getInitialValueInEffect: true });
@@ -88,11 +90,15 @@ function EditableTimerName({
   height: CSSProperties["height"];
 }) {
   const [isEditing, setEditing] = useState(false);
-  const [currentText, setText] = useState(displayName);
+  const [currentText, setText] = useState(
+    () => window.localStorage.getItem(timerNameStorageKey) ?? displayName
+  );
 
   const submit = () => {
     const newText = currentText.trim();
-    setText(newText.length > 0 ? newText : displayName);
+    const finalText = newText.length > 0 ? newText : displayName;
+    setText(finalText);
+    window.localStorage.setItem(timerNameStorageKey, finalText);
     setEditing(false);
   };
 

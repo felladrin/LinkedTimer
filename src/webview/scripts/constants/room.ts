@@ -6,7 +6,7 @@ import changeCase from "camelcase";
 import { name as packageName } from "../../../../package.json";
 import { HoursMinutesSeconds, InitialSyncParameters, PeriodicSyncParameters } from "../types";
 import { possiblePeerIdSuffixes } from "./strings";
-import { fakerEN } from "@faker-js/faker";
+import { adjectivesByLength, colorsByLength } from "./words";
 
 type Peer = import("simple-peer").Instance & { id: string };
 type RoomEventEmitter<T = void> = (data: T, targetPeersIds?: string[]) => Promise<void>;
@@ -14,10 +14,16 @@ type RoomEventHandler<T = void> = (data: T, peerId: string) => void;
 type RoomEventListener<T = void> = (handler: RoomEventHandler<T>) => void;
 type Room = ReturnType<typeof prepareRoom>;
 
+const defaultTrackers = [
+  "wss://tracker.openwebtorrent.com",
+  "wss://tracker.btorrent.xyz",
+  "wss://tracker.webtorrent.dev",
+];
+
 function prepareRoom({
   id,
   peerId,
-  trackersAnnounceURLs = ["wss://tracker.openwebtorrent.com"],
+  trackersAnnounceURLs = defaultTrackers,
 }: {
   id?: string;
   peerId?: string;
@@ -105,7 +111,7 @@ function prepareRoom({
         ? peersArray.filter((peer) => targetPeersIds.includes(peer.id))
         : peersArray;
       const promises = peersToBroadcastTo.map((peer) => peer.send(JSON.stringify([eventName, data])));
-      await Promise.all(promises);
+      await Promise.allSettled(promises);
     };
 
     const eventHandlers: RoomEventHandler<T>[] = [];
@@ -137,28 +143,19 @@ function prepareRoom({
   };
 }
 
-function generatePeerId() {
-  let peerId = "";
-
+function generatePeerId(): string {
   const peerIdRequiredLength = 20;
+  const allColors = Object.values(colorsByLength).flat();
 
-  while (peerId.length !== peerIdRequiredLength) {
-    const randomColorName = fakerEN.color.human();
-
-    const idSuffix = getRandomElementFromArray(possiblePeerIdSuffixes);
-
-    const expectedAdjectiveLength = peerIdRequiredLength - (randomColorName.length + idSuffix.length);
-
-    const fittingAdjective = fakerEN.word.adjective(expectedAdjectiveLength);
-
-    if (fittingAdjective.length !== expectedAdjectiveLength) continue;
-
-    peerId = changeCase([fittingAdjective, randomColorName, idSuffix], {
-      pascalCase: true,
-    });
+  while (true) {
+    const suffix = getRandomElementFromArray(possiblePeerIdSuffixes);
+    const color = getRandomElementFromArray(allColors);
+    const adjLength = peerIdRequiredLength - suffix.length - color.length;
+    const candidates = adjectivesByLength[adjLength];
+    if (!candidates || candidates.length === 0) continue;
+    const adjective = getRandomElementFromArray(candidates);
+    return changeCase([adjective, color, suffix], { pascalCase: true });
   }
-
-  return peerId;
 }
 
 enum RoomEventName {
@@ -177,16 +174,16 @@ export { onRoomUpdated, getRoom };
 export const roomPeersIdsPubSub = createPubSub<string[]>([]);
 const [setRoomPeers] = roomPeersIdsPubSub;
 
-export let emitEditTimer: RoomEventEmitter<HoursMinutesSeconds>;
-export let listenToEditTimer: RoomEventListener<HoursMinutesSeconds>;
-export let emitStart: RoomEventEmitter;
-export let listenToStart: RoomEventListener;
-export let emitStop: RoomEventEmitter;
-export let listenToStop: RoomEventListener;
-export let emitPeriodicSync: RoomEventEmitter<PeriodicSyncParameters>;
-export let listenToPeriodicSync: RoomEventListener<PeriodicSyncParameters>;
-export let emitInitialSync: RoomEventEmitter<InitialSyncParameters>;
-export let listenToInitialSync: RoomEventListener<InitialSyncParameters>;
+export let emitEditTimer: RoomEventEmitter<HoursMinutesSeconds> = async () => {};
+export let listenToEditTimer: RoomEventListener<HoursMinutesSeconds> = () => {};
+export let emitStart: RoomEventEmitter = async () => {};
+export let listenToStart: RoomEventListener = () => {};
+export let emitStop: RoomEventEmitter = async () => {};
+export let listenToStop: RoomEventListener = () => {};
+export let emitPeriodicSync: RoomEventEmitter<PeriodicSyncParameters> = async () => {};
+export let listenToPeriodicSync: RoomEventListener<PeriodicSyncParameters> = () => {};
+export let emitInitialSync: RoomEventEmitter<InitialSyncParameters> = async () => {};
+export let listenToInitialSync: RoomEventListener<InitialSyncParameters> = () => {};
 
 export function leaveRoom() {
   getRoom()?.leave();
