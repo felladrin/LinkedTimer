@@ -76,7 +76,7 @@
     "globals": "^17.0.0",
     "jscpd": "^4.0.0",
     "load-script": "^2.0.0",
-    "npm-run-all2": "^8.0.0",
+    "npm-run-all2": "^9.0.0",
     "parcel": "^2.16.3",
     "postcss": "^8.4.29",
     "postcss-preset-mantine": "^1.7.0",
