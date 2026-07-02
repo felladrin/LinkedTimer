@@ -92,7 +92,7 @@
   },
   "overrides": {
     "xml2js": "^0.6.0",
-    "picomatch": "4.0.4"
+    "picomatch": "4.0.5"
   },
   "targets": {
     "main": false
