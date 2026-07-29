@@ -65,7 +65,7 @@
     "@types/react-dom": "^19.0.0",
     "@types/simple-peer": "^9.11.5",
     "@types/vscode": "^1.77.0",
-    "bittorrent-tracker-websocket-client": "github:felladrin/bittorrent-tracker-websocket-client#v12.0.1",
+    "bittorrent-tracker-websocket-client": "github:felladrin/bittorrent-tracker-websocket-client#v12.0.2",
     "buffer": "^6.0.3",
     "camelcase": "^9.0.0",
     "create-pubsub": "^1.6.0",
