@@ -92,7 +92,8 @@
   },
   "overrides": {
     "xml2js": "^0.6.0",
-    "picomatch": "4.0.5"
+    "picomatch": "4.0.5",
+    "brace-expansion": "1.1.17"
   },
   "targets": {
     "main": false
