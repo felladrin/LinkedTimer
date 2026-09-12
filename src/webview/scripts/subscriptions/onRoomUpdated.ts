@@ -71,7 +71,7 @@ function handleInitialSyncEvent(data: InitialSyncParameters): void {
 
   if (isReceivingThisEventFromAPeerThatJoinedLater) return;
 
-  if (isRunning && Math.abs(totalSeconds - getTotalTimerSeconds()) > 1) {
+  if (isRunning && (!isTimerRunning() || Math.abs(totalSeconds - getTotalTimerSeconds()) > 1)) {
     startTimerWithValues(timeValues);
   }
 
