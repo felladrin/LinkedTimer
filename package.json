@@ -46,7 +46,8 @@
     "watch": "run-p watch-extension watch-webview",
     "lint": "eslint --fix src && ts-prune -p src/webview/tsconfig.json && jscpd src && dpdm --tree false --warning false src/webview/scripts/subscriptions/onWindowDOMContentLoaded.tsx",
     "package-extension": "npx vsce package",
-    "test:trackers": "node --test tests/trackers.test.mjs"
+    "test:trackers": "node --test tests/trackers.test.mjs",
+    "test:initial-sync": "node --test tests/initial-sync.test.mjs"
   },
   "devDependencies": {
     "@emotion/react": "^11.10.6",
