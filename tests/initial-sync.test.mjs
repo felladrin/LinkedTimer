@@ -1,18 +1,31 @@
+/**
+ * Initial room sync tests
+ *
+ * Verifies that a client joining a room adopts the running state of the peers already in it.
+ * Run with: npm run test:initial-sync
+ *
+ * The handler is compiled and then evaluated inside a vm context with a stubbed `require`, which
+ * relies on `module: "commonjs"` in src/webview/tsconfig.json. Switching that to an ESM target
+ * makes the emitted `import` statements throw a SyntaxError here.
+ */
+
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { test } from "node:test";
 import { runInNewContext } from "node:vm";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
+const typeScriptCompiler = join(dirname(createRequire(import.meta.url).resolve("typescript/package.json")), "bin/tsc");
 const outputDirectory = mkdtempSync(join(tmpdir(), "linked-timer-test-"));
 let outputText;
 try {
   execFileSync(process.execPath, [
-    join(root, "node_modules/typescript/bin/tsc"),
+    typeScriptCompiler,
     "-p",
     join(root, "src/webview/tsconfig.json"),
     "--noCheck",

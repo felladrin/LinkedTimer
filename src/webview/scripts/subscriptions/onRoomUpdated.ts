@@ -71,6 +71,9 @@ function handleInitialSyncEvent(data: InitialSyncParameters): void {
 
   if (isReceivingThisEventFromAPeerThatJoinedLater) return;
 
+  // A stopped timer adopts the peer's state regardless of the drift tolerance. handlePeriodicSyncEvent keeps
+  // the tolerance because it debounces syncs still in flight when someone presses Stop, a race this one-shot
+  // join handshake does not face in practice, so the two conditions are intentionally different.
   if (isRunning && (!isTimerRunning() || Math.abs(totalSeconds - getTotalTimerSeconds()) > 1)) {
     startTimerWithValues(timeValues);
   }
