@@ -98,6 +98,12 @@ test("does not start a timer when joining a stopped room", () => {
   assert.deepEqual(session.calls, []);
 });
 
+test("stops a running timer when joining a stopped room", () => {
+  const session = createSession({ running: true });
+  session.receive({ isRunning: false });
+  assert.deepEqual(session.calls, [["stop"]]);
+});
+
 test("does not restart a running timer already within the drift tolerance", () => {
   const session = createSession({ running: true, seconds: 14 });
   session.receive();
