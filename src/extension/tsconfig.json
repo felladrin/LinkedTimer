@@ -8,6 +8,7 @@
     "outDir": "../../out",
     "sourceMap": false,
     "strict": true,
+    "types": ["node"],
     "rootDir": ".",
     "skipLibCheck": true
   },
