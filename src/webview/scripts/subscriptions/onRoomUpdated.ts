@@ -76,6 +76,8 @@ function handleInitialSyncEvent(data: InitialSyncParameters): void {
   // join handshake does not face in practice, so the two conditions are intentionally different.
   if (isRunning && (!isTimerRunning() || Math.abs(totalSeconds - getTotalTimerSeconds()) > 1)) {
     startTimerWithValues(timeValues);
+  } else if (!isRunning && isTimerRunning()) {
+    stopTimer();
   }
 
   const timerStartValues = getTimerStartValues();
