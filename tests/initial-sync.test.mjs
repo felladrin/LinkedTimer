@@ -104,6 +104,16 @@ test("stops a running timer when joining a stopped room", () => {
   assert.deepEqual(session.calls, [["stop"]]);
 });
 
+// The stop deliberately ignores the peer's remaining time: easytimer's stop() resets the
+// counters, so an adopted value would be discarded on the same call. This pins that the
+// editor configuration still gets adopted alongside the stop.
+test("adopts the peer's editor configuration when it stops the local timer", () => {
+  const session = createSession({ running: true });
+  const peerConfiguration = { hours: 0, minutes: 5, seconds: 0 };
+  session.receive({ isRunning: false, timerEditorConfiguration: peerConfiguration });
+  assert.deepEqual(session.calls, [["stop"], ["configure", peerConfiguration]]);
+});
+
 test("does not restart a running timer already within the drift tolerance", () => {
   const session = createSession({ running: true, seconds: 14 });
   session.receive();
