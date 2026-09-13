@@ -12,7 +12,7 @@ import assert from "node:assert/strict";
 
 const TRACKERS = [
   "wss://tracker.openwebtorrent.com",
-  "wss://tracker.btorrent.xyz",
+  "wss://open.ftorrent.com",
   "wss://tracker.webtorrent.dev",
 ];
 

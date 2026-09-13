@@ -16,7 +16,7 @@ type Room = ReturnType<typeof prepareRoom>;
 
 const defaultTrackers = [
   "wss://tracker.openwebtorrent.com",
-  "wss://tracker.btorrent.xyz",
+  "wss://open.ftorrent.com",
   "wss://tracker.webtorrent.dev",
 ];
 
