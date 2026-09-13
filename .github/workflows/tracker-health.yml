@@ -1,0 +1,37 @@
+# The trackers are third-party servers, so this runs on a schedule instead of on
+# pull requests: a tracker having a bad day should not block unrelated work.
+name: Tracker Health
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  trackers:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - id: probe
+        run: npm run test:trackers
+      - name: Report an unreachable tracker
+        if: failure() && steps.probe.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          title="A default tracker is unreachable"
+          existing=$(gh issue list --state open --search "$title in:title" --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "Still failing: $RUN_URL"
+          else
+            gh issue create --title "$title" --body "\`npm run test:trackers\` failed, so one of the trackers in \`src/webview/scripts/constants/room.ts\` is no longer answering. Peer discovery keeps working on the remaining ones, but it is worth replacing the dead entry. Run: $RUN_URL"
+          fi
