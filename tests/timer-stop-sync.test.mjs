@@ -10,8 +10,15 @@
  * Same technique as tests/initial-sync.test.mjs: compile, then evaluate inside a vm context with
  * a stubbed `require`, relying on `module: "commonjs"` in src/webview/tsconfig.json. The real
  * create-pubsub and easytimer.js (ESM-only) are preloaded in the test realm and injected as the
- * modules those compiled files require. `frames` receives structuredClone'd payloads so the
- * assertions compare same-realm data and catch anything non-serializable reaching the wire.
+ * modules those compiled files require. Each frame is captured through a JSON round-trip, the
+ * same serialization room.ts:113 applies before the wire, so assertions see exactly the shape a
+ * peer receives, as a plain same-realm object.
+ *
+ * Scope: this drives the synchronous `started`/`stopped` dispatch only. The natural-completion
+ * boundary is NOT covered: on the final tick easytimer dispatches `secondsUpdated` while still
+ * running, so the last tick still broadcasts { isRunning: true, totalSeconds: 0 } before the
+ * `stopped` frame. That is a separate pre-existing issue; nothing interleaves with these tests
+ * either way, because start/stop dispatch and the assertions all run synchronously in one turn.
  */
 
 import assert from "node:assert/strict";
@@ -63,7 +70,7 @@ function loadCompiledModule(source, sandbox) {
 
 function createSession() {
   const frames = [];
-  const roomModule = { emitPeriodicSync: (frame) => frames.push(structuredClone(frame)) };
+  const roomModule = { emitPeriodicSync: (frame) => frames.push(JSON.parse(JSON.stringify(frame))) };
   const requireFromSandbox = (request) => {
     if (request === "create-pubsub") return createPubSubModule;
     if (request === "easytimer.js") return easytimerModule;
@@ -72,7 +79,9 @@ function createSession() {
   };
   const sandbox = {
     window: { localStorage: { getItem: () => null } },
-    // Fake timers: the tests only exercise the synchronous started/stopped dispatch, so no tick ever fires.
+    // The sandboxed modules never call these. easytimer resolves its own interval in the host realm, so
+    // ticks there are real; they cannot interleave because dispatch + assertions are one synchronous
+    // turn, and every session that starts is stopped by its test below so no handle leaks past the run.
     setInterval: () => 0,
     clearInterval: () => {},
     setTimeout: () => 0,
@@ -96,27 +105,34 @@ function createSession() {
   };
 }
 
-test("start broadcasts a periodic sync that reports the timer as running", () => {
+// Full frames, not an [isRunning, totalSeconds] projection: the consumer (handlePeriodicSyncEvent)
+// acts on timeValues, whose freshness depends on setTimerValues running before setTotalTimerSeconds
+// inside the counter handler, so the whole frame must be pinned.
+test("start broadcasts one periodic sync with the running state and all fields up to date", () => {
   const session = createSession();
   session.start();
-  assert.deepEqual(
-    session.frames.map((frame) => [frame.isRunning, frame.totalSeconds]),
-    [[true, 15]]
-  );
+  try {
+    assert.deepEqual(session.frames, [
+      { isRunning: true, timeValues: { hours: 0, minutes: 0, seconds: 15 }, totalSeconds: 15 },
+    ]);
+  } finally {
+    session.stop(); // a started easytimer holds a live 15s host-realm interval; release it or the run waits on it
+  }
 });
 
-test("stop broadcasts a periodic sync that reports the timer as stopped", () => {
+test("stop broadcasts one periodic sync with the stopped state and all fields reset", () => {
   const session = createSession();
   session.start();
   session.clearFrames();
   session.stop();
-  assert.deepEqual(
-    session.frames.map((frame) => [frame.isRunning, frame.totalSeconds]),
-    [[false, 0]]
-  );
+  assert.deepEqual(session.frames, [
+    { isRunning: false, timeValues: { hours: 0, minutes: 0, seconds: 0 }, totalSeconds: 0 },
+  ]);
 });
 
-test("no broadcast ever pairs a running state with reset counters", () => {
+// Scoped to the started/stopped dispatch this harness drives; the natural-completion tick is out of
+// scope (see header) and still pairs running with reset counters until its own issue lands.
+test("no start or stop dispatch ever pairs a running state with reset counters", () => {
   const session = createSession();
   session.start();
   session.stop();
