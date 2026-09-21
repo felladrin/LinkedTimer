@@ -47,6 +47,9 @@ onRoomUpdated((room) => {
 
 function handlePeriodicSyncEvent(data: PeriodicSyncParameters): void {
   const { isRunning, timeValues, totalSeconds } = data;
+  // The !isRunning branch must stay inert: startTimerWithValues stops before starting, so every sync-triggered
+  // restart broadcasts a transient { isRunning: false, totalSeconds: 0 } frame of its own. Acting on a peer's
+  // reported stop here would echo every restart back as a room-wide stop cascade.
   if (isRunning && Math.abs(totalSeconds - getTotalTimerSeconds()) > 1) {
     startTimerWithValues(timeValues);
   }

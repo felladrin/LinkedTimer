@@ -54,6 +54,16 @@ export function onTimerTargetAchieved(handler: (event: TimerEvent) => void) {
 }
 
 export function configureTimerEventHandlers() {
+  // Must be registered before the counter handler below: easytimer dispatches in registration order, and
+  // the counter handler's setTotalTimerSeconds triggers the periodic sync broadcast, which reads
+  // isTimerRunning(). With the other order, that broadcast read the state before this handler updated it,
+  // so the frame a start emitted said isRunning: false and the frame a stop emitted said isRunning: true.
+  (["started", "stopped"] satisfies TimerEventType[]).forEach((eventType) => {
+    timer.on(eventType, () => {
+      setTimerRunning(timer.isRunning());
+    });
+  });
+
   (["started", "stopped", "secondsUpdated"] satisfies TimerEventType[]).forEach((eventType) => {
     timer.on(eventType, () => {
       setTimerValues({
@@ -65,12 +75,6 @@ export function configureTimerEventHandlers() {
       setTotalTimerSeconds(timer.getTotalTimeValues().seconds);
       const { hours, minutes, seconds } = getTimerStartValues();
       setPercentageOfTimeLeft((getTotalTimerSeconds() / (hours * 3600 + minutes * 60 + seconds)) * 100);
-    });
-  });
-
-  (["started", "stopped"] satisfies TimerEventType[]).forEach((eventType) => {
-    timer.on(eventType, () => {
-      setTimerRunning(timer.isRunning());
     });
   });
 }
