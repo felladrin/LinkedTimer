@@ -8,11 +8,11 @@ export type PeriodicSyncParameters = {
   isRunning: boolean;
   timeValues: HoursMinutesSeconds;
   totalSeconds: number;
+  joinRoomTimestamp: number;
 };
 
 export type InitialSyncParameters = PeriodicSyncParameters & {
   timerEditorConfiguration: HoursMinutesSeconds;
-  joinRoomTimestamp: number;
 };
 
 export type LocalStorageProperties = {

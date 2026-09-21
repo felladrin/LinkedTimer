@@ -46,7 +46,15 @@ onRoomUpdated((room) => {
 });
 
 function handlePeriodicSyncEvent(data: PeriodicSyncParameters): void {
-  const { isRunning, timeValues, totalSeconds } = data;
+  const { isRunning, timeValues, totalSeconds, joinRoomTimestamp } = data;
+
+  // Same older-peer rule as handleInitialSyncEvent: a peer that joined the room later never gets to move
+  // the earlier peers' state. Peers on versions predating this field send no joinRoomTimestamp, and a
+  // missing timestamp never compares greater, so their syncs are applied exactly as they were before.
+  const isReceivingThisEventFromAPeerThatJoinedLater = joinRoomTimestamp > (getRoom()?.creationTimestamp ?? 0);
+
+  if (isReceivingThisEventFromAPeerThatJoinedLater) return;
+
   // The !isRunning branch must stay inert: startTimerWithValues stops before starting, so every sync-triggered
   // restart broadcasts a transient { isRunning: false, totalSeconds: 0 } frame of its own. Acting on a peer's
   // reported stop here would echo every restart back as a room-wide stop cascade.
