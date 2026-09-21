@@ -70,7 +70,11 @@ function loadCompiledModule(source, sandbox) {
 
 function createSession() {
   const frames = [];
-  const roomModule = { emitPeriodicSync: (frame) => frames.push(JSON.parse(JSON.stringify(frame))) };
+  const roomModule = {
+    emitPeriodicSync: (frame) => frames.push(JSON.parse(JSON.stringify(frame))),
+    // The producer reads the local room to stamp joinRoomTimestamp onto every frame (#1203).
+    getRoom: () => ({ creationTimestamp: 200 }),
+  };
   const requireFromSandbox = (request) => {
     if (request === "create-pubsub") return createPubSubModule;
     if (request === "easytimer.js") return easytimerModule;
@@ -113,7 +117,12 @@ test("start broadcasts one periodic sync with the running state and all fields u
   session.start();
   try {
     assert.deepEqual(session.frames, [
-      { isRunning: true, timeValues: { hours: 0, minutes: 0, seconds: 15 }, totalSeconds: 15 },
+      {
+        isRunning: true,
+        timeValues: { hours: 0, minutes: 0, seconds: 15 },
+        totalSeconds: 15,
+        joinRoomTimestamp: 200,
+      },
     ]);
   } finally {
     session.stop(); // a started easytimer holds a live 15s host-realm interval; release it or the run waits on it
@@ -126,7 +135,12 @@ test("stop broadcasts one periodic sync with the stopped state and all fields re
   session.clearFrames();
   session.stop();
   assert.deepEqual(session.frames, [
-    { isRunning: false, timeValues: { hours: 0, minutes: 0, seconds: 0 }, totalSeconds: 0 },
+    {
+      isRunning: false,
+      timeValues: { hours: 0, minutes: 0, seconds: 0 },
+      totalSeconds: 0,
+      joinRoomTimestamp: 200,
+    },
   ]);
 });
 
