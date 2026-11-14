@@ -95,7 +95,7 @@
   "overrides": {
     "xml2js": "^0.6.0",
     "picomatch": "4.0.7",
-    "brace-expansion": "5.0.12",
+    "brace-expansion": "5.0.13",
     "minimatch": "^11.0.1"
   },
   "targets": {
